@@ -1,0 +1,11 @@
+/* ใช้ Vuetify เป็นหลัก ไฟล์นี้มีแค่ตอนพิมพ์ / ส่งออก PDF */
+@media print {
+  .no-print,
+  .v-app-bar,
+  .v-navigation-drawer {
+    display: none !important;
+  }
+  .v-main {
+    padding: 0 !important;
+  }
+}

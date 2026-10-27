@@ -3205,7 +3205,23 @@ vite.config.js หรือ <code>docker compose restart</code></td>
 <tr>
 <td><code>npm create vite</code> ถามคำถามเยอะ</td>
 <td>ใช้ npm เวอร์ชันใหม่</td>
-<td>เลือก <code>Vue</code> → <code>JavaScript</code></td>
+<td>เลือก <code>Vue</code> → <code>JavaScript</code> คำถามอื่น (rolldown,
+ติดตั้งและเปิดเลยไหม) ตอบ No</td>
+</tr>
+<tr>
+<td>กด Export PDF แล้วไม่ได้ไฟล์ Console ขึ้น
+<code>unsupported color function</code></td>
+<td>ติดตั้ง Vuetify 4 (พิมพ์ <code>npm install vuetify</code>
+โดยไม่ใส่เวอร์ชัน)</td>
+<td>ในโฟลเดอร์ frontend พิมพ์
+<code>npm install vuetify@3 html2pdf.js@0.10</code> แล้วปิดเปิด
+<code>npm run dev</code> ใหม่ (ถ้ายังไม่หาย ลบโฟลเดอร์
+<code>node_modules/.vite</code>)</td>
+</tr>
+<tr>
+<td>หน้าเว็บเปิดมาพื้นดำ ปุ่มเป็นตัวพิมพ์เล็ก</td>
+<td>ได้ Vuetify 4 (ใช้ธีมตาม Windows) แทน Vuetify 3</td>
+<td>ติดตั้งใหม่ด้วย <code>npm install vuetify@3</code> ตามข้อ 5.1</td>
 </tr>
 <tr>
 <td>login ด้วยรหัสในคู่มือแล้วได้ 401 ทั้งที่พิมพ์ถูก</td>

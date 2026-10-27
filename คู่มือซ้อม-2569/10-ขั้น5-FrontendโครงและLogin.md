@@ -10,8 +10,12 @@
 npm create vite@latest frontend -- --template vue
 cd frontend
 npm install
-npm install vuetify @mdi/font vue-router axios html2pdf.js
+npm install vuetify@3 @mdi/font@7 vue-router@4 axios@1 html2pdf.js@0.10
+npm install -D vite@6 @vitejs/plugin-vue@5
 ```
+
+> **ต้องใส่ @เลขเวอร์ชัน ตามนี้ทุกตัว** ถ้าพิมพ์แค่ `npm install vuetify` จะได้ Vuetify 4 (รุ่นใหม่ ยังไม่ตรงกับคู่มือ) ซึ่งทำให้ปุ่ม Export PDF ใช้ไม่ได้ (Console ขึ้น `unsupported color function`) และหน้าตาบางอย่างต่างจากเฉลย บรรทัดสุดท้ายปรับ Vite ให้รุ่นเดียวกับเฉลย
+> ถ้า `npm create vite` ถามคำถามเพิ่ม (เช่น ใช้ rolldown หรือ ติดตั้งและเปิดเลยไหม) ให้ตอบ **No**
 
 | แพ็กเกจ | ใช้ทำอะไร |
 |---|---|
@@ -29,11 +33,25 @@ npm install vuetify @mdi/font vue-router axios html2pdf.js
 # อยู่ในโฟลเดอร์ frontend
 rm src/components/HelloWorld.vue
 rm -r src/assets
-rm public/vite.svg
 mkdir src/pages
 ```
 
-> บน Windows PowerShell ใช้ `Remove-Item` แทน `rm` หรือจะลบใน VS Code (คลิกขวา → Delete) ก็ได้
+> ใช้ได้ทั้ง PowerShell และ Git Bash หรือจะลบใน VS Code (คลิกขวา → Delete) ก็ได้ ไฟล์ในโฟลเดอร์ `public` ปล่อยไว้ได้ (Vite แต่ละรุ่นใส่ไฟล์ตัวอย่างไม่เหมือนกัน)
+
+### สร้างหน้าชั่วคราวทั้ง 14 หน้าไว้ก่อน (สำคัญ)
+
+`router.js` (ข้อ 5.7) จะอ้างถึงหน้า 14 หน้า ถ้าไฟล์ยังไม่มี Vite จะขึ้น `Failed to resolve import` ทันทีที่เปิดเว็บ จึงต้องสร้างไฟล์เปล่าไว้ก่อน แล้วค่อยเขียนทับทีละหน้าในข้อ 5.9–5.11 และขั้น 6–7
+
+```powershell
+# PowerShell ในโฟลเดอร์ frontend
+$pages = 'LoginPage','PasswordPage','ProfilePage','ResultPage','DashboardPage','UsersPage','PeriodsPage','CriteriaPage','AssignPage','TrackPage','BackupPage','SelfPage','EvaluateListPage','EvaluatePage'
+foreach ($p in $pages) { Set-Content "src/pages/$p.vue" "<template>`n  <h2>$p (กำลังทำ)</h2>`n</template>" -Encoding utf8 }
+dir src/pages
+```
+
+ต้องเห็นไฟล์ `.vue` ครบ 14 ไฟล์ (หรือสร้างเองใน VS Code ทีละไฟล์ ใส่เนื้อหาตามตัวอย่างในข้อ 5.13)
+
+> **อย่าเพิ่งเปิดเว็บดูจนกว่าจะเขียนถึงข้อ 5.8** เพราะ `App.vue` ตัวเดิมยังเรียก `HelloWorld.vue` ที่เพิ่งลบ และ `main.js` (ข้อ 5.4) เรียก `router.js` ที่ยังไม่ได้เขียน จุดตรวจแรกอยู่หลังข้อ 5.8
 
 ตรวจ `package.json` ให้หน้าตาประมาณนี้ (เลขเวอร์ชันใหม่กว่าได้)
 
@@ -355,6 +373,21 @@ function signOut() {
 - เมนูแสดงตามบทบาท (`v-if="state.user.role === 'admin'"`)
 - `v-snackbar` แสดงข้อความแจ้งเตือนจาก `state.message`
 
+### ✔ ตรวจโครง (หลังข้อ 5.8)
+
+ตอนนี้มีครบแล้ว: `main.js` → `App.vue` → `router.js` → หน้าชั่วคราว 14 หน้า เปิดเว็บได้แล้ว (ต้องเปิด backend ไว้ก่อน ดูวิธีรันในหัวข้อ ✔ ตรวจขั้น 5 ท้ายบท)
+
+```bash
+# ในโฟลเดอร์ frontend
+npm run dev
+```
+
+- [ ] เปิด http://localhost:5173 → แถบบนสีน้ำเงิน "ระบบประเมินบุคลากร" และหัวข้อ "LoginPage (กำลังทำ)" URL เปลี่ยนเป็น `/login` เอง
+- [ ] พิมพ์ `/users` ในช่อง URL → ถูกพากลับ `/login` (ยังไม่ login)
+- [ ] F12 → Console ไม่มีตัวแดง
+
+ถ้าขึ้น `Failed to resolve import "./pages/XxxPage.vue"` แปลว่าหน้านั้นยังไม่ได้สร้าง หรือสะกดชื่อไฟล์ไม่ตรง (ตัวพิมพ์เล็กใหญ่ต้องตรง) กลับไปทำ "สร้างหน้าชั่วคราวทั้ง 14 หน้า" ในข้อ 5.1
+
 ## 5.9 หน้า Login
 
 ไฟล์ `frontend/src/pages/LoginPage.vue`
@@ -523,15 +556,15 @@ const scale = [
 
 ## 5.13 หน้าอื่นที่ยังไม่ได้ทำ
 
-`router.js` อ้างถึงหน้าทั้ง 14 หน้า ถ้าไฟล์ยังไม่มี Vite จะ error ให้สร้างไฟล์ชั่วคราวไว้ก่อน เช่น `src/pages/UsersPage.vue`
+หน้าที่เหลือ 11 หน้า (Dashboard, Users, Periods, Criteria, Assign, Track, Backup, Result, Self, EvaluateList, Evaluate) ยังเป็นหน้าชั่วคราวที่สร้างไว้ในข้อ 5.1 หน้าตาแบบนี้ เช่น `src/pages/UsersPage.vue`
 
 ```vue
 <template>
-  <h2>กำลังทำ</h2>
+  <h2>UsersPage (กำลังทำ)</h2>
 </template>
 ```
 
-แล้วค่อยเขียนจริงในขั้น 6 และ 7
+แล้วค่อยเขียนทับด้วยตัวจริงในขั้น 6 และ 7 (ห้ามลบไฟล์ทิ้ง เพราะ router ยังอ้างถึงอยู่)
 
 ## ✔ ตรวจขั้น 5 (รันและตรวจ)
 

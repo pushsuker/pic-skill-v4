@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="th" xml:lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>คู่มือซ้อม Front-end ถึงขั้น Login</title>
+  <style>
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+  <style type="text/css">body{font-family:"Sarabun","Noto Sans Thai",sans-serif;max-width:960px;margin:auto;padding:16px;line-height:1.7;color:#222;background:#fff}
+h1{border-bottom:3px solid #1867c0;padding-bottom:6px;margin-top:2.5em;color:#1867c0}h2{margin-top:1.8em;color:#0d47a1}
+pre{background:#f5f7fa;border:1px solid #dde;padding:10px;overflow-x:auto;font-size:13px;line-height:1.45}
+code{font-family:Consolas,monospace;overflow-wrap:anywhere;background:#f0f2f5;padding:1px 4px;border-radius:3px}pre code{background:none;padding:0}
+table{border-collapse:collapse;width:100%;margin:1em 0;display:block;overflow-x:auto}td,th{border:1px solid #ccd;padding:6px 8px;vertical-align:top}th{background:#e8f0fe}
+img{max-width:100%;border:1px solid #ddd}blockquote{border-left:4px solid #fb8c00;background:#fff8e1;margin:1em 0;padding:6px 14px}
+nav#TOC{background:#f5f7fa;padding:8px 20px;border:1px solid #dde}@media print{h1{page-break-before:always}pre{white-space:pre-wrap}}</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">คู่มือซ้อม Front-end ถึงขั้น Login</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#คู่มือซ้อม-front-end-ถึงขั้น-login-คนที่-2" id="toc-คู่มือซ้อม-front-end-ถึงขั้น-login-คนที่-2">คู่มือซ้อม Front-end ถึงขั้น Login
+(คนที่ 2)</a>
+<ul>
+<li><a href="#l0-เปิด-back-end-เฉลย" id="toc-l0-เปิด-back-end-เฉลย">L0 เปิด
+Back-end เฉลย</a></li>
+<li><a href="#l1-สร้างโปรเจกต์-vue--vuetify" id="toc-l1-สร้างโปรเจกต์-vue--vuetify">L1 สร้างโปรเจกต์ Vue +
+Vuetify</a></li>
+<li><a href="#l2-apijs--หน้าชั่วคราว--routerjs--appvue" id="toc-l2-apijs--หน้าชั่วคราว--routerjs--appvue">L2 <code>api.js</code> +
+หน้าชั่วคราว + <code>router.js</code> + <code>App.vue</code></a></li>
+<li><a href="#l3-หน้า-login" id="toc-l3-หน้า-login">L3 หน้า Login</a></li>
+<li><a href="#l4-หน้าเปลี่ยนรหัสผ่าน-บังคับครั้งแรก" id="toc-l4-หน้าเปลี่ยนรหัสผ่าน-บังคับครั้งแรก">L4 หน้าเปลี่ยนรหัสผ่าน
+(บังคับครั้งแรก)</a></li>
+<li><a href="#l5-หน้าข้อมูลส่วนตัว" id="toc-l5-หน้าข้อมูลส่วนตัว">L5
+หน้าข้อมูลส่วนตัว</a></li>
+<li><a href="#l6-ตรวจรวมก่อนส่ง" id="toc-l6-ตรวจรวมก่อนส่ง">L6
+ตรวจรวมก่อนส่ง</a></li>
+<li><a href="#ไปต่อคู่มือหลัก-ขั้น-67" id="toc-ไปต่อคู่มือหลัก-ขั้น-67">ไปต่อคู่มือหลัก (ขั้น
+6–7)</a></li>
+<li><a href="#ปัญหาที่เจอบ่อยในเล่มนี้" id="toc-ปัญหาที่เจอบ่อยในเล่มนี้">ปัญหาที่เจอบ่อยในเล่มนี้</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="คู่มือซ้อม-front-end-ถึงขั้น-login-คนที่-2">คู่มือซ้อม Front-end ถึงขั้น Login
+(คนที่ 2)</h1>
+<p>เล่มนี้แยกจากคู่มือหลัก ใช้ซ้อมเฉพาะ <strong>โครงหน้าเว็บ + Login + บังคับเปลี่ยนรหัส
++ ข้อมูลส่วนตัว</strong> ให้จบในรอบเดียว เขียนทีละไฟล์ตามลำดับ <strong>ทุกขั้นจบด้วย ✔
+ตรวจ ที่รันได้จริง ไม่มี error ค้างระหว่างทาง</strong></p>
+<blockquote>
+<p>ทำไมคู่มือหลักถึง error กลางทาง: ในคู่มือหลัก <code>main.js</code> เรียก
+<code>router</code> ตั้งแต่ข้อ 5.4 และ <code>router.js</code> (ข้อ 5.7)
+อ้างถึงหน้า 14 หน้าที่ยังไม่ได้สร้าง วิธีแก้ (สร้างหน้าชั่วคราว) อยู่ท้ายบทข้อ 5.13
+นักเรียนที่เปิดเว็บดูระหว่างทางจึงเจอ <code>Failed to resolve import</code>
+เล่มนี้เรียงใหม่ให้สร้างไฟล์ก่อนแล้วค่อยอ้างถึง</p>
+</blockquote>
+<blockquote>
+<p>โค้ดที่ทำเสร็จตามเล่มนี้อยู่ในโฟลเดอร์ <code>เฉลย-frontend</code> (ข้างไฟล์คู่มือนี้)
+ใช้เทียบเมื่อติดปัญหา ถ้าจะรันเฉลยให้ <code>npm install</code> ในโฟลเดอร์นั้นก่อน</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>ขั้น</th>
+<th>ทำอะไร</th>
+<th>ใช้เวลา</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>L0</td>
+<td>เปิด Back-end เฉลย ไว้ให้หน้าบ้านเรียก</td>
+<td>5 นาที</td>
+</tr>
+<tr>
+<td>L1</td>
+<td>สร้างโปรเจกต์ Vue + Vuetify ให้หน้าเว็บขึ้น</td>
+<td>15 นาที</td>
+</tr>
+<tr>
+<td>L2</td>
+<td><code>api.js</code> + หน้าชั่วคราว + <code>router.js</code> +
+<code>App.vue</code></td>
+<td>20 นาที</td>
+</tr>
+<tr>
+<td>L3</td>
+<td>หน้า Login</td>
+<td>15 นาที</td>
+</tr>
+<tr>
+<td>L4</td>
+<td>หน้าเปลี่ยนรหัสผ่าน (บังคับครั้งแรก)</td>
+<td>10 นาที</td>
+</tr>
+<tr>
+<td>L5</td>
+<td>หน้าข้อมูลส่วนตัว</td>
+<td>10 นาที</td>
+</tr>
+<tr>
+<td>L6</td>
+<td>ตรวจรวมก่อนส่ง</td>
+<td>10 นาที</td>
+</tr>
+</tbody>
+</table>
+<p>บัญชีที่ใช้ซ้อม (มาจาก seed ของเฉลย)</p>
+<table>
+<thead>
+<tr>
+<th>ชื่อผู้ใช้</th>
+<th>รหัสผ่าน</th>
+<th>บทบาท</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>admin</td>
+<td>admin1234</td>
+<td>ฝ่ายบุคลากร</td>
+</tr>
+<tr>
+<td>emp1, emp2</td>
+<td>emp12345</td>
+<td>ผู้รับการประเมิน (ต้องเปลี่ยนรหัสครั้งแรก)</td>
+</tr>
+<tr>
+<td>eva1, eva2</td>
+<td>eva12345</td>
+<td>กรรมการ (ต้องเปลี่ยนรหัสครั้งแรก)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="l0-เปิด-back-end-เฉลย">L0 เปิด Back-end เฉลย</h2>
+<p>หน้าบ้านต้องมี API ให้เรียก เล่มนี้ใช้ Back-end จากโฟลเดอร์เฉลย
+<code>project</code> (คนที่ 1 ไม่ต้องเขียนก่อน) เปิด Docker Desktop
+ให้ไอคอนเป็นสีเขียว แล้วพิมพ์ที่โฟลเดอร์ <code>project</code></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose down <span class="at">-v</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose up <span class="at">-d</span> db phpmyadmin backend</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose logs <span class="at">-f</span> backend</span></code></pre></div>
+<ul>
+<li><code>down -v</code> ล้างฐานข้อมูลเก่า บัญชีจะกลับเป็นรหัสตามตารางด้านบน</li>
+<li>สั่งเปิด <strong>แค่ 3 บริการ</strong> ไม่เปิด <code>frontend</code>
+ของเฉลย เพราะเราจะใช้พอร์ต 5173 กับหน้าบ้านที่เขียนเอง</li>
+</ul>
+<h3 id="-ตรวจ-l0">✔ ตรวจ L0</h3>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>log ขึ้น <code>seed เสร็จแล้ว</code> และ
+<code>API พร้อมที่ http://localhost:3000</code> แล้วกด <code>Ctrl + C</code>
+ออกจาก log ได้ (Back-end ยังทำงานต่อ)</label></li>
+<li><label><input type="checkbox"></input>เปิด
+http://localhost:3000/api/auth/me ในเบราว์เซอร์ เห็น
+<code>{&quot;status&quot;:&quot;error&quot;,&quot;message&quot;:&quot;กรุณาเข้าสู่ระบบ&quot;,&quot;data&quot;:null}</code>
+(ได้ข้อความนี้ = API ทำงานแล้ว)</label></li>
+</ul>
+<h2 id="l1-สร้างโปรเจกต์-vue--vuetify">L1 สร้างโปรเจกต์ Vue + Vuetify</h2>
+<h3 id="l11-สร้างโปรเจกต์และติดตั้งแพ็กเกจ">L1.1 สร้างโปรเจกต์และติดตั้งแพ็กเกจ</h3>
+<p>เปิด PowerShell ที่โฟลเดอร์ซ้อม (เช่น <code>D:\ซ้อม</code>) แล้วพิมพ์</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> create vite@latest frontend <span class="at">--</span> <span class="at">--template</span> vue</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> frontend</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install vuetify@3 @mdi/font@7 vue-router@4 axios@1</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install <span class="at">-D</span> vite@6 @vitejs/plugin-vue@5</span></code></pre></div>
+<blockquote>
+<p><strong>ต้องใส่ @เลขเวอร์ชันตามนี้</strong> ถ้าพิมพ์แค่
+<code>npm install vuetify</code> จะได้ Vuetify 4 ซึ่งยังไม่ตรงกับเฉลย
+(ต่อไปในคู่มือหลัก ปุ่ม Export PDF จะใช้ไม่ได้) บรรทัดสุดท้ายปรับ Vite ให้รุ่นเดียวกับเฉลย
+ถ้า <code>npm create vite</code> ถามคำถามเพิ่ม (เช่น ใช้ rolldown หรือ
+ติดตั้งและเปิดเลยไหม) ให้ตอบ <strong>No</strong> ทุกข้อ แล้วพิมพ์คำสั่งที่เหลือเอง</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>แพ็กเกจ</th>
+<th>ใช้ทำอะไร</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vuetify</code></td>
+<td>ชุดคอมโพเนนต์สำเร็จรูป ปุ่ม ฟอร์ม เมนู ไม่ต้องเขียน CSS เอง</td>
+</tr>
+<tr>
+<td><code>@mdi/font</code></td>
+<td>ไอคอน <code>mdi-...</code></td>
+</tr>
+<tr>
+<td><code>vue-router</code></td>
+<td>เปลี่ยนหน้าโดยไม่รีโหลด และกันหน้าตามสิทธิ์</td>
+</tr>
+<tr>
+<td><code>axios</code></td>
+<td>เรียก API</td>
+</tr>
+</tbody>
+</table>
+<h3 id="l12-ลบไฟล์ตัวอย่างที่ไม่ใช้-และสร้างโฟลเดอร์หน้า">L1.2 ลบไฟล์ตัวอย่างที่ไม่ใช้
+และสร้างโฟลเดอร์หน้า</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># อยู่ในโฟลเดอร์ frontend (PowerShell)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">Remove-Item</span> src<span class="op">/</span>components<span class="op">/</span>HelloWorld<span class="op">.</span><span class="fu">vue</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">Remove-Item</span> <span class="op">-</span>Recurse src<span class="op">/</span>assets</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">New-Item</span> <span class="op">-</span>ItemType Directory src<span class="op">/</span>pages</span></code></pre></div>
+<blockquote>
+<p>ไฟล์ในโฟลเดอร์ <code>public</code> (ไอคอน) ปล่อยไว้ได้ ไม่มีผล (Vite
+แต่ละรุ่นใส่ไฟล์ตัวอย่างไม่เหมือนกัน ถ้าลบไฟล์ไหนแล้วขึ้นว่าไม่มีไฟล์ ข้ามไปได้เลย) ลบใน VS
+Code ก็ได้ (คลิกขวา → Delete) ตอนนี้อย่าเพิ่งรันเว็บ เพราะ <code>App.vue</code>
+ตัวเดิมยังเรียก <code>HelloWorld.vue</code> ที่เพิ่งลบ จะแก้ใน L1.6</p>
+</blockquote>
+<h3 id="l13-viteconfigjs--ตั้งพอร์ตและ-proxy">L1.3
+<code>vite.config.js</code> — ตั้งพอร์ตและ proxy</h3>
+<p>เขียนทับทั้งไฟล์</p>
+<p>ไฟล์ <code>frontend/vite.config.js</code></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { defineConfig } <span class="im">from</span> <span class="st">&#39;vite&#39;</span><span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> vue <span class="im">from</span> <span class="st">&#39;@vitejs/plugin-vue&#39;</span><span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">// หน้าเว็บเรียก /api แล้ว Vite ส่งต่อไปที่ backend</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="fu">defineConfig</span>({</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">plugins</span><span class="op">:</span> [<span class="fu">vue</span>()]<span class="op">,</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">server</span><span class="op">:</span> {</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">host</span><span class="op">:</span> <span class="st">&#39;0.0.0.0&#39;</span><span class="op">,</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">port</span><span class="op">:</span> <span class="dv">5173</span><span class="op">,</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">proxy</span><span class="op">:</span> { <span class="st">&#39;/api&#39;</span><span class="op">:</span> <span class="bu">process</span><span class="op">.</span><span class="at">env</span><span class="op">.</span><span class="at">API_URL</span> <span class="op">||</span> <span class="st">&#39;http://localhost:3000&#39;</span> }<span class="op">,</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">watch</span><span class="op">:</span> { <span class="dt">usePolling</span><span class="op">:</span> <span class="kw">true</span> }<span class="op">,</span> <span class="co">// Windows + Docker ต้องใช้ polling จึงเห็นไฟล์ที่แก้</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<ul>
+<li><code>proxy</code> ทำให้หน้าบ้านเรียก <code>/api/...</code> แล้ว Vite
+ส่งต่อไปที่ <code>http://localhost:3000</code> ให้ <strong>จึงไม่ติด
+CORS</strong></li>
+</ul>
+<h3 id="l14-indexhtml">L1.4 <code>index.html</code></h3>
+<p>เขียนทับทั้งไฟล์</p>
+<p>ไฟล์ <code>frontend/index.html</code></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!doctype</span> html<span class="dt">&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="ot"> lang</span><span class="op">=</span><span class="st">&quot;th&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> charset</span><span class="op">=</span><span class="st">&quot;UTF-8&quot;</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> name</span><span class="op">=</span><span class="st">&quot;viewport&quot;</span><span class="ot"> content</span><span class="op">=</span><span class="st">&quot;width=device-width, initial-scale=1.0&quot;</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">title</span><span class="dt">&gt;</span>ระบบประเมินบุคลากร<span class="dt">&lt;/</span><span class="kw">title</span><span class="dt">&gt;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> id</span><span class="op">=</span><span class="st">&quot;app&quot;</span><span class="dt">&gt;&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> type=</span><span class="st">&quot;module&quot;</span><span class="ot"> src</span><span class="op">=</span><span class="st">&quot;/src/main.js&quot;</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span></code></pre></div>
+<h3 id="l15-srcstylecss">L1.5 <code>src/style.css</code></h3>
+<p>เขียนทับทั้งไฟล์ (ลบ CSS ตัวอย่างของ Vite ทิ้งให้หมด ไม่อย่างนั้นจะตีกับ Vuetify)</p>
+<p>ไฟล์ <code>frontend/src/style.css</code></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode css"><code class="sourceCode css"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* ใช้ Vuetify เป็นหลัก ไฟล์นี้มีแค่ตอนพิมพ์ / ส่งออก PDF */</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">@media</span> <span class="an">print</span> {</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.no-print</span><span class="op">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.v-app-bar</span><span class="op">,</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.v-navigation-drawer</span> {</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">display</span><span class="ch">:</span> <span class="dv">none</span> <span class="at">!important</span><span class="op">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.v-main</span> {</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">padding</span><span class="ch">:</span> <span class="dv">0</span> <span class="at">!important</span><span class="op">;</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="l16-srcmainjs-รุ่นแรก-ยังไม่มี-router-และ-appvue-ชั่วคราว">L1.6
+<code>src/main.js</code> (รุ่นแรก ยังไม่มี router) และ <code>App.vue</code>
+ชั่วคราว</h3>
+<p><code>main.js</code> รุ่นนี้ติดตั้งแค่ Vuetify ก่อน <strong>ยังไม่ import
+router</strong> เพราะยังไม่มีไฟล์</p>
+<p>ไฟล์ <code>frontend/src/main.js</code> (รุ่นแรก)</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { createApp } <span class="im">from</span> <span class="st">&#39;vue&#39;</span><span class="op">;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { createVuetify } <span class="im">from</span> <span class="st">&#39;vuetify&#39;</span><span class="op">;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> components <span class="im">from</span> <span class="st">&#39;vuetify/components&#39;</span><span class="op">;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> directives <span class="im">from</span> <span class="st">&#39;vuetify/directives&#39;</span><span class="op">;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="st">&#39;vuetify/styles&#39;</span><span class="op">;</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="st">&#39;@mdi/font/css/materialdesignicons.css&#39;</span><span class="op">;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="st">&#39;./style.css&#39;</span><span class="op">;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> App <span class="im">from</span> <span class="st">&#39;./App.vue&#39;</span><span class="op">;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> vuetify <span class="op">=</span> <span class="fu">createVuetify</span>({ components<span class="op">,</span> directives })<span class="op">;</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="fu">createApp</span>(App)<span class="op">.</span><span class="fu">use</span>(vuetify)<span class="op">.</span><span class="fu">mount</span>(<span class="st">&#39;#app&#39;</span>)<span class="op">;</span></span></code></pre></div>
+<p>เขียนทับ <code>App.vue</code> ด้วยหน้าทดสอบสั้น ๆ</p>
+<p>ไฟล์ <code>frontend/src/App.vue</code> (ชั่วคราว)</p>
+<pre class="vue"><code>&lt;template&gt;
+  &lt;v-app&gt;
+    &lt;v-main&gt;
+      &lt;v-container&gt;
+        &lt;h2&gt;Vuetify พร้อมใช้งาน&lt;/h2&gt;
+        &lt;v-btn color=&quot;primary&quot; prepend-icon=&quot;mdi-check&quot;&gt;ปุ่มทดสอบ&lt;/v-btn&gt;
+      &lt;/v-container&gt;
+    &lt;/v-main&gt;
+  &lt;/v-app&gt;
+&lt;/template&gt;</code></pre>
+<h3 id="-ตรวจ-l1">✔ ตรวจ L1</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> run dev</span></code></pre></div>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>Terminal ขึ้น
+<code>Local: http://localhost:5173/</code></label></li>
+<li><label><input type="checkbox"></input>เปิด http://localhost:5173 เห็นหัวข้อ
+&quot;Vuetify พร้อมใช้งาน&quot; และ <strong>ปุ่มสีน้ำเงินมีไอคอนเครื่องหมายถูก</strong>
+(ถ้าปุ่มไม่มีสี = ยังไม่ได้ import <code>vuetify/styles</code>, ไม่มีไอคอน = ขาด
+<code>@mdi/font</code>)</label></li>
+<li><label><input type="checkbox"></input>กด F12 → Console
+ไม่มีตัวแดง</label></li>
+</ul>
+<blockquote>
+<p>พื้นหลังเป็นสีดำ? แปลว่าได้ Vuetify 4 (ลืมใส่ <code>@3</code> ใน L1.1) ให้
+<code>npm install vuetify@3</code> แล้วปิดเปิด <code>npm run dev</code>
+ใหม่</p>
+</blockquote>
+<p>เปิด <code>npm run dev</code> ทิ้งไว้ได้เลย แก้ไฟล์แล้วหน้าเว็บจะรีเฟรชเอง
+(ถ้าหน้าขาวค้างให้กด F5)</p>
+<h2 id="l2-apijs--หน้าชั่วคราว--routerjs--appvue">L2 <code>api.js</code> +
+หน้าชั่วคราว + <code>router.js</code> + <code>App.vue</code></h2>
+<p>ลำดับสำคัญ: <strong>สร้างไฟล์ที่ถูกอ้างถึงก่อน</strong> แล้วค่อยเขียนไฟล์ที่ import
+มัน</p>
+<h3 id="l21-srcapijs--axios-กลางของทั้งแอป">L2.1 <code>src/api.js</code> —
+axios กลางของทั้งแอป</h3>
+<p>ไฟล์ <code>frontend/src/api.js</code></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">// เรียก API ด้วย axios + เก็บข้อมูลผู้ใช้ที่ login</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> axios <span class="im">from</span> <span class="st">&#39;axios&#39;</span><span class="op">;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { reactive } <span class="im">from</span> <span class="st">&#39;vue&#39;</span><span class="op">;</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">// ข้อมูลที่ทุกหน้าใช้ร่วมกัน</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> state <span class="op">=</span> <span class="fu">reactive</span>({</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">user</span><span class="op">:</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(localStorage<span class="op">.</span><span class="fu">getItem</span>(<span class="st">&#39;user&#39;</span>) <span class="op">||</span> <span class="st">&#39;null&#39;</span>)<span class="op">,</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">message</span><span class="op">:</span> <span class="st">&#39;&#39;</span><span class="op">,</span> <span class="co">// ข้อความแจ้งเตือนมุมจอ</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> api <span class="op">=</span> axios<span class="op">.</span><span class="fu">create</span>({ <span class="dt">baseURL</span><span class="op">:</span> <span class="st">&#39;/api&#39;</span> })<span class="op">;</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">// แนบ token ไปกับทุกคำขอ</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>api<span class="op">.</span><span class="at">interceptors</span><span class="op">.</span><span class="at">request</span><span class="op">.</span><span class="fu">use</span>((config) <span class="kw">=&gt;</span> {</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  config<span class="op">.</span><span class="at">headers</span><span class="op">.</span><span class="at">Authorization</span> <span class="op">=</span> <span class="st">&#39;Bearer &#39;</span> <span class="op">+</span> localStorage<span class="op">.</span><span class="fu">getItem</span>(<span class="st">&#39;token&#39;</span>)<span class="op">;</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> config<span class="op">;</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co">// สำเร็จ: คืนเฉพาะ body  /  ผิดพลาด: แสดงข้อความจาก API</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>api<span class="op">.</span><span class="at">interceptors</span><span class="op">.</span><span class="at">response</span><span class="op">.</span><span class="fu">use</span>(</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>  (res) <span class="kw">=&gt;</span> res<span class="op">.</span><span class="at">data</span><span class="op">,</span></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>  (err) <span class="kw">=&gt;</span> {</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    state<span class="op">.</span><span class="at">message</span> <span class="op">=</span> err<span class="op">.</span><span class="at">response</span><span class="op">?.</span><span class="at">data</span><span class="op">?.</span><span class="at">message</span> <span class="op">||</span> <span class="st">&#39;เชื่อมต่อ API ไม่ได้&#39;</span><span class="op">;</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (err<span class="op">.</span><span class="at">response</span><span class="op">?.</span><span class="at">status</span> <span class="op">===</span> <span class="dv">401</span>) <span class="fu">logout</span>()<span class="op">;</span></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">reject</span>(err)<span class="op">;</span></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">saveLogin</span>(token<span class="op">,</span> user) {</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  localStorage<span class="op">.</span><span class="fu">setItem</span>(<span class="st">&#39;token&#39;</span><span class="op">,</span> token)<span class="op">;</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>  localStorage<span class="op">.</span><span class="fu">setItem</span>(<span class="st">&#39;user&#39;</span><span class="op">,</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(user))<span class="op">;</span></span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>  state<span class="op">.</span><span class="at">user</span> <span class="op">=</span> user<span class="op">;</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">logout</span>() {</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>  localStorage<span class="op">.</span><span class="fu">clear</span>()<span class="op">;</span></span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>  state<span class="op">.</span><span class="at">user</span> <span class="op">=</span> <span class="kw">null</span><span class="op">;</span></span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a><span class="co">// ลิงก์ดาวน์โหลดไฟล์ (แนบ token ใน URL)</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">fileUrl</span>(name) {</span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="st">&#39;/api/files/&#39;</span> <span class="op">+</span> name <span class="op">+</span> <span class="st">&#39;?token=&#39;</span> <span class="op">+</span> localStorage<span class="op">.</span><span class="fu">getItem</span>(<span class="st">&#39;token&#39;</span>)<span class="op">;</span></span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a><span class="co">// กฎตรวจข้อมูลในฟอร์ม (Data Validation)</span></span>
+<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> rules <span class="op">=</span> {</span>
+<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>  <span class="dt">required</span><span class="op">:</span> (v) <span class="kw">=&gt;</span> (v <span class="op">!==</span> <span class="kw">null</span> <span class="op">&amp;&amp;</span> v <span class="op">!==</span> <span class="kw">undefined</span> <span class="op">&amp;&amp;</span> v <span class="op">!==</span> <span class="st">&#39;&#39;</span>) <span class="op">||</span> <span class="st">&#39;ห้ามว่าง&#39;</span><span class="op">,</span></span>
+<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>  <span class="dt">email</span><span class="op">:</span> (v) <span class="kw">=&gt;</span> <span class="op">!</span>v <span class="op">||</span> <span class="ss">/</span><span class="sc">^\S+</span><span class="ss">@</span><span class="sc">\S+\.\S+$</span><span class="ss">/</span><span class="op">.</span><span class="fu">test</span>(v) <span class="op">||</span> <span class="st">&#39;รูปแบบอีเมลไม่ถูกต้อง&#39;</span><span class="op">,</span></span>
+<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>  <span class="dt">min8</span><span class="op">:</span> (v) <span class="kw">=&gt;</span> (v <span class="op">&amp;&amp;</span> v<span class="op">.</span><span class="at">length</span> <span class="op">&gt;=</span> <span class="dv">8</span>) <span class="op">||</span> <span class="st">&#39;อย่างน้อย 8 ตัวอักษร&#39;</span><span class="op">,</span></span>
+<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a><span class="co">// ชื่อที่แสดงบนหน้าจอ</span></span>
+<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> roleNames <span class="op">=</span> { <span class="dt">admin</span><span class="op">:</span> <span class="st">&#39;ฝ่ายบุคลากร&#39;</span><span class="op">,</span> <span class="dt">evaluatee</span><span class="op">:</span> <span class="st">&#39;ผู้รับการประเมิน&#39;</span><span class="op">,</span> <span class="dt">evaluator</span><span class="op">:</span> <span class="st">&#39;กรรมการ&#39;</span> }<span class="op">;</span></span>
+<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> committeeNames <span class="op">=</span> { <span class="dt">chair</span><span class="op">:</span> <span class="st">&#39;ประธาน&#39;</span><span class="op">,</span> <span class="dt">member</span><span class="op">:</span> <span class="st">&#39;กรรมการร่วม&#39;</span> }<span class="op">;</span></span>
+<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> statusNames <span class="op">=</span> { <span class="dt">pending</span><span class="op">:</span> <span class="st">&#39;ยังไม่ได้ประเมิน&#39;</span><span class="op">,</span> <span class="dt">draft</span><span class="op">:</span> <span class="st">&#39;บันทึกร่าง&#39;</span><span class="op">,</span> <span class="dt">confirmed</span><span class="op">:</span> <span class="st">&#39;ยืนยันผลแล้ว&#39;</span> }<span class="op">;</span></span>
+<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> statusColors <span class="op">=</span> { <span class="dt">pending</span><span class="op">:</span> <span class="st">&#39;grey&#39;</span><span class="op">,</span> <span class="dt">draft</span><span class="op">:</span> <span class="st">&#39;orange&#39;</span><span class="op">,</span> <span class="dt">confirmed</span><span class="op">:</span> <span class="st">&#39;green&#39;</span> }<span class="op">;</span></span></code></pre></div>
+<ul>
+<li><strong>interceptor ขาไป</strong> แนบ
+<code>Authorization: Bearer &lt;token&gt;</code> ให้ทุกคำขอ</li>
+<li><strong>interceptor ขากลับ</strong> ข้อความ error จาก API ไปขึ้นที่
+<code>state.message</code> และถ้าได้ 401 จะล้าง token ให้</li>
+<li>ไฟล์นี้เป็นตัวเต็มเหมือนเฉลย ใช้ต่อได้จนจบงาน</li>
+</ul>
+<h3 id="l22-สร้างหน้าชั่วคราว-4-ไฟล์">L2.2 สร้างหน้าชั่วคราว 4 ไฟล์</h3>
+<p>สร้างไฟล์ไว้ก่อนให้ router มีของให้เรียก ข้างในเขียนแค่หัวข้อ (หน้า Login,
+Password, Profile จะเขียนจริงใน L3–L5)</p>
+<p>ไฟล์ <code>frontend/src/pages/LoginPage.vue</code> (ชั่วคราว)</p>
+<pre class="vue"><code>&lt;template&gt;
+  &lt;h2&gt;หน้า Login (กำลังทำ)&lt;/h2&gt;
+&lt;/template&gt;</code></pre>
+<p>ไฟล์ <code>frontend/src/pages/PasswordPage.vue</code> (ชั่วคราว)</p>
+<pre class="vue"><code>&lt;template&gt;
+  &lt;h2&gt;หน้าเปลี่ยนรหัสผ่าน (กำลังทำ)&lt;/h2&gt;
+&lt;/template&gt;</code></pre>
+<p>ไฟล์ <code>frontend/src/pages/ProfilePage.vue</code> (ชั่วคราว)</p>
+<pre class="vue"><code>&lt;template&gt;
+  &lt;h2&gt;หน้าข้อมูลส่วนตัว (กำลังทำ)&lt;/h2&gt;
+&lt;/template&gt;</code></pre>
+<p>หน้าแรกหลัง login ของทุกบทบาท ใช้ไฟล์เดียวกันไปก่อน (ในคู่มือหลักจะแยกเป็น
+Dashboard / ประเมินตนเอง / รายชื่อที่ต้องประเมิน)</p>
+<p>ไฟล์ <code>frontend/src/pages/HomePage.vue</code></p>
+<pre class="vue"><code>&lt;template&gt;
+  &lt;h2 class=&quot;mb-4&quot;&gt;ยินดีต้อนรับ {{ state.user.full_name }}&lt;/h2&gt;
+  &lt;v-card class=&quot;pa-4&quot; max-width=&quot;600&quot;&gt;
+    &lt;p&gt;บทบาท: &lt;strong&gt;{{ roleNames[state.user.role] }}&lt;/strong&gt;&lt;/p&gt;
+    &lt;p&gt;หน้านี้เป็นหน้าชั่วคราวของเล่มซ้อม Login เมนูจริงของแต่ละบทบาทจะทำในคู่มือหลักขั้น 6–7&lt;/p&gt;
+  &lt;/v-card&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { state, roleNames } from &#39;../api&#39;;
+&lt;/script&gt;</code></pre>
+<h3 id="l23-srcrouterjs-รุ่นซ้อม-login">L2.3 <code>src/router.js</code>
+(รุ่นซ้อม Login)</h3>
+<p>มีแค่หน้าที่สร้างแล้ว ส่วนกันสิทธิ์ (<code>beforeEach</code>,
+<code>homeOf</code>) <strong>เหมือนเฉลยทุกบรรทัด</strong></p>
+<p>ไฟล์ <code>frontend/src/router.js</code> (รุ่นซ้อม Login)</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">// กำหนดหน้าเว็บแต่ละหน้า และตรวจการ login ก่อนเข้า (รุ่นซ้อม Login)</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { createRouter<span class="op">,</span> createWebHistory } <span class="im">from</span> <span class="st">&#39;vue-router&#39;</span><span class="op">;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { state } <span class="im">from</span> <span class="st">&#39;./api&#39;</span><span class="op">;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> routes <span class="op">=</span> [</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/login&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/LoginPage.vue&#39;</span>) }<span class="op">,</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/password&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/PasswordPage.vue&#39;</span>) }<span class="op">,</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/profile&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/ProfilePage.vue&#39;</span>) }<span class="op">,</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">// หน้าแรกของแต่ละบทบาท (ตอนนี้ใช้หน้าชั่วคราวหน้าเดียวกัน)</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/dashboard&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/HomePage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;admin&#39;</span> } }<span class="op">,</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/self&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/HomePage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;evaluatee&#39;</span> } }<span class="op">,</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/evaluate&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/HomePage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;evaluator&#39;</span> } }<span class="op">,</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="co">// พาธอื่น ๆ ไปหน้า login (ถ้า login แล้วจะถูกส่งไปหน้าแรกของบทบาท)</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/:any(.*)*&#39;</span><span class="op">,</span> <span class="dt">redirect</span><span class="op">:</span> <span class="st">&#39;/login&#39;</span> }<span class="op">,</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> router <span class="op">=</span> <span class="fu">createRouter</span>({ <span class="dt">history</span><span class="op">:</span> <span class="fu">createWebHistory</span>()<span class="op">,</span> routes })<span class="op">;</span></span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a><span class="co">// หน้าแรกหลัง login (ถ้าต้องเปลี่ยนรหัสผ่าน ไปหน้าเปลี่ยนรหัสก่อน)</span></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">homeOf</span>(user) {</span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (user<span class="op">.</span><span class="at">must_change_password</span>) <span class="cf">return</span> <span class="st">&#39;/password&#39;</span><span class="op">;</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { <span class="dt">admin</span><span class="op">:</span> <span class="st">&#39;/dashboard&#39;</span><span class="op">,</span> <span class="dt">evaluatee</span><span class="op">:</span> <span class="st">&#39;/self&#39;</span><span class="op">,</span> <span class="dt">evaluator</span><span class="op">:</span> <span class="st">&#39;/evaluate&#39;</span> }[user<span class="op">.</span><span class="at">role</span>]<span class="op">;</span></span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-25"><a href="#cb15-25" aria-hidden="true" tabindex="-1"></a>router<span class="op">.</span><span class="fu">beforeEach</span>((to) <span class="kw">=&gt;</span> {</span>
+<span id="cb15-26"><a href="#cb15-26" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> user <span class="op">=</span> state<span class="op">.</span><span class="at">user</span><span class="op">;</span></span>
+<span id="cb15-27"><a href="#cb15-27" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>user) <span class="cf">return</span> to<span class="op">.</span><span class="at">path</span> <span class="op">===</span> <span class="st">&#39;/login&#39;</span> <span class="op">?</span> <span class="kw">true</span> <span class="op">:</span> <span class="st">&#39;/login&#39;</span><span class="op">;</span></span>
+<span id="cb15-28"><a href="#cb15-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (user<span class="op">.</span><span class="at">must_change_password</span> <span class="op">&amp;&amp;</span> to<span class="op">.</span><span class="at">path</span> <span class="op">!==</span> <span class="st">&#39;/password&#39;</span>) <span class="cf">return</span> <span class="st">&#39;/password&#39;</span><span class="op">;</span></span>
+<span id="cb15-29"><a href="#cb15-29" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (to<span class="op">.</span><span class="at">path</span> <span class="op">===</span> <span class="st">&#39;/login&#39;</span>) <span class="cf">return</span> <span class="fu">homeOf</span>(user)<span class="op">;</span></span>
+<span id="cb15-30"><a href="#cb15-30" aria-hidden="true" tabindex="-1"></a>  <span class="co">// เข้าหน้าของบทบาทอื่น → ส่งกลับหน้าแรกของตัวเอง</span></span>
+<span id="cb15-31"><a href="#cb15-31" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (to<span class="op">.</span><span class="at">meta</span><span class="op">.</span><span class="at">role</span> <span class="op">&amp;&amp;</span> to<span class="op">.</span><span class="at">meta</span><span class="op">.</span><span class="at">role</span> <span class="op">!==</span> user<span class="op">.</span><span class="at">role</span>) <span class="cf">return</span> <span class="fu">homeOf</span>(user)<span class="op">;</span></span>
+<span id="cb15-32"><a href="#cb15-32" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb15-33"><a href="#cb15-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-34"><a href="#cb15-34" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> router<span class="op">;</span></span></code></pre></div>
+<ul>
+<li><code>() =&gt; import(...)</code> โหลดหน้านั้นตอนเปิดจริง แต่ <strong>Vite
+ตรวจว่าไฟล์มีอยู่ทันที</strong> ถ้าอ้างไฟล์ที่ยังไม่สร้างจะขึ้น
+<code>Failed to resolve import</code> นี่คือเหตุที่ต้องทำ L2.2 ก่อน</li>
+<li><code>beforeEach</code> ตรวจตามลำดับ: ยังไม่ login →
+<code>/login</code>, ต้องเปลี่ยนรหัส → <code>/password</code>, login แล้วเปิด
+<code>/login</code> → หน้าแรก, บทบาทไม่ตรง <code>meta.role</code> →
+หน้าแรกของตัวเอง</li>
+</ul>
+<h3 id="l24-srcmainjs-ตัวเต็ม-เพิ่ม-router">L2.4 <code>src/main.js</code>
+(ตัวเต็ม เพิ่ม router)</h3>
+<p>เขียนทับทั้งไฟล์ เพิ่ม 2 อย่าง: <code>import router</code> และ
+<code>.use(router)</code></p>
+<p>ไฟล์ <code>frontend/src/main.js</code></p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { createApp } <span class="im">from</span> <span class="st">&#39;vue&#39;</span><span class="op">;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { createVuetify } <span class="im">from</span> <span class="st">&#39;vuetify&#39;</span><span class="op">;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> components <span class="im">from</span> <span class="st">&#39;vuetify/components&#39;</span><span class="op">;</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> directives <span class="im">from</span> <span class="st">&#39;vuetify/directives&#39;</span><span class="op">;</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="st">&#39;vuetify/styles&#39;</span><span class="op">;</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="st">&#39;@mdi/font/css/materialdesignicons.css&#39;</span><span class="op">;</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="st">&#39;./style.css&#39;</span><span class="op">;</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> App <span class="im">from</span> <span class="st">&#39;./App.vue&#39;</span><span class="op">;</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> router <span class="im">from</span> <span class="st">&#39;./router&#39;</span><span class="op">;</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> vuetify <span class="op">=</span> <span class="fu">createVuetify</span>({ components<span class="op">,</span> directives })<span class="op">;</span></span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> app <span class="op">=</span> <span class="fu">createApp</span>(App)<span class="op">;</span></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co">// error จาก API แสดงที่ snackbar แล้ว (ดู api.js) จึงไม่ต้องให้ขึ้นแดงใน Console ซ้ำ</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="at">config</span><span class="op">.</span><span class="at">errorHandler</span> <span class="op">=</span> (err) <span class="kw">=&gt;</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(err<span class="op">.</span><span class="at">message</span>)<span class="op">;</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">use</span>(vuetify)<span class="op">.</span><span class="fu">use</span>(router)<span class="op">.</span><span class="fu">mount</span>(<span class="st">&#39;#app&#39;</span>)<span class="op">;</span></span></code></pre></div>
+<h3 id="l25-srcappvue-รุ่นซ้อม-login">L2.5 <code>src/App.vue</code> (รุ่นซ้อม
+Login)</h3>
+<p>เหมือนเฉลย ต่างแค่ <code>menus</code> มีเฉพาะหน้าแรกของแต่ละบทบาท</p>
+<p>ไฟล์ <code>frontend/src/App.vue</code> (รุ่นซ้อม Login)</p>
+<pre class="vue"><code>&lt;template&gt;
+  &lt;v-app&gt;
+    &lt;!-- แถบด้านบน --&gt;
+    &lt;v-app-bar color=&quot;primary&quot;&gt;
+      &lt;v-app-bar-nav-icon v-if=&quot;state.user&quot; @click=&quot;drawer = !drawer&quot; /&gt;
+      &lt;v-app-bar-title&gt;ระบบประเมินบุคลากร&lt;/v-app-bar-title&gt;
+      &lt;template v-if=&quot;state.user&quot;&gt;
+        &lt;span class=&quot;d-none d-sm-inline mr-2&quot;&gt;{{ state.user.full_name }}&lt;/span&gt;
+        &lt;v-btn icon=&quot;mdi-logout&quot; @click=&quot;signOut&quot; /&gt;
+      &lt;/template&gt;
+    &lt;/v-app-bar&gt;
+
+    &lt;!-- เมนูด้านซ้าย (มือถือจะซ่อน กดปุ่มเมนูเพื่อเปิด) --&gt;
+    &lt;v-navigation-drawer v-if=&quot;state.user &amp;&amp; !state.user.must_change_password&quot; v-model=&quot;drawer&quot;&gt;
+      &lt;v-list nav&gt;
+        &lt;v-list-item
+          v-for=&quot;m in menus[state.user.role]&quot;
+          :key=&quot;m.to&quot;
+          :to=&quot;m.to&quot;
+          :prepend-icon=&quot;m.icon&quot;
+          :title=&quot;m.title&quot;
+        /&gt;
+        &lt;v-divider /&gt;
+        &lt;v-list-item to=&quot;/profile&quot; prepend-icon=&quot;mdi-account&quot; title=&quot;ข้อมูลส่วนตัว&quot; /&gt;
+        &lt;v-list-item to=&quot;/password&quot; prepend-icon=&quot;mdi-key&quot; title=&quot;เปลี่ยนรหัสผ่าน&quot; /&gt;
+      &lt;/v-list&gt;
+    &lt;/v-navigation-drawer&gt;
+
+    &lt;v-main&gt;
+      &lt;v-container&gt;
+        &lt;router-view /&gt;
+      &lt;/v-container&gt;
+    &lt;/v-main&gt;
+
+    &lt;!-- ข้อความแจ้งเตือน --&gt;
+    &lt;v-snackbar :model-value=&quot;!!state.message&quot; @update:model-value=&quot;state.message = &#39;&#39;&quot;&gt;
+      {{ state.message }}
+    &lt;/v-snackbar&gt;
+  &lt;/v-app&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { ref } from &#39;vue&#39;;
+import { useRouter } from &#39;vue-router&#39;;
+import { state, logout } from &#39;./api&#39;;
+
+const router = useRouter();
+const drawer = ref(null); // null = ให้ Vuetify เลือกเอง (จอใหญ่เปิด จอเล็กปิด)
+
+// เมนูของแต่ละบทบาท (รุ่นซ้อม Login มีแค่หน้าแรก คู่มือหลักจะเพิ่มเมนูครบ)
+const menus = {
+  admin: [{ to: &#39;/dashboard&#39;, icon: &#39;mdi-view-dashboard&#39;, title: &#39;Dashboard&#39; }],
+  evaluatee: [{ to: &#39;/self&#39;, icon: &#39;mdi-clipboard-edit&#39;, title: &#39;ประเมินตนเอง&#39; }],
+  evaluator: [{ to: &#39;/evaluate&#39;, icon: &#39;mdi-clipboard-check&#39;, title: &#39;รายชื่อที่ต้องประเมิน&#39; }],
+};
+
+function signOut() {
+  logout();
+  router.push(&#39;/login&#39;);
+}
+&lt;/script&gt;</code></pre>
+<h3 id="-ตรวจ-l2">✔ ตรวจ L2</h3>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>เปิด http://localhost:5173 →
+แถบบนสีน้ำเงิน &quot;ระบบประเมินบุคลากร&quot; และหัวข้อ &quot;หน้า Login (กำลังทำ)&quot; URL เปลี่ยนเป็น
+<code>/login</code> เอง</label></li>
+<li><label><input type="checkbox"></input>พิมพ์ http://localhost:5173/dashboard
+ในช่อง URL → ถูกพากลับ <code>/login</code> (ยังไม่ login
+เข้าไม่ได้)</label></li>
+<li><label><input type="checkbox"></input>พิมพ์ http://localhost:5173/abc →
+ถูกพากลับ <code>/login</code></label></li>
+<li><label><input type="checkbox"></input>F12 → Console ไม่มีตัวแดง</label></li>
+</ul>
+<h2 id="l3-หน้า-login">L3 หน้า Login</h2>
+<p>เขียนทับไฟล์ชั่วคราวด้วยตัวจริง (เหมือนเฉลยทุกบรรทัด)</p>
+<p>ไฟล์ <code>frontend/src/pages/LoginPage.vue</code></p>
+<pre class="vue"><code>&lt;template&gt;
+  &lt;v-card max-width=&quot;420&quot; class=&quot;mx-auto mt-10 pa-4&quot;&gt;
+    &lt;v-card-title&gt;เข้าสู่ระบบ&lt;/v-card-title&gt;
+    &lt;v-form ref=&quot;form&quot; @submit.prevent=&quot;login&quot;&gt;
+      &lt;v-text-field v-model=&quot;username&quot; label=&quot;ชื่อผู้ใช้&quot; :rules=&quot;[rules.required]&quot; /&gt;
+      &lt;v-text-field v-model=&quot;password&quot; label=&quot;รหัสผ่าน&quot; type=&quot;password&quot; :rules=&quot;[rules.required]&quot; /&gt;
+      &lt;v-btn type=&quot;submit&quot; color=&quot;primary&quot; block&gt;เข้าสู่ระบบ&lt;/v-btn&gt;
+    &lt;/v-form&gt;
+  &lt;/v-card&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { ref } from &#39;vue&#39;;
+import { useRouter } from &#39;vue-router&#39;;
+import { homeOf } from &#39;../router&#39;;
+import { api, saveLogin, rules } from &#39;../api&#39;;
+
+const router = useRouter();
+const form = ref();
+const username = ref(&#39;&#39;);
+const password = ref(&#39;&#39;);
+
+async function login() {
+  const { valid } = await form.value.validate();
+  if (!valid) return;
+  const res = await api.post(&#39;/auth/login&#39;, { username: username.value, password: password.value });
+  saveLogin(res.data.token, res.data.user);
+  router.push(homeOf(res.data.user));
+}
+&lt;/script&gt;</code></pre>
+<ul>
+<li><code>:rules=&quot;[rules.required]&quot;</code> ตรวจช่องว่างก่อนส่ง (Validation
+ฝั่งหน้าบ้าน)</li>
+<li><code>await form.value.validate()</code> ถ้าไม่ผ่านจะไม่เรียก API</li>
+<li>รหัสผิด API ตอบ 401 → interceptor ใน <code>api.js</code> ใส่ข้อความลง
+<code>state.message</code> → snackbar ใน <code>App.vue</code> เด้งขึ้นเอง
+หน้านี้ไม่ต้องเขียน try/catch</li>
+</ul>
+<h3 id="-ตรวจ-l3">✔ ตรวจ L3</h3>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>เห็นการ์ด &quot;เข้าสู่ระบบ&quot; กดปุ่มโดยไม่กรอก →
+ใต้ทั้งสองช่องขึ้น &quot;ห้ามว่าง&quot; สีแดง</label></li>
+<li><label><input type="checkbox"></input><code>admin</code> / <code>x</code>
+→ snackbar ล่างจอ &quot;ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง&quot;</label></li>
+<li><label><input type="checkbox"></input><code>admin</code> /
+<code>admin1234</code> → ไปหน้า <code>/dashboard</code> เห็น &quot;ยินดีต้อนรับ
+ฝ่ายบุคลากร&quot; บทบาท ฝ่ายบุคลากร เมนูซ้ายมี Dashboard, ข้อมูลส่วนตัว,
+เปลี่ยนรหัสผ่าน</label></li>
+<li><label><input type="checkbox"></input>F12 → Application → Local Storage →
+<code>http://localhost:5173</code> มี <code>token</code> และ
+<code>user</code></label></li>
+<li><label><input type="checkbox"></input>พิมพ์ <code>/login</code> ในช่อง URL →
+ถูกพากลับ <code>/dashboard</code> (login แล้วไม่ต้องเห็นหน้า
+Login)</label></li>
+<li><label><input type="checkbox"></input>พิมพ์ <code>/self</code> (หน้าของผู้รับ) →
+ถูกพากลับ <code>/dashboard</code> (กันหน้าข้ามบทบาท)</label></li>
+<li><label><input type="checkbox"></input>กดไอคอนออกจากระบบมุมขวาบน → กลับหน้า
+Login, Local Storage ว่าง</label></li>
+</ul>
+<h2 id="l4-หน้าเปลี่ยนรหัสผ่าน-บังคับครั้งแรก">L4 หน้าเปลี่ยนรหัสผ่าน
+(บังคับครั้งแรก)</h2>
+<p>ไฟล์ <code>frontend/src/pages/PasswordPage.vue</code></p>
+<pre class="vue"><code>&lt;template&gt;
+  &lt;v-card max-width=&quot;420&quot; class=&quot;mx-auto mt-6 pa-4&quot;&gt;
+    &lt;v-card-title&gt;เปลี่ยนรหัสผ่าน&lt;/v-card-title&gt;
+    &lt;v-alert v-if=&quot;state.user.must_change_password&quot; type=&quot;warning&quot; class=&quot;mb-4&quot;&gt;
+      เข้าใช้งานครั้งแรก กรุณาเปลี่ยนรหัสผ่านก่อน
+    &lt;/v-alert&gt;
+    &lt;v-form ref=&quot;form&quot; @submit.prevent=&quot;save&quot;&gt;
+      &lt;v-text-field v-model=&quot;oldPassword&quot; label=&quot;รหัสผ่านเดิม&quot; type=&quot;password&quot; :rules=&quot;[rules.required]&quot; /&gt;
+      &lt;v-text-field v-model=&quot;newPassword&quot; label=&quot;รหัสผ่านใหม่&quot; type=&quot;password&quot; :rules=&quot;[rules.min8]&quot; /&gt;
+      &lt;v-text-field
+        v-model=&quot;confirm&quot;
+        label=&quot;ยืนยันรหัสผ่านใหม่&quot;
+        type=&quot;password&quot;
+        :rules=&quot;[(v) =&gt; v === newPassword || &#39;รหัสผ่านไม่ตรงกัน&#39;]&quot;
+      /&gt;
+      &lt;v-btn type=&quot;submit&quot; color=&quot;primary&quot; block&gt;บันทึก&lt;/v-btn&gt;
+    &lt;/v-form&gt;
+  &lt;/v-card&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { ref } from &#39;vue&#39;;
+import { useRouter } from &#39;vue-router&#39;;
+import { homeOf } from &#39;../router&#39;;
+import { api, state, saveLogin, rules } from &#39;../api&#39;;
+
+const router = useRouter();
+const form = ref();
+const oldPassword = ref(&#39;&#39;);
+const newPassword = ref(&#39;&#39;);
+const confirm = ref(&#39;&#39;);
+
+async function save() {
+  const { valid } = await form.value.validate();
+  if (!valid) return;
+  const res = await api.put(&#39;/auth/password&#39;, {
+    old_password: oldPassword.value,
+    new_password: newPassword.value,
+  });
+  saveLogin(res.data.token, { ...state.user, must_change_password: 0 });
+  state.message = res.message;
+  router.push(homeOf(state.user));
+}
+&lt;/script&gt;</code></pre>
+<ul>
+<li>API เปลี่ยนรหัสแล้วส่ง <strong>token ใหม่</strong> กลับมา (token
+เก่ายังบอกว่าต้องเปลี่ยนรหัส) จึงต้อง <code>saveLogin</code> อีกรอบ</li>
+<li><code>must_change_password: 0</code> ทำให้ router ปล่อยไปหน้าอื่นได้</li>
+</ul>
+<h3 id="-ตรวจ-l4">✔ ตรวจ L4</h3>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>login <code>emp1</code> /
+<code>emp12345</code> → ถูกพาไป <code>/password</code> เห็นกล่องสีส้ม
+&quot;เข้าใช้งานครั้งแรก...&quot; และ <strong>ไม่มีเมนูซ้าย</strong></label></li>
+<li><label><input type="checkbox"></input>พิมพ์ <code>/self</code> ในช่อง URL →
+ยังถูกพากลับ <code>/password</code></label></li>
+<li><label><input type="checkbox"></input>รหัสใหม่ <code>123</code> → ขึ้น
+&quot;อย่างน้อย 8 ตัวอักษร&quot; / ยืนยันไม่ตรง → ขึ้น &quot;รหัสผ่านไม่ตรงกัน&quot;</label></li>
+<li><label><input type="checkbox"></input>รหัสเดิมผิด (เช่น <code>xxxx</code>)
+รหัสใหม่ <code>newpass123</code> ทั้งสองช่อง → snackbar
+&quot;รหัสผ่านเดิมไม่ถูกต้อง&quot;</label></li>
+<li><label><input type="checkbox"></input>รหัสเดิม <code>emp12345</code> รหัสใหม่
+<code>newpass123</code> ทั้งสองช่อง → snackbar &quot;เปลี่ยนรหัสผ่านแล้ว&quot; ไปหน้า
+<code>/self</code> เห็น &quot;ยินดีต้อนรับ สมชาย ใจดี&quot; บทบาท ผู้รับการประเมิน
+และเมนูซ้ายโผล่</label></li>
+<li><label><input type="checkbox"></input>ออกจากระบบ แล้ว login
+<code>emp1</code> / <code>newpass123</code> → เข้า <code>/self</code> ตรง
+ๆ ไม่ถูกบังคับเปลี่ยนรหัสอีก</label></li>
+</ul>
+<blockquote>
+<p>ซ้อมรอบใหม่ อยากให้ emp1 กลับเป็นรหัสเดิม: ที่โฟลเดอร์ <code>project</code> พิมพ์
+<code>docker compose down -v</code> แล้ว
+<code>docker compose up -d db phpmyadmin backend</code> หรือใช้
+<code>emp2</code>, <code>eva1</code>, <code>eva2</code>
+ที่ยังไม่เคยเปลี่ยน</p>
+</blockquote>
+<h2 id="l5-หน้าข้อมูลส่วนตัว">L5 หน้าข้อมูลส่วนตัว</h2>
+<p>ไฟล์ <code>frontend/src/pages/ProfilePage.vue</code></p>
+<pre class="vue"><code>&lt;template&gt;
+  &lt;h2 class=&quot;mb-4&quot;&gt;ข้อมูลส่วนตัว&lt;/h2&gt;
+  &lt;v-card class=&quot;pa-4&quot; max-width=&quot;600&quot;&gt;
+    &lt;p class=&quot;mb-4&quot;&gt;ชื่อผู้ใช้: {{ user.username }}&lt;/p&gt;
+    &lt;v-form ref=&quot;form&quot; @submit.prevent=&quot;save&quot;&gt;
+      &lt;v-text-field v-model=&quot;user.full_name&quot; label=&quot;ชื่อ-นามสกุล&quot; :rules=&quot;[rules.required]&quot; /&gt;
+      &lt;v-text-field v-model=&quot;user.email&quot; label=&quot;อีเมล&quot; :rules=&quot;[rules.email]&quot; /&gt;
+      &lt;v-text-field v-model=&quot;user.department&quot; label=&quot;แผนก/หน่วยงาน&quot; /&gt;
+      &lt;v-btn type=&quot;submit&quot; color=&quot;primary&quot;&gt;บันทึก&lt;/v-btn&gt;
+    &lt;/v-form&gt;
+  &lt;/v-card&gt;
+&lt;/template&gt;
+
+&lt;script setup&gt;
+import { ref, onMounted } from &#39;vue&#39;;
+import { api, state, rules } from &#39;../api&#39;;
+
+const form = ref();
+const user = ref({});
+
+onMounted(async () =&gt; {
+  user.value = (await api.get(&#39;/auth/me&#39;)).data;
+});
+
+async function save() {
+  const { valid } = await form.value.validate();
+  if (!valid) return;
+  const res = await api.put(&#39;/auth/me&#39;, user.value);
+  state.user.full_name = user.value.full_name;
+  localStorage.setItem(&#39;user&#39;, JSON.stringify(state.user));
+  state.message = res.message;
+}
+&lt;/script&gt;</code></pre>
+<ul>
+<li><code>onMounted</code> โหลดข้อมูลล่าสุดจาก <code>GET /api/auth/me</code>
+ตอนเปิดหน้า</li>
+<li>บันทึกแล้วอัปเดตชื่อใน <code>state.user</code> ชื่อบนแถบบนจึงเปลี่ยนตามทันที</li>
+</ul>
+<h3 id="-ตรวจ-l5">✔ ตรวจ L5</h3>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>login <code>admin</code> → เมนูซ้าย
+&quot;ข้อมูลส่วนตัว&quot; → เห็น &quot;ชื่อผู้ใช้: admin&quot; และช่องชื่อเป็น &quot;ฝ่ายบุคลากร&quot;</label></li>
+<li><label><input type="checkbox"></input>อีเมล <code>abc</code> → ขึ้น
+&quot;รูปแบบอีเมลไม่ถูกต้อง&quot; กดบันทึกแล้วไม่ส่ง</label></li>
+<li><label><input type="checkbox"></input>ลบชื่อให้ว่าง → ขึ้น &quot;ห้ามว่าง&quot;</label></li>
+<li><label><input type="checkbox"></input>ชื่อ <code>ฝ่ายบุคลากร ทดสอบ</code> อีเมล
+<code>hr@school.ac.th</code> แผนก <code>บุคลากร</code> → snackbar
+&quot;บันทึกข้อมูลส่วนตัวแล้ว&quot; ชื่อบนแถบบนเปลี่ยนทันที</label></li>
+<li><label><input type="checkbox"></input>กด F5 → ข้อมูลที่บันทึกยังอยู่
+(มาจากฐานข้อมูลจริง)</label></li>
+</ul>
+<h2 id="l6-ตรวจรวมก่อนส่ง">L6 ตรวจรวมก่อนส่ง</h2>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>login ครบ 3 บทบาท:
+<code>admin</code> → <code>/dashboard</code>, <code>emp2</code>
+(เปลี่ยนรหัสก่อน) → <code>/self</code>, <code>eva1</code> (เปลี่ยนรหัสก่อน) →
+<code>/evaluate</code> แต่ละคนเห็นเมนูหน้าแรกของตัวเองเท่านั้น</label></li>
+<li><label><input type="checkbox"></input>ขณะเป็น eva1 พิมพ์
+<code>/dashboard</code> → ถูกพากลับ <code>/evaluate</code></label></li>
+<li><label><input type="checkbox"></input>ออกจากระบบแล้วพิมพ์
+<code>/profile</code> → ถูกพากลับ <code>/login</code></label></li>
+<li><label><input type="checkbox"></input>F12 → Console ไม่มีตัวแดงตลอดการทดสอบ
+ยกเว้นบรรทัด <code>Failed to load resource ... 401 (Unauthorized)</code> /
+<code>400 (Bad Request)</code> ที่เกิดตอน <strong>ตั้งใจ</strong> ใส่รหัสผิด
+อันนั้นคือเบราว์เซอร์รายงานว่า API ตอบ error ซึ่งถูกต้องตามที่ทดสอบ</label></li>
+<li><label><input type="checkbox"></input>F12 → ไอคอนมือถือ
+(<code>Ctrl + Shift + M</code>) เลือก iPhone → เมนูซ้ายซ่อน กดปุ่ม ☰
+เมนูเลื่อนออกมา การ์ด Login ไม่ล้นจอ (Responsive)</label></li>
+<li><label><input type="checkbox"></input>Network → กดเข้าสู่ระบบ เห็น request
+<code>login</code> ไป <code>/api/auth/login</code> status
+200</label></li>
+</ul>
+<h3 id="เทียบกับเฉลย">เทียบกับเฉลย</h3>
+<table>
+<thead>
+<tr>
+<th>ไฟล์</th>
+<th>เทียบกับ <code>project/frontend</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vite.config.js</code> <code>index.html</code>
+<code>style.css</code> <code>main.js</code> <code>api.js</code></td>
+<td>เหมือนทุกบรรทัด</td>
+</tr>
+<tr>
+<td><code>LoginPage.vue</code> <code>PasswordPage.vue</code>
+<code>ProfilePage.vue</code></td>
+<td>เหมือนทุกบรรทัด</td>
+</tr>
+<tr>
+<td><code>router.js</code></td>
+<td>ส่วน <code>homeOf</code> และ <code>beforeEach</code> เหมือน
+ต่างแค่รายการ <code>routes</code></td>
+</tr>
+<tr>
+<td><code>App.vue</code></td>
+<td>เหมือน ต่างแค่ <code>menus</code></td>
+</tr>
+<tr>
+<td><code>HomePage.vue</code></td>
+<td>มีเฉพาะเล่มซ้อมนี้</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ไปต่อคู่มือหลัก-ขั้น-67">ไปต่อคู่มือหลัก (ขั้น 6–7)</h2>
+<ol type="1">
+<li>สร้างหน้าชั่วคราวให้ครบทุกหน้าที่ router เต็มอ้างถึง <strong>ก่อน</strong> แก้
+router (ใช้เนื้อหาแบบ L2.2): <code>DashboardPage.vue</code>
+<code>UsersPage.vue</code> <code>PeriodsPage.vue</code>
+<code>CriteriaPage.vue</code> <code>AssignPage.vue</code>
+<code>TrackPage.vue</code> <code>BackupPage.vue</code>
+<code>ResultPage.vue</code> <code>SelfPage.vue</code>
+<code>EvaluateListPage.vue</code> <code>EvaluatePage.vue</code></li>
+<li>เขียนทับ <code>router.js</code> และ <code>App.vue</code>
+ด้วยตัวเต็มจากคู่มือหลักข้อ 5.7 และ 5.8</li>
+<li>ลบ <code>HomePage.vue</code> ทิ้ง</li>
+<li>ทำ ✔ ตรวจ L2 ซ้ำ (ต้องไม่มีตัวแดง) แล้วค่อยเขียนหน้าจริงทีละหน้าตามคู่มือหลักขั้น
+6–7</li>
+</ol>
+<h2 id="ปัญหาที่เจอบ่อยในเล่มนี้">ปัญหาที่เจอบ่อยในเล่มนี้</h2>
+<table>
+<thead>
+<tr>
+<th>อาการ</th>
+<th>สาเหตุ</th>
+<th>วิธีแก้</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>หน้าขาว Console
+<code>Failed to resolve import &quot;./pages/XxxPage.vue&quot;</code></td>
+<td>router อ้างหน้าที่ยังไม่ได้สร้าง หรือสะกดชื่อไฟล์ผิด (ตัวพิมพ์เล็กใหญ่ต้องตรง)</td>
+<td>สร้างไฟล์หน้าชั่วคราวตาม L2.2</td>
+</tr>
+<tr>
+<td>หน้าขาว Console
+<code>Failed to resolve import &quot;./components/HelloWorld.vue&quot;</code></td>
+<td>ยังไม่ได้เขียนทับ <code>App.vue</code> หลังลบ HelloWorld</td>
+<td>ทำ L1.6</td>
+</tr>
+<tr>
+<td>ปุ่มไม่มีสี ฟอร์มไม่สวย</td>
+<td>ไม่ได้ <code>import &#39;vuetify/styles&#39;</code> หรือ CSS ตัวอย่างของ Vite
+ยังอยู่</td>
+<td>ตรวจ <code>main.js</code> และเขียนทับ <code>style.css</code> ตาม
+L1.5</td>
+</tr>
+<tr>
+<td><code>Failed to resolve component: v-btn</code></td>
+<td>ไม่ได้ <code>.use(vuetify)</code></td>
+<td>ตรวจ <code>main.js</code></td>
+</tr>
+<tr>
+<td>กดเข้าสู่ระบบแล้ว snackbar &quot;เชื่อมต่อ API ไม่ได้&quot; หรือ Network ขึ้น 500/502</td>
+<td>Back-end ไม่ได้เปิด</td>
+<td>ทำ L0 ใหม่ ตรวจ http://localhost:3000/api/auth/me</td>
+</tr>
+<tr>
+<td>login รหัสถูกแต่ขึ้น &quot;ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง&quot;</td>
+<td>เคยเปลี่ยนรหัสไปแล้ว หรือฐานข้อมูลเก่าค้าง</td>
+<td>ใช้ <code>newpass123</code> หรือ <code>docker compose down -v</code>
+แล้วเปิดใหม่ตาม L0</td>
+</tr>
+<tr>
+<td><code>Port 5173 is already in use</code></td>
+<td>เปิด <code>frontend</code> ของเฉลยค้างไว้ หรือรัน
+<code>npm run dev</code> ซ้ำสองหน้าต่าง</td>
+<td>ที่โฟลเดอร์ <code>project</code> พิมพ์
+<code>docker compose stop frontend</code> หรือปิด Terminal เก่า</td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

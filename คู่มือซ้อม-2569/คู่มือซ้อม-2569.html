@@ -3066,7 +3066,17 @@ Front-end โครงโปรเจกต์ และหน้า Login (ค�
 <div class="sourceCode" id="cb38"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> create vite@latest frontend <span class="at">--</span> <span class="at">--template</span> vue</span>
 <span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> frontend</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install vuetify @mdi/font vue-router axios html2pdf.js</span></code></pre></div>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install vuetify@3 @mdi/font@7 vue-router@4 axios@1 html2pdf.js@0.10</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install <span class="at">-D</span> vite@6 @vitejs/plugin-vue@5</span></code></pre></div>
+<blockquote>
+<p><strong>ต้องใส่ @เลขเวอร์ชัน ตามนี้ทุกตัว</strong> ถ้าพิมพ์แค่
+<code>npm install vuetify</code> จะได้ Vuetify 4 (รุ่นใหม่ ยังไม่ตรงกับคู่มือ)
+ซึ่งทำให้ปุ่ม Export PDF ใช้ไม่ได้ (Console ขึ้น
+<code>unsupported color function</code>) และหน้าตาบางอย่างต่างจากเฉลย
+บรรทัดสุดท้ายปรับ Vite ให้รุ่นเดียวกับเฉลย ถ้า <code>npm create vite</code>
+ถามคำถามเพิ่ม (เช่น ใช้ rolldown หรือ ติดตั้งและเปิดเลยไหม) ให้ตอบ
+<strong>No</strong></p>
+</blockquote>
 <table>
 <thead>
 <tr>
@@ -3109,52 +3119,69 @@ Front-end โครงโปรเจกต์ และหน้า Login (ค�
 <div class="sourceCode" id="cb39"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># อยู่ในโฟลเดอร์ frontend</span></span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> src/components/HelloWorld.vue</span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> <span class="at">-r</span> src/assets</span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span> public/vite.svg</span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> src/pages</span></code></pre></div>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> src/pages</span></code></pre></div>
 <blockquote>
-<p>บน Windows PowerShell ใช้ <code>Remove-Item</code> แทน <code>rm</code>
-หรือจะลบใน VS Code (คลิกขวา → Delete) ก็ได้</p>
+<p>ใช้ได้ทั้ง PowerShell และ Git Bash หรือจะลบใน VS Code (คลิกขวา → Delete)
+ก็ได้ ไฟล์ในโฟลเดอร์ <code>public</code> ปล่อยไว้ได้ (Vite
+แต่ละรุ่นใส่ไฟล์ตัวอย่างไม่เหมือนกัน)</p>
+</blockquote>
+<h3 id="สร้างหน้าชั่วคราวทั้ง-14-หน้าไว้ก่อน-สำคัญ">สร้างหน้าชั่วคราวทั้ง 14 หน้าไว้ก่อน
+(สำคัญ)</h3>
+<p><code>router.js</code> (ข้อ 5.7) จะอ้างถึงหน้า 14 หน้า ถ้าไฟล์ยังไม่มี Vite
+จะขึ้น <code>Failed to resolve import</code> ทันทีที่เปิดเว็บ
+จึงต้องสร้างไฟล์เปล่าไว้ก่อน แล้วค่อยเขียนทับทีละหน้าในข้อ 5.9–5.11 และขั้น 6–7</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># PowerShell ในโฟลเดอร์ frontend</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="va">$pages</span> <span class="op">=</span> <span class="st">&#39;LoginPage&#39;</span><span class="op">,</span><span class="st">&#39;PasswordPage&#39;</span><span class="op">,</span><span class="st">&#39;ProfilePage&#39;</span><span class="op">,</span><span class="st">&#39;ResultPage&#39;</span><span class="op">,</span><span class="st">&#39;DashboardPage&#39;</span><span class="op">,</span><span class="st">&#39;UsersPage&#39;</span><span class="op">,</span><span class="st">&#39;PeriodsPage&#39;</span><span class="op">,</span><span class="st">&#39;CriteriaPage&#39;</span><span class="op">,</span><span class="st">&#39;AssignPage&#39;</span><span class="op">,</span><span class="st">&#39;TrackPage&#39;</span><span class="op">,</span><span class="st">&#39;BackupPage&#39;</span><span class="op">,</span><span class="st">&#39;SelfPage&#39;</span><span class="op">,</span><span class="st">&#39;EvaluateListPage&#39;</span><span class="op">,</span><span class="st">&#39;EvaluatePage&#39;</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="cf">foreach</span> <span class="op">(</span><span class="va">$p</span> <span class="kw">in</span> <span class="va">$pages</span><span class="op">)</span> <span class="op">{</span> <span class="fu">Set-Content</span> <span class="st">&quot;src/pages/</span><span class="va">$p</span><span class="st">.vue&quot;</span> <span class="st">&quot;&lt;template&gt;</span><span class="ch">`n</span><span class="st">  &lt;h2&gt;</span><span class="va">$p</span><span class="st"> (กำลังทำ)&lt;/h2&gt;</span><span class="ch">`n</span><span class="st">&lt;/template&gt;&quot;</span> <span class="op">-</span>Encoding utf8 <span class="op">}</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dir</span> src<span class="op">/</span>pages</span></code></pre></div>
+<p>ต้องเห็นไฟล์ <code>.vue</code> ครบ 14 ไฟล์ (หรือสร้างเองใน VS Code ทีละไฟล์
+ใส่เนื้อหาตามตัวอย่างในข้อ 5.13)</p>
+<blockquote>
+<p><strong>อย่าเพิ่งเปิดเว็บดูจนกว่าจะเขียนถึงข้อ 5.8</strong> เพราะ
+<code>App.vue</code> ตัวเดิมยังเรียก <code>HelloWorld.vue</code> ที่เพิ่งลบ และ
+<code>main.js</code> (ข้อ 5.4) เรียก <code>router.js</code> ที่ยังไม่ได้เขียน
+จุดตรวจแรกอยู่หลังข้อ 5.8</p>
 </blockquote>
 <p>ตรวจ <code>package.json</code> ให้หน้าตาประมาณนี้ (เลขเวอร์ชันใหม่กว่าได้)</p>
 <p>ไฟล์ <code>frontend/package.json</code></p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;evaluation-web&quot;</span><span class="fu">,</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;private&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;version&quot;</span><span class="fu">:</span> <span class="st">&quot;2569.0.0&quot;</span><span class="fu">,</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;module&quot;</span><span class="fu">,</span></span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;scripts&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;dev&quot;</span><span class="fu">:</span> <span class="st">&quot;vite&quot;</span><span class="fu">,</span></span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;build&quot;</span><span class="fu">:</span> <span class="st">&quot;vite build&quot;</span></span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;dependencies&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;@mdi/font&quot;</span><span class="fu">:</span> <span class="st">&quot;^7.4.47&quot;</span><span class="fu">,</span></span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;axios&quot;</span><span class="fu">:</span> <span class="st">&quot;^1.7.9&quot;</span><span class="fu">,</span></span>
-<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;html2pdf.js&quot;</span><span class="fu">:</span> <span class="st">&quot;^0.10.3&quot;</span><span class="fu">,</span></span>
-<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;vue&quot;</span><span class="fu">:</span> <span class="st">&quot;^3.5.13&quot;</span><span class="fu">,</span></span>
-<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;vue-router&quot;</span><span class="fu">:</span> <span class="st">&quot;^4.5.0&quot;</span><span class="fu">,</span></span>
-<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;vuetify&quot;</span><span class="fu">:</span> <span class="st">&quot;^3.7.6&quot;</span></span>
-<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
-<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;devDependencies&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
-<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;@vitejs/plugin-vue&quot;</span><span class="fu">:</span> <span class="st">&quot;^5.2.1&quot;</span><span class="fu">,</span></span>
-<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;vite&quot;</span><span class="fu">:</span> <span class="st">&quot;^6.0.7&quot;</span></span>
-<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
-<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;evaluation-web&quot;</span><span class="fu">,</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;private&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;version&quot;</span><span class="fu">:</span> <span class="st">&quot;2569.0.0&quot;</span><span class="fu">,</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;type&quot;</span><span class="fu">:</span> <span class="st">&quot;module&quot;</span><span class="fu">,</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;scripts&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;dev&quot;</span><span class="fu">:</span> <span class="st">&quot;vite&quot;</span><span class="fu">,</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;build&quot;</span><span class="fu">:</span> <span class="st">&quot;vite build&quot;</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;dependencies&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;@mdi/font&quot;</span><span class="fu">:</span> <span class="st">&quot;^7.4.47&quot;</span><span class="fu">,</span></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;axios&quot;</span><span class="fu">:</span> <span class="st">&quot;^1.7.9&quot;</span><span class="fu">,</span></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;html2pdf.js&quot;</span><span class="fu">:</span> <span class="st">&quot;^0.10.3&quot;</span><span class="fu">,</span></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;vue&quot;</span><span class="fu">:</span> <span class="st">&quot;^3.5.13&quot;</span><span class="fu">,</span></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;vue-router&quot;</span><span class="fu">:</span> <span class="st">&quot;^4.5.0&quot;</span><span class="fu">,</span></span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;vuetify&quot;</span><span class="fu">:</span> <span class="st">&quot;^3.7.6&quot;</span></span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;devDependencies&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;@vitejs/plugin-vue&quot;</span><span class="fu">:</span> <span class="st">&quot;^5.2.1&quot;</span><span class="fu">,</span></span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;vite&quot;</span><span class="fu">:</span> <span class="st">&quot;^6.0.7&quot;</span></span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
 <h2 id="52-viteconfigjs--ตั้งพอร์ตและ-proxy">5.2
 <code>vite.config.js</code> — ตั้งพอร์ตและ proxy</h2>
 <p>ไฟล์ <code>frontend/vite.config.js</code></p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { defineConfig } <span class="im">from</span> <span class="st">&#39;vite&#39;</span><span class="op">;</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> vue <span class="im">from</span> <span class="st">&#39;@vitejs/plugin-vue&#39;</span><span class="op">;</span></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a><span class="co">// หน้าเว็บเรียก /api แล้ว Vite ส่งต่อไปที่ backend</span></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="fu">defineConfig</span>({</span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">plugins</span><span class="op">:</span> [<span class="fu">vue</span>()]<span class="op">,</span></span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">server</span><span class="op">:</span> {</span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">host</span><span class="op">:</span> <span class="st">&#39;0.0.0.0&#39;</span><span class="op">,</span></span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">port</span><span class="op">:</span> <span class="dv">5173</span><span class="op">,</span></span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">proxy</span><span class="op">:</span> { <span class="st">&#39;/api&#39;</span><span class="op">:</span> <span class="bu">process</span><span class="op">.</span><span class="at">env</span><span class="op">.</span><span class="at">API_URL</span> <span class="op">||</span> <span class="st">&#39;http://localhost:3000&#39;</span> }<span class="op">,</span></span>
-<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">watch</span><span class="op">:</span> { <span class="dt">usePolling</span><span class="op">:</span> <span class="kw">true</span> }<span class="op">,</span> <span class="co">// Windows + Docker ต้องใช้ polling จึงเห็นไฟล์ที่แก้</span></span>
-<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
-<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { defineConfig } <span class="im">from</span> <span class="st">&#39;vite&#39;</span><span class="op">;</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> vue <span class="im">from</span> <span class="st">&#39;@vitejs/plugin-vue&#39;</span><span class="op">;</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="co">// หน้าเว็บเรียก /api แล้ว Vite ส่งต่อไปที่ backend</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> <span class="fu">defineConfig</span>({</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">plugins</span><span class="op">:</span> [<span class="fu">vue</span>()]<span class="op">,</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">server</span><span class="op">:</span> {</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">host</span><span class="op">:</span> <span class="st">&#39;0.0.0.0&#39;</span><span class="op">,</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">port</span><span class="op">:</span> <span class="dv">5173</span><span class="op">,</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">proxy</span><span class="op">:</span> { <span class="st">&#39;/api&#39;</span><span class="op">:</span> <span class="bu">process</span><span class="op">.</span><span class="at">env</span><span class="op">.</span><span class="at">API_URL</span> <span class="op">||</span> <span class="st">&#39;http://localhost:3000&#39;</span> }<span class="op">,</span></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">watch</span><span class="op">:</span> { <span class="dt">usePolling</span><span class="op">:</span> <span class="kw">true</span> }<span class="op">,</span> <span class="co">// Windows + Docker ต้องใช้ polling จึงเห็นไฟล์ที่แก้</span></span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
 <ul>
 <li><code>proxy</code> ทำให้ front-end เรียก <code>/api/...</code> แล้ว
 Vite ส่งต่อไปที่ back-end ให้ <strong>จึงไม่ติด CORS</strong></li>
@@ -3165,37 +3192,37 @@ Windows</li>
 </ul>
 <h2 id="53-indexhtml">5.3 <code>index.html</code></h2>
 <p>ไฟล์ <code>frontend/index.html</code></p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!doctype</span> html<span class="dt">&gt;</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="ot"> lang</span><span class="op">=</span><span class="st">&quot;th&quot;</span><span class="dt">&gt;</span></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> charset</span><span class="op">=</span><span class="st">&quot;UTF-8&quot;</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> name</span><span class="op">=</span><span class="st">&quot;viewport&quot;</span><span class="ot"> content</span><span class="op">=</span><span class="st">&quot;width=device-width, initial-scale=1.0&quot;</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">title</span><span class="dt">&gt;</span>ระบบประเมินบุคลากร<span class="dt">&lt;/</span><span class="kw">title</span><span class="dt">&gt;</span></span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> id</span><span class="op">=</span><span class="st">&quot;app&quot;</span><span class="dt">&gt;&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
-<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> type=</span><span class="st">&quot;module&quot;</span><span class="ot"> src</span><span class="op">=</span><span class="st">&quot;/src/main.js&quot;</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
-<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
-<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode html"><code class="sourceCode html"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!doctype</span> html<span class="dt">&gt;</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">html</span><span class="ot"> lang</span><span class="op">=</span><span class="st">&quot;th&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">head</span><span class="dt">&gt;</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> charset</span><span class="op">=</span><span class="st">&quot;UTF-8&quot;</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">meta</span><span class="ot"> name</span><span class="op">=</span><span class="st">&quot;viewport&quot;</span><span class="ot"> content</span><span class="op">=</span><span class="st">&quot;width=device-width, initial-scale=1.0&quot;</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">title</span><span class="dt">&gt;</span>ระบบประเมินบุคลากร<span class="dt">&lt;/</span><span class="kw">title</span><span class="dt">&gt;</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">head</span><span class="dt">&gt;</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> id</span><span class="op">=</span><span class="st">&quot;app&quot;</span><span class="dt">&gt;&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">script</span><span class="ot"> type=</span><span class="st">&quot;module&quot;</span><span class="ot"> src</span><span class="op">=</span><span class="st">&quot;/src/main.js&quot;</span><span class="dt">&gt;&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">body</span><span class="dt">&gt;</span></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">html</span><span class="dt">&gt;</span></span></code></pre></div>
 <h2 id="54-srcmainjs--จุดเริ่มต้นของแอป">5.4 <code>src/main.js</code> —
 จุดเริ่มต้นของแอป</h2>
 <p>ไฟล์ <code>frontend/src/main.js</code></p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { createApp } <span class="im">from</span> <span class="st">&#39;vue&#39;</span><span class="op">;</span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { createVuetify } <span class="im">from</span> <span class="st">&#39;vuetify&#39;</span><span class="op">;</span></span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> components <span class="im">from</span> <span class="st">&#39;vuetify/components&#39;</span><span class="op">;</span></span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> directives <span class="im">from</span> <span class="st">&#39;vuetify/directives&#39;</span><span class="op">;</span></span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="st">&#39;vuetify/styles&#39;</span><span class="op">;</span></span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="st">&#39;@mdi/font/css/materialdesignicons.css&#39;</span><span class="op">;</span></span>
-<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="st">&#39;./style.css&#39;</span><span class="op">;</span></span>
-<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> App <span class="im">from</span> <span class="st">&#39;./App.vue&#39;</span><span class="op">;</span></span>
-<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> router <span class="im">from</span> <span class="st">&#39;./router&#39;</span><span class="op">;</span></span>
-<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> vuetify <span class="op">=</span> <span class="fu">createVuetify</span>({ components<span class="op">,</span> directives })<span class="op">;</span></span>
-<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> app <span class="op">=</span> <span class="fu">createApp</span>(App)<span class="op">;</span></span>
-<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a><span class="co">// error จาก API แสดงที่ snackbar แล้ว (ดู api.js) จึงไม่ต้องให้ขึ้นแดงใน Console ซ้ำ</span></span>
-<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="at">config</span><span class="op">.</span><span class="at">errorHandler</span> <span class="op">=</span> (err) <span class="kw">=&gt;</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(err<span class="op">.</span><span class="at">message</span>)<span class="op">;</span></span>
-<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">use</span>(vuetify)<span class="op">.</span><span class="fu">use</span>(router)<span class="op">.</span><span class="fu">mount</span>(<span class="st">&#39;#app&#39;</span>)<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { createApp } <span class="im">from</span> <span class="st">&#39;vue&#39;</span><span class="op">;</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { createVuetify } <span class="im">from</span> <span class="st">&#39;vuetify&#39;</span><span class="op">;</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> components <span class="im">from</span> <span class="st">&#39;vuetify/components&#39;</span><span class="op">;</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="op">*</span> <span class="im">as</span> directives <span class="im">from</span> <span class="st">&#39;vuetify/directives&#39;</span><span class="op">;</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="st">&#39;vuetify/styles&#39;</span><span class="op">;</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="st">&#39;@mdi/font/css/materialdesignicons.css&#39;</span><span class="op">;</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="st">&#39;./style.css&#39;</span><span class="op">;</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> App <span class="im">from</span> <span class="st">&#39;./App.vue&#39;</span><span class="op">;</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> router <span class="im">from</span> <span class="st">&#39;./router&#39;</span><span class="op">;</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> vuetify <span class="op">=</span> <span class="fu">createVuetify</span>({ components<span class="op">,</span> directives })<span class="op">;</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> app <span class="op">=</span> <span class="fu">createApp</span>(App)<span class="op">;</span></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a><span class="co">// error จาก API แสดงที่ snackbar แล้ว (ดู api.js) จึงไม่ต้องให้ขึ้นแดงใน Console ซ้ำ</span></span>
+<span id="cb44-15"><a href="#cb44-15" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="at">config</span><span class="op">.</span><span class="at">errorHandler</span> <span class="op">=</span> (err) <span class="kw">=&gt;</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(err<span class="op">.</span><span class="at">message</span>)<span class="op">;</span></span>
+<span id="cb44-16"><a href="#cb44-16" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">use</span>(vuetify)<span class="op">.</span><span class="fu">use</span>(router)<span class="op">.</span><span class="fu">mount</span>(<span class="st">&#39;#app&#39;</span>)<span class="op">;</span></span></code></pre></div>
 <ul>
 <li>โหลด Vuetify ทุกคอมโพเนนต์ (<code>components</code>,
 <code>directives</code>) จะได้ไม่ต้อง import ทีละตัว</li>
@@ -3204,17 +3231,17 @@ Windows</li>
 <h2 id="55-srcstylecss--css-เท่าที่จำเป็น">5.5 <code>src/style.css</code> —
 CSS เท่าที่จำเป็น</h2>
 <p>ไฟล์ <code>frontend/src/style.css</code></p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode css"><code class="sourceCode css"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* ใช้ Vuetify เป็นหลัก ไฟล์นี้มีแค่ตอนพิมพ์ / ส่งออก PDF */</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="im">@media</span> <span class="an">print</span> {</span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.no-print</span><span class="op">,</span></span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.v-app-bar</span><span class="op">,</span></span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.v-navigation-drawer</span> {</span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">display</span><span class="ch">:</span> <span class="dv">none</span> <span class="at">!important</span><span class="op">;</span></span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.v-main</span> {</span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">padding</span><span class="ch">:</span> <span class="dv">0</span> <span class="at">!important</span><span class="op">;</span></span>
-<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode css"><code class="sourceCode css"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* ใช้ Vuetify เป็นหลัก ไฟล์นี้มีแค่ตอนพิมพ์ / ส่งออก PDF */</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="im">@media</span> <span class="an">print</span> {</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.no-print</span><span class="op">,</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.v-app-bar</span><span class="op">,</span></span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.v-navigation-drawer</span> {</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">display</span><span class="ch">:</span> <span class="dv">none</span> <span class="at">!important</span><span class="op">;</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">.v-main</span> {</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">padding</span><span class="ch">:</span> <span class="dv">0</span> <span class="at">!important</span><span class="op">;</span></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
 <blockquote>
 <p>CSS มีแค่นี้จริง ๆ เรื่องสี ระยะห่าง และ Responsive ให้ Vuetify จัดการ
 (<code>v-row</code>, <code>v-col cols=&quot;12&quot; md=&quot;6&quot;</code>)</p>
@@ -3222,62 +3249,62 @@ CSS เท่าที่จำเป็น</h2>
 <h2 id="56-srcapijs--axios-กลางของทั้งแอป">5.6 <code>src/api.js</code> —
 axios กลางของทั้งแอป</h2>
 <p>ไฟล์ <code>frontend/src/api.js</code></p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">// เรียก API ด้วย axios + เก็บข้อมูลผู้ใช้ที่ login</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> axios <span class="im">from</span> <span class="st">&#39;axios&#39;</span><span class="op">;</span></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { reactive } <span class="im">from</span> <span class="st">&#39;vue&#39;</span><span class="op">;</span></span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="co">// ข้อมูลที่ทุกหน้าใช้ร่วมกัน</span></span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> state <span class="op">=</span> <span class="fu">reactive</span>({</span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">user</span><span class="op">:</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(localStorage<span class="op">.</span><span class="fu">getItem</span>(<span class="st">&#39;user&#39;</span>) <span class="op">||</span> <span class="st">&#39;null&#39;</span>)<span class="op">,</span></span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">message</span><span class="op">:</span> <span class="st">&#39;&#39;</span><span class="op">,</span> <span class="co">// ข้อความแจ้งเตือนมุมจอ</span></span>
-<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
-<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> api <span class="op">=</span> axios<span class="op">.</span><span class="fu">create</span>({ <span class="dt">baseURL</span><span class="op">:</span> <span class="st">&#39;/api&#39;</span> })<span class="op">;</span></span>
-<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-13"><a href="#cb45-13" aria-hidden="true" tabindex="-1"></a><span class="co">// แนบ token ไปกับทุกคำขอ</span></span>
-<span id="cb45-14"><a href="#cb45-14" aria-hidden="true" tabindex="-1"></a>api<span class="op">.</span><span class="at">interceptors</span><span class="op">.</span><span class="at">request</span><span class="op">.</span><span class="fu">use</span>((config) <span class="kw">=&gt;</span> {</span>
-<span id="cb45-15"><a href="#cb45-15" aria-hidden="true" tabindex="-1"></a>  config<span class="op">.</span><span class="at">headers</span><span class="op">.</span><span class="at">Authorization</span> <span class="op">=</span> <span class="st">&#39;Bearer &#39;</span> <span class="op">+</span> localStorage<span class="op">.</span><span class="fu">getItem</span>(<span class="st">&#39;token&#39;</span>)<span class="op">;</span></span>
-<span id="cb45-16"><a href="#cb45-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> config<span class="op">;</span></span>
-<span id="cb45-17"><a href="#cb45-17" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
-<span id="cb45-18"><a href="#cb45-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-19"><a href="#cb45-19" aria-hidden="true" tabindex="-1"></a><span class="co">// สำเร็จ: คืนเฉพาะ body  /  ผิดพลาด: แสดงข้อความจาก API</span></span>
-<span id="cb45-20"><a href="#cb45-20" aria-hidden="true" tabindex="-1"></a>api<span class="op">.</span><span class="at">interceptors</span><span class="op">.</span><span class="at">response</span><span class="op">.</span><span class="fu">use</span>(</span>
-<span id="cb45-21"><a href="#cb45-21" aria-hidden="true" tabindex="-1"></a>  (res) <span class="kw">=&gt;</span> res<span class="op">.</span><span class="at">data</span><span class="op">,</span></span>
-<span id="cb45-22"><a href="#cb45-22" aria-hidden="true" tabindex="-1"></a>  (err) <span class="kw">=&gt;</span> {</span>
-<span id="cb45-23"><a href="#cb45-23" aria-hidden="true" tabindex="-1"></a>    state<span class="op">.</span><span class="at">message</span> <span class="op">=</span> err<span class="op">.</span><span class="at">response</span><span class="op">?.</span><span class="at">data</span><span class="op">?.</span><span class="at">message</span> <span class="op">||</span> <span class="st">&#39;เชื่อมต่อ API ไม่ได้&#39;</span><span class="op">;</span></span>
-<span id="cb45-24"><a href="#cb45-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (err<span class="op">.</span><span class="at">response</span><span class="op">?.</span><span class="at">status</span> <span class="op">===</span> <span class="dv">401</span>) <span class="fu">logout</span>()<span class="op">;</span></span>
-<span id="cb45-25"><a href="#cb45-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">reject</span>(err)<span class="op">;</span></span>
-<span id="cb45-26"><a href="#cb45-26" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
-<span id="cb45-27"><a href="#cb45-27" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span>
-<span id="cb45-28"><a href="#cb45-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-29"><a href="#cb45-29" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">saveLogin</span>(token<span class="op">,</span> user) {</span>
-<span id="cb45-30"><a href="#cb45-30" aria-hidden="true" tabindex="-1"></a>  localStorage<span class="op">.</span><span class="fu">setItem</span>(<span class="st">&#39;token&#39;</span><span class="op">,</span> token)<span class="op">;</span></span>
-<span id="cb45-31"><a href="#cb45-31" aria-hidden="true" tabindex="-1"></a>  localStorage<span class="op">.</span><span class="fu">setItem</span>(<span class="st">&#39;user&#39;</span><span class="op">,</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(user))<span class="op">;</span></span>
-<span id="cb45-32"><a href="#cb45-32" aria-hidden="true" tabindex="-1"></a>  state<span class="op">.</span><span class="at">user</span> <span class="op">=</span> user<span class="op">;</span></span>
-<span id="cb45-33"><a href="#cb45-33" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb45-34"><a href="#cb45-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-35"><a href="#cb45-35" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">logout</span>() {</span>
-<span id="cb45-36"><a href="#cb45-36" aria-hidden="true" tabindex="-1"></a>  localStorage<span class="op">.</span><span class="fu">clear</span>()<span class="op">;</span></span>
-<span id="cb45-37"><a href="#cb45-37" aria-hidden="true" tabindex="-1"></a>  state<span class="op">.</span><span class="at">user</span> <span class="op">=</span> <span class="kw">null</span><span class="op">;</span></span>
-<span id="cb45-38"><a href="#cb45-38" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb45-39"><a href="#cb45-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-40"><a href="#cb45-40" aria-hidden="true" tabindex="-1"></a><span class="co">// ลิงก์ดาวน์โหลดไฟล์ (แนบ token ใน URL)</span></span>
-<span id="cb45-41"><a href="#cb45-41" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">fileUrl</span>(name) {</span>
-<span id="cb45-42"><a href="#cb45-42" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="st">&#39;/api/files/&#39;</span> <span class="op">+</span> name <span class="op">+</span> <span class="st">&#39;?token=&#39;</span> <span class="op">+</span> localStorage<span class="op">.</span><span class="fu">getItem</span>(<span class="st">&#39;token&#39;</span>)<span class="op">;</span></span>
-<span id="cb45-43"><a href="#cb45-43" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb45-44"><a href="#cb45-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-45"><a href="#cb45-45" aria-hidden="true" tabindex="-1"></a><span class="co">// กฎตรวจข้อมูลในฟอร์ม (Data Validation)</span></span>
-<span id="cb45-46"><a href="#cb45-46" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> rules <span class="op">=</span> {</span>
-<span id="cb45-47"><a href="#cb45-47" aria-hidden="true" tabindex="-1"></a>  <span class="dt">required</span><span class="op">:</span> (v) <span class="kw">=&gt;</span> (v <span class="op">!==</span> <span class="kw">null</span> <span class="op">&amp;&amp;</span> v <span class="op">!==</span> <span class="kw">undefined</span> <span class="op">&amp;&amp;</span> v <span class="op">!==</span> <span class="st">&#39;&#39;</span>) <span class="op">||</span> <span class="st">&#39;ห้ามว่าง&#39;</span><span class="op">,</span></span>
-<span id="cb45-48"><a href="#cb45-48" aria-hidden="true" tabindex="-1"></a>  <span class="dt">email</span><span class="op">:</span> (v) <span class="kw">=&gt;</span> <span class="op">!</span>v <span class="op">||</span> <span class="ss">/</span><span class="sc">^\S+</span><span class="ss">@</span><span class="sc">\S+\.\S+$</span><span class="ss">/</span><span class="op">.</span><span class="fu">test</span>(v) <span class="op">||</span> <span class="st">&#39;รูปแบบอีเมลไม่ถูกต้อง&#39;</span><span class="op">,</span></span>
-<span id="cb45-49"><a href="#cb45-49" aria-hidden="true" tabindex="-1"></a>  <span class="dt">min8</span><span class="op">:</span> (v) <span class="kw">=&gt;</span> (v <span class="op">&amp;&amp;</span> v<span class="op">.</span><span class="at">length</span> <span class="op">&gt;=</span> <span class="dv">8</span>) <span class="op">||</span> <span class="st">&#39;อย่างน้อย 8 ตัวอักษร&#39;</span><span class="op">,</span></span>
-<span id="cb45-50"><a href="#cb45-50" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
-<span id="cb45-51"><a href="#cb45-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-52"><a href="#cb45-52" aria-hidden="true" tabindex="-1"></a><span class="co">// ชื่อที่แสดงบนหน้าจอ</span></span>
-<span id="cb45-53"><a href="#cb45-53" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> roleNames <span class="op">=</span> { <span class="dt">admin</span><span class="op">:</span> <span class="st">&#39;ฝ่ายบุคลากร&#39;</span><span class="op">,</span> <span class="dt">evaluatee</span><span class="op">:</span> <span class="st">&#39;ผู้รับการประเมิน&#39;</span><span class="op">,</span> <span class="dt">evaluator</span><span class="op">:</span> <span class="st">&#39;กรรมการ&#39;</span> }<span class="op">;</span></span>
-<span id="cb45-54"><a href="#cb45-54" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> committeeNames <span class="op">=</span> { <span class="dt">chair</span><span class="op">:</span> <span class="st">&#39;ประธาน&#39;</span><span class="op">,</span> <span class="dt">member</span><span class="op">:</span> <span class="st">&#39;กรรมการร่วม&#39;</span> }<span class="op">;</span></span>
-<span id="cb45-55"><a href="#cb45-55" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> statusNames <span class="op">=</span> { <span class="dt">pending</span><span class="op">:</span> <span class="st">&#39;ยังไม่ได้ประเมิน&#39;</span><span class="op">,</span> <span class="dt">draft</span><span class="op">:</span> <span class="st">&#39;บันทึกร่าง&#39;</span><span class="op">,</span> <span class="dt">confirmed</span><span class="op">:</span> <span class="st">&#39;ยืนยันผลแล้ว&#39;</span> }<span class="op">;</span></span>
-<span id="cb45-56"><a href="#cb45-56" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> statusColors <span class="op">=</span> { <span class="dt">pending</span><span class="op">:</span> <span class="st">&#39;grey&#39;</span><span class="op">,</span> <span class="dt">draft</span><span class="op">:</span> <span class="st">&#39;orange&#39;</span><span class="op">,</span> <span class="dt">confirmed</span><span class="op">:</span> <span class="st">&#39;green&#39;</span> }<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co">// เรียก API ด้วย axios + เก็บข้อมูลผู้ใช้ที่ login</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> axios <span class="im">from</span> <span class="st">&#39;axios&#39;</span><span class="op">;</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { reactive } <span class="im">from</span> <span class="st">&#39;vue&#39;</span><span class="op">;</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="co">// ข้อมูลที่ทุกหน้าใช้ร่วมกัน</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> state <span class="op">=</span> <span class="fu">reactive</span>({</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">user</span><span class="op">:</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(localStorage<span class="op">.</span><span class="fu">getItem</span>(<span class="st">&#39;user&#39;</span>) <span class="op">||</span> <span class="st">&#39;null&#39;</span>)<span class="op">,</span></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">message</span><span class="op">:</span> <span class="st">&#39;&#39;</span><span class="op">,</span> <span class="co">// ข้อความแจ้งเตือนมุมจอ</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> api <span class="op">=</span> axios<span class="op">.</span><span class="fu">create</span>({ <span class="dt">baseURL</span><span class="op">:</span> <span class="st">&#39;/api&#39;</span> })<span class="op">;</span></span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a><span class="co">// แนบ token ไปกับทุกคำขอ</span></span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>api<span class="op">.</span><span class="at">interceptors</span><span class="op">.</span><span class="at">request</span><span class="op">.</span><span class="fu">use</span>((config) <span class="kw">=&gt;</span> {</span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>  config<span class="op">.</span><span class="at">headers</span><span class="op">.</span><span class="at">Authorization</span> <span class="op">=</span> <span class="st">&#39;Bearer &#39;</span> <span class="op">+</span> localStorage<span class="op">.</span><span class="fu">getItem</span>(<span class="st">&#39;token&#39;</span>)<span class="op">;</span></span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> config<span class="op">;</span></span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a><span class="co">// สำเร็จ: คืนเฉพาะ body  /  ผิดพลาด: แสดงข้อความจาก API</span></span>
+<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a>api<span class="op">.</span><span class="at">interceptors</span><span class="op">.</span><span class="at">response</span><span class="op">.</span><span class="fu">use</span>(</span>
+<span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a>  (res) <span class="kw">=&gt;</span> res<span class="op">.</span><span class="at">data</span><span class="op">,</span></span>
+<span id="cb46-22"><a href="#cb46-22" aria-hidden="true" tabindex="-1"></a>  (err) <span class="kw">=&gt;</span> {</span>
+<span id="cb46-23"><a href="#cb46-23" aria-hidden="true" tabindex="-1"></a>    state<span class="op">.</span><span class="at">message</span> <span class="op">=</span> err<span class="op">.</span><span class="at">response</span><span class="op">?.</span><span class="at">data</span><span class="op">?.</span><span class="at">message</span> <span class="op">||</span> <span class="st">&#39;เชื่อมต่อ API ไม่ได้&#39;</span><span class="op">;</span></span>
+<span id="cb46-24"><a href="#cb46-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (err<span class="op">.</span><span class="at">response</span><span class="op">?.</span><span class="at">status</span> <span class="op">===</span> <span class="dv">401</span>) <span class="fu">logout</span>()<span class="op">;</span></span>
+<span id="cb46-25"><a href="#cb46-25" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">Promise</span><span class="op">.</span><span class="fu">reject</span>(err)<span class="op">;</span></span>
+<span id="cb46-26"><a href="#cb46-26" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb46-27"><a href="#cb46-27" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span>
+<span id="cb46-28"><a href="#cb46-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-29"><a href="#cb46-29" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">saveLogin</span>(token<span class="op">,</span> user) {</span>
+<span id="cb46-30"><a href="#cb46-30" aria-hidden="true" tabindex="-1"></a>  localStorage<span class="op">.</span><span class="fu">setItem</span>(<span class="st">&#39;token&#39;</span><span class="op">,</span> token)<span class="op">;</span></span>
+<span id="cb46-31"><a href="#cb46-31" aria-hidden="true" tabindex="-1"></a>  localStorage<span class="op">.</span><span class="fu">setItem</span>(<span class="st">&#39;user&#39;</span><span class="op">,</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(user))<span class="op">;</span></span>
+<span id="cb46-32"><a href="#cb46-32" aria-hidden="true" tabindex="-1"></a>  state<span class="op">.</span><span class="at">user</span> <span class="op">=</span> user<span class="op">;</span></span>
+<span id="cb46-33"><a href="#cb46-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb46-34"><a href="#cb46-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-35"><a href="#cb46-35" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">logout</span>() {</span>
+<span id="cb46-36"><a href="#cb46-36" aria-hidden="true" tabindex="-1"></a>  localStorage<span class="op">.</span><span class="fu">clear</span>()<span class="op">;</span></span>
+<span id="cb46-37"><a href="#cb46-37" aria-hidden="true" tabindex="-1"></a>  state<span class="op">.</span><span class="at">user</span> <span class="op">=</span> <span class="kw">null</span><span class="op">;</span></span>
+<span id="cb46-38"><a href="#cb46-38" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb46-39"><a href="#cb46-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-40"><a href="#cb46-40" aria-hidden="true" tabindex="-1"></a><span class="co">// ลิงก์ดาวน์โหลดไฟล์ (แนบ token ใน URL)</span></span>
+<span id="cb46-41"><a href="#cb46-41" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">fileUrl</span>(name) {</span>
+<span id="cb46-42"><a href="#cb46-42" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="st">&#39;/api/files/&#39;</span> <span class="op">+</span> name <span class="op">+</span> <span class="st">&#39;?token=&#39;</span> <span class="op">+</span> localStorage<span class="op">.</span><span class="fu">getItem</span>(<span class="st">&#39;token&#39;</span>)<span class="op">;</span></span>
+<span id="cb46-43"><a href="#cb46-43" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb46-44"><a href="#cb46-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-45"><a href="#cb46-45" aria-hidden="true" tabindex="-1"></a><span class="co">// กฎตรวจข้อมูลในฟอร์ม (Data Validation)</span></span>
+<span id="cb46-46"><a href="#cb46-46" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> rules <span class="op">=</span> {</span>
+<span id="cb46-47"><a href="#cb46-47" aria-hidden="true" tabindex="-1"></a>  <span class="dt">required</span><span class="op">:</span> (v) <span class="kw">=&gt;</span> (v <span class="op">!==</span> <span class="kw">null</span> <span class="op">&amp;&amp;</span> v <span class="op">!==</span> <span class="kw">undefined</span> <span class="op">&amp;&amp;</span> v <span class="op">!==</span> <span class="st">&#39;&#39;</span>) <span class="op">||</span> <span class="st">&#39;ห้ามว่าง&#39;</span><span class="op">,</span></span>
+<span id="cb46-48"><a href="#cb46-48" aria-hidden="true" tabindex="-1"></a>  <span class="dt">email</span><span class="op">:</span> (v) <span class="kw">=&gt;</span> <span class="op">!</span>v <span class="op">||</span> <span class="ss">/</span><span class="sc">^\S+</span><span class="ss">@</span><span class="sc">\S+\.\S+$</span><span class="ss">/</span><span class="op">.</span><span class="fu">test</span>(v) <span class="op">||</span> <span class="st">&#39;รูปแบบอีเมลไม่ถูกต้อง&#39;</span><span class="op">,</span></span>
+<span id="cb46-49"><a href="#cb46-49" aria-hidden="true" tabindex="-1"></a>  <span class="dt">min8</span><span class="op">:</span> (v) <span class="kw">=&gt;</span> (v <span class="op">&amp;&amp;</span> v<span class="op">.</span><span class="at">length</span> <span class="op">&gt;=</span> <span class="dv">8</span>) <span class="op">||</span> <span class="st">&#39;อย่างน้อย 8 ตัวอักษร&#39;</span><span class="op">,</span></span>
+<span id="cb46-50"><a href="#cb46-50" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb46-51"><a href="#cb46-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-52"><a href="#cb46-52" aria-hidden="true" tabindex="-1"></a><span class="co">// ชื่อที่แสดงบนหน้าจอ</span></span>
+<span id="cb46-53"><a href="#cb46-53" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> roleNames <span class="op">=</span> { <span class="dt">admin</span><span class="op">:</span> <span class="st">&#39;ฝ่ายบุคลากร&#39;</span><span class="op">,</span> <span class="dt">evaluatee</span><span class="op">:</span> <span class="st">&#39;ผู้รับการประเมิน&#39;</span><span class="op">,</span> <span class="dt">evaluator</span><span class="op">:</span> <span class="st">&#39;กรรมการ&#39;</span> }<span class="op">;</span></span>
+<span id="cb46-54"><a href="#cb46-54" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> committeeNames <span class="op">=</span> { <span class="dt">chair</span><span class="op">:</span> <span class="st">&#39;ประธาน&#39;</span><span class="op">,</span> <span class="dt">member</span><span class="op">:</span> <span class="st">&#39;กรรมการร่วม&#39;</span> }<span class="op">;</span></span>
+<span id="cb46-55"><a href="#cb46-55" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> statusNames <span class="op">=</span> { <span class="dt">pending</span><span class="op">:</span> <span class="st">&#39;ยังไม่ได้ประเมิน&#39;</span><span class="op">,</span> <span class="dt">draft</span><span class="op">:</span> <span class="st">&#39;บันทึกร่าง&#39;</span><span class="op">,</span> <span class="dt">confirmed</span><span class="op">:</span> <span class="st">&#39;ยืนยันผลแล้ว&#39;</span> }<span class="op">;</span></span>
+<span id="cb46-56"><a href="#cb46-56" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> statusColors <span class="op">=</span> { <span class="dt">pending</span><span class="op">:</span> <span class="st">&#39;grey&#39;</span><span class="op">,</span> <span class="dt">draft</span><span class="op">:</span> <span class="st">&#39;orange&#39;</span><span class="op">,</span> <span class="dt">confirmed</span><span class="op">:</span> <span class="st">&#39;green&#39;</span> }<span class="op">;</span></span></code></pre></div>
 <ul>
 <li><strong>interceptor ขาไป</strong> แนบ
 <code>Authorization: Bearer &lt;token&gt;</code> อัตโนมัติ</li>
@@ -3288,50 +3315,50 @@ token แล้วกลับหน้า Login</li>
 <h2 id="57-srcrouterjs--เส้นทางและการกันสิทธิ์">5.7
 <code>src/router.js</code> — เส้นทางและการกันสิทธิ์</h2>
 <p>ไฟล์ <code>frontend/src/router.js</code></p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co">// กำหนดหน้าเว็บแต่ละหน้า และตรวจการ login ก่อนเข้า</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { createRouter<span class="op">,</span> createWebHistory } <span class="im">from</span> <span class="st">&#39;vue-router&#39;</span><span class="op">;</span></span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { state } <span class="im">from</span> <span class="st">&#39;./api&#39;</span><span class="op">;</span></span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> routes <span class="op">=</span> [</span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/login&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/LoginPage.vue&#39;</span>) }<span class="op">,</span></span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/password&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/PasswordPage.vue&#39;</span>) }<span class="op">,</span></span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/profile&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/ProfilePage.vue&#39;</span>) }<span class="op">,</span></span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/result/:periodId/:userId&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/ResultPage.vue&#39;</span>) }<span class="op">,</span></span>
-<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ฝ่ายบุคลากร (meta.role = บทบาทที่เข้าหน้านี้ได้)</span></span>
-<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/dashboard&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/DashboardPage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;admin&#39;</span> } }<span class="op">,</span></span>
-<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/users&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/UsersPage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;admin&#39;</span> } }<span class="op">,</span></span>
-<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/periods&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/PeriodsPage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;admin&#39;</span> } }<span class="op">,</span></span>
-<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/periods/:id&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/CriteriaPage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;admin&#39;</span> } }<span class="op">,</span></span>
-<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/assign&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/AssignPage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;admin&#39;</span> } }<span class="op">,</span></span>
-<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/track&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/TrackPage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;admin&#39;</span> } }<span class="op">,</span></span>
-<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/backup&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/BackupPage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;admin&#39;</span> } }<span class="op">,</span></span>
-<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ผู้รับการประเมิน</span></span>
-<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/self&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/SelfPage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;evaluatee&#39;</span> } }<span class="op">,</span></span>
-<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a>  <span class="co">// กรรมการ</span></span>
-<span id="cb46-21"><a href="#cb46-21" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/evaluate&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/EvaluateListPage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;evaluator&#39;</span> } }<span class="op">,</span></span>
-<span id="cb46-22"><a href="#cb46-22" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/evaluate/:id&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/EvaluatePage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;evaluator&#39;</span> } }<span class="op">,</span></span>
-<span id="cb46-23"><a href="#cb46-23" aria-hidden="true" tabindex="-1"></a>  <span class="co">// พาธอื่น ๆ ไปหน้า login (ถ้า login แล้วจะถูกส่งไปหน้าแรกของบทบาท)</span></span>
-<span id="cb46-24"><a href="#cb46-24" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/:any(.*)*&#39;</span><span class="op">,</span> <span class="dt">redirect</span><span class="op">:</span> <span class="st">&#39;/login&#39;</span> }<span class="op">,</span></span>
-<span id="cb46-25"><a href="#cb46-25" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span>
-<span id="cb46-26"><a href="#cb46-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-27"><a href="#cb46-27" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> router <span class="op">=</span> <span class="fu">createRouter</span>({ <span class="dt">history</span><span class="op">:</span> <span class="fu">createWebHistory</span>()<span class="op">,</span> routes })<span class="op">;</span></span>
-<span id="cb46-28"><a href="#cb46-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-29"><a href="#cb46-29" aria-hidden="true" tabindex="-1"></a><span class="co">// หน้าแรกหลัง login (ถ้าต้องเปลี่ยนรหัสผ่าน ไปหน้าเปลี่ยนรหัสก่อน)</span></span>
-<span id="cb46-30"><a href="#cb46-30" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">homeOf</span>(user) {</span>
-<span id="cb46-31"><a href="#cb46-31" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (user<span class="op">.</span><span class="at">must_change_password</span>) <span class="cf">return</span> <span class="st">&#39;/password&#39;</span><span class="op">;</span></span>
-<span id="cb46-32"><a href="#cb46-32" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { <span class="dt">admin</span><span class="op">:</span> <span class="st">&#39;/dashboard&#39;</span><span class="op">,</span> <span class="dt">evaluatee</span><span class="op">:</span> <span class="st">&#39;/self&#39;</span><span class="op">,</span> <span class="dt">evaluator</span><span class="op">:</span> <span class="st">&#39;/evaluate&#39;</span> }[user<span class="op">.</span><span class="at">role</span>]<span class="op">;</span></span>
-<span id="cb46-33"><a href="#cb46-33" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb46-34"><a href="#cb46-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-35"><a href="#cb46-35" aria-hidden="true" tabindex="-1"></a>router<span class="op">.</span><span class="fu">beforeEach</span>((to) <span class="kw">=&gt;</span> {</span>
-<span id="cb46-36"><a href="#cb46-36" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> user <span class="op">=</span> state<span class="op">.</span><span class="at">user</span><span class="op">;</span></span>
-<span id="cb46-37"><a href="#cb46-37" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>user) <span class="cf">return</span> to<span class="op">.</span><span class="at">path</span> <span class="op">===</span> <span class="st">&#39;/login&#39;</span> <span class="op">?</span> <span class="kw">true</span> <span class="op">:</span> <span class="st">&#39;/login&#39;</span><span class="op">;</span></span>
-<span id="cb46-38"><a href="#cb46-38" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (user<span class="op">.</span><span class="at">must_change_password</span> <span class="op">&amp;&amp;</span> to<span class="op">.</span><span class="at">path</span> <span class="op">!==</span> <span class="st">&#39;/password&#39;</span>) <span class="cf">return</span> <span class="st">&#39;/password&#39;</span><span class="op">;</span></span>
-<span id="cb46-39"><a href="#cb46-39" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (to<span class="op">.</span><span class="at">path</span> <span class="op">===</span> <span class="st">&#39;/login&#39;</span>) <span class="cf">return</span> <span class="fu">homeOf</span>(user)<span class="op">;</span></span>
-<span id="cb46-40"><a href="#cb46-40" aria-hidden="true" tabindex="-1"></a>  <span class="co">// เข้าหน้าของบทบาทอื่น → ส่งกลับหน้าแรกของตัวเอง</span></span>
-<span id="cb46-41"><a href="#cb46-41" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (to<span class="op">.</span><span class="at">meta</span><span class="op">.</span><span class="at">role</span> <span class="op">&amp;&amp;</span> to<span class="op">.</span><span class="at">meta</span><span class="op">.</span><span class="at">role</span> <span class="op">!==</span> user<span class="op">.</span><span class="at">role</span>) <span class="cf">return</span> <span class="fu">homeOf</span>(user)<span class="op">;</span></span>
-<span id="cb46-42"><a href="#cb46-42" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
-<span id="cb46-43"><a href="#cb46-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-44"><a href="#cb46-44" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> router<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co">// กำหนดหน้าเว็บแต่ละหน้า และตรวจการ login ก่อนเข้า</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { createRouter<span class="op">,</span> createWebHistory } <span class="im">from</span> <span class="st">&#39;vue-router&#39;</span><span class="op">;</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { state } <span class="im">from</span> <span class="st">&#39;./api&#39;</span><span class="op">;</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> routes <span class="op">=</span> [</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/login&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/LoginPage.vue&#39;</span>) }<span class="op">,</span></span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/password&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/PasswordPage.vue&#39;</span>) }<span class="op">,</span></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/profile&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/ProfilePage.vue&#39;</span>) }<span class="op">,</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/result/:periodId/:userId&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/ResultPage.vue&#39;</span>) }<span class="op">,</span></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ฝ่ายบุคลากร (meta.role = บทบาทที่เข้าหน้านี้ได้)</span></span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/dashboard&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/DashboardPage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;admin&#39;</span> } }<span class="op">,</span></span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/users&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/UsersPage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;admin&#39;</span> } }<span class="op">,</span></span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/periods&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/PeriodsPage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;admin&#39;</span> } }<span class="op">,</span></span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/periods/:id&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/CriteriaPage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;admin&#39;</span> } }<span class="op">,</span></span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/assign&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/AssignPage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;admin&#39;</span> } }<span class="op">,</span></span>
+<span id="cb47-16"><a href="#cb47-16" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/track&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/TrackPage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;admin&#39;</span> } }<span class="op">,</span></span>
+<span id="cb47-17"><a href="#cb47-17" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/backup&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/BackupPage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;admin&#39;</span> } }<span class="op">,</span></span>
+<span id="cb47-18"><a href="#cb47-18" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ผู้รับการประเมิน</span></span>
+<span id="cb47-19"><a href="#cb47-19" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/self&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/SelfPage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;evaluatee&#39;</span> } }<span class="op">,</span></span>
+<span id="cb47-20"><a href="#cb47-20" aria-hidden="true" tabindex="-1"></a>  <span class="co">// กรรมการ</span></span>
+<span id="cb47-21"><a href="#cb47-21" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/evaluate&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/EvaluateListPage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;evaluator&#39;</span> } }<span class="op">,</span></span>
+<span id="cb47-22"><a href="#cb47-22" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/evaluate/:id&#39;</span><span class="op">,</span> <span class="dt">component</span><span class="op">:</span> () <span class="kw">=&gt;</span> <span class="im">import</span>(<span class="st">&#39;./pages/EvaluatePage.vue&#39;</span>)<span class="op">,</span> <span class="dt">meta</span><span class="op">:</span> { <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;evaluator&#39;</span> } }<span class="op">,</span></span>
+<span id="cb47-23"><a href="#cb47-23" aria-hidden="true" tabindex="-1"></a>  <span class="co">// พาธอื่น ๆ ไปหน้า login (ถ้า login แล้วจะถูกส่งไปหน้าแรกของบทบาท)</span></span>
+<span id="cb47-24"><a href="#cb47-24" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">path</span><span class="op">:</span> <span class="st">&#39;/:any(.*)*&#39;</span><span class="op">,</span> <span class="dt">redirect</span><span class="op">:</span> <span class="st">&#39;/login&#39;</span> }<span class="op">,</span></span>
+<span id="cb47-25"><a href="#cb47-25" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span>
+<span id="cb47-26"><a href="#cb47-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-27"><a href="#cb47-27" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> router <span class="op">=</span> <span class="fu">createRouter</span>({ <span class="dt">history</span><span class="op">:</span> <span class="fu">createWebHistory</span>()<span class="op">,</span> routes })<span class="op">;</span></span>
+<span id="cb47-28"><a href="#cb47-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-29"><a href="#cb47-29" aria-hidden="true" tabindex="-1"></a><span class="co">// หน้าแรกหลัง login (ถ้าต้องเปลี่ยนรหัสผ่าน ไปหน้าเปลี่ยนรหัสก่อน)</span></span>
+<span id="cb47-30"><a href="#cb47-30" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">homeOf</span>(user) {</span>
+<span id="cb47-31"><a href="#cb47-31" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (user<span class="op">.</span><span class="at">must_change_password</span>) <span class="cf">return</span> <span class="st">&#39;/password&#39;</span><span class="op">;</span></span>
+<span id="cb47-32"><a href="#cb47-32" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { <span class="dt">admin</span><span class="op">:</span> <span class="st">&#39;/dashboard&#39;</span><span class="op">,</span> <span class="dt">evaluatee</span><span class="op">:</span> <span class="st">&#39;/self&#39;</span><span class="op">,</span> <span class="dt">evaluator</span><span class="op">:</span> <span class="st">&#39;/evaluate&#39;</span> }[user<span class="op">.</span><span class="at">role</span>]<span class="op">;</span></span>
+<span id="cb47-33"><a href="#cb47-33" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb47-34"><a href="#cb47-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-35"><a href="#cb47-35" aria-hidden="true" tabindex="-1"></a>router<span class="op">.</span><span class="fu">beforeEach</span>((to) <span class="kw">=&gt;</span> {</span>
+<span id="cb47-36"><a href="#cb47-36" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> user <span class="op">=</span> state<span class="op">.</span><span class="at">user</span><span class="op">;</span></span>
+<span id="cb47-37"><a href="#cb47-37" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>user) <span class="cf">return</span> to<span class="op">.</span><span class="at">path</span> <span class="op">===</span> <span class="st">&#39;/login&#39;</span> <span class="op">?</span> <span class="kw">true</span> <span class="op">:</span> <span class="st">&#39;/login&#39;</span><span class="op">;</span></span>
+<span id="cb47-38"><a href="#cb47-38" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (user<span class="op">.</span><span class="at">must_change_password</span> <span class="op">&amp;&amp;</span> to<span class="op">.</span><span class="at">path</span> <span class="op">!==</span> <span class="st">&#39;/password&#39;</span>) <span class="cf">return</span> <span class="st">&#39;/password&#39;</span><span class="op">;</span></span>
+<span id="cb47-39"><a href="#cb47-39" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (to<span class="op">.</span><span class="at">path</span> <span class="op">===</span> <span class="st">&#39;/login&#39;</span>) <span class="cf">return</span> <span class="fu">homeOf</span>(user)<span class="op">;</span></span>
+<span id="cb47-40"><a href="#cb47-40" aria-hidden="true" tabindex="-1"></a>  <span class="co">// เข้าหน้าของบทบาทอื่น → ส่งกลับหน้าแรกของตัวเอง</span></span>
+<span id="cb47-41"><a href="#cb47-41" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (to<span class="op">.</span><span class="at">meta</span><span class="op">.</span><span class="at">role</span> <span class="op">&amp;&amp;</span> to<span class="op">.</span><span class="at">meta</span><span class="op">.</span><span class="at">role</span> <span class="op">!==</span> user<span class="op">.</span><span class="at">role</span>) <span class="cf">return</span> <span class="fu">homeOf</span>(user)<span class="op">;</span></span>
+<span id="cb47-42"><a href="#cb47-42" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb47-43"><a href="#cb47-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-44"><a href="#cb47-44" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="im">default</span> router<span class="op">;</span></span></code></pre></div>
 <ul>
 <li>หน้าที่จำกัดบทบาทมี <code>meta: { role: &#39;...&#39; }</code> บอกว่าบทบาทไหนเข้าได้
 (หน้า login, password, profile, result ไม่มี meta เพราะทุกบทบาทใช้)</li>
@@ -3423,6 +3450,23 @@ function signOut() {
 <li><code>v-snackbar</code> แสดงข้อความแจ้งเตือนจาก
 <code>state.message</code></li>
 </ul>
+<h3 id="-ตรวจโครง-หลังข้อ-58">✔ ตรวจโครง (หลังข้อ 5.8)</h3>
+<p>ตอนนี้มีครบแล้ว: <code>main.js</code> → <code>App.vue</code> →
+<code>router.js</code> → หน้าชั่วคราว 14 หน้า เปิดเว็บได้แล้ว (ต้องเปิด backend
+ไว้ก่อน ดูวิธีรันในหัวข้อ ✔ ตรวจขั้น 5 ท้ายบท)</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ในโฟลเดอร์ frontend</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> run dev</span></code></pre></div>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>เปิด http://localhost:5173 →
+แถบบนสีน้ำเงิน &quot;ระบบประเมินบุคลากร&quot; และหัวข้อ &quot;LoginPage (กำลังทำ)&quot; URL เปลี่ยนเป็น
+<code>/login</code> เอง</label></li>
+<li><label><input type="checkbox"></input>พิมพ์ <code>/users</code> ในช่อง URL →
+ถูกพากลับ <code>/login</code> (ยังไม่ login)</label></li>
+<li><label><input type="checkbox"></input>F12 → Console ไม่มีตัวแดง</label></li>
+</ul>
+<p>ถ้าขึ้น <code>Failed to resolve import &quot;./pages/XxxPage.vue&quot;</code>
+แปลว่าหน้านั้นยังไม่ได้สร้าง หรือสะกดชื่อไฟล์ไม่ตรง (ตัวพิมพ์เล็กใหญ่ต้องตรง) กลับไปทำ
+&quot;สร้างหน้าชั่วคราวทั้ง 14 หน้า&quot; ในข้อ 5.1</p>
 <h2 id="59-หน้า-login">5.9 หน้า Login</h2>
 <p>ไฟล์ <code>frontend/src/pages/LoginPage.vue</code></p>
 <pre class="vue"><code>&lt;template&gt;
@@ -3573,20 +3617,22 @@ const scale = [
 ];
 &lt;/script&gt;</code></pre>
 <h2 id="513-หน้าอื่นที่ยังไม่ได้ทำ">5.13 หน้าอื่นที่ยังไม่ได้ทำ</h2>
-<p><code>router.js</code> อ้างถึงหน้าทั้ง 14 หน้า ถ้าไฟล์ยังไม่มี Vite จะ error
-ให้สร้างไฟล์ชั่วคราวไว้ก่อน เช่น <code>src/pages/UsersPage.vue</code></p>
+<p>หน้าที่เหลือ 11 หน้า (Dashboard, Users, Periods, Criteria, Assign, Track,
+Backup, Result, Self, EvaluateList, Evaluate) ยังเป็นหน้าชั่วคราวที่สร้างไว้ในข้อ
+5.1 หน้าตาแบบนี้ เช่น <code>src/pages/UsersPage.vue</code></p>
 <pre class="vue"><code>&lt;template&gt;
-  &lt;h2&gt;กำลังทำ&lt;/h2&gt;
+  &lt;h2&gt;UsersPage (กำลังทำ)&lt;/h2&gt;
 &lt;/template&gt;</code></pre>
-<p>แล้วค่อยเขียนจริงในขั้น 6 และ 7</p>
+<p>แล้วค่อยเขียนทับด้วยตัวจริงในขั้น 6 และ 7 (ห้ามลบไฟล์ทิ้ง เพราะ router
+ยังอ้างถึงอยู่)</p>
 <h2 id="-ตรวจขั้น-5-รันและตรวจ">✔ ตรวจขั้น 5 (รันและตรวจ)</h2>
-<div class="sourceCode" id="cb53"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ถ้าใช้ Docker (แนะนำ) ที่โฟลเดอร์โปรเจกต์</span></span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose up <span class="at">-d</span></span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose logs <span class="at">-f</span> frontend</span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a><span class="co"># หรือรันตรงในเครื่อง (ต้องเปิด backend ไว้ที่พอร์ต 3000)</span></span>
-<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> frontend</span>
-<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> run dev</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ถ้าใช้ Docker (แนะนำ) ที่โฟลเดอร์โปรเจกต์</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose up <span class="at">-d</span></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose logs <span class="at">-f</span> frontend</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a><span class="co"># หรือรันตรงในเครื่อง (ต้องเปิด backend ไว้ที่พอร์ต 3000)</span></span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> frontend</span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> run dev</span></code></pre></div>
 <p>ตรวจตามนี้</p>
 <ul class="task-list">
 <li><label><input type="checkbox"></input>เปิด
@@ -4586,8 +4632,8 @@ async function confirmResult() {
 <h2 id="-ตรวจขั้น-7-ทำตามลำดับ">✔ ตรวจขั้น 7 (ทำตามลำดับ)</h2>
 <p><strong>ก่อนเริ่ม ให้รีเซ็ตฐานข้อมูล</strong> เพราะการทดสอบขั้น 4 และ 6
 ทิ้งข้อมูลไว้ (เช่น eva1 บันทึกร่างให้ emp1 ไปแล้ว ทำให้ emp1 แก้คะแนนตนเองไม่ได้)</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose down <span class="at">-v</span></span>
-<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose up <span class="at">-d</span></span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose down <span class="at">-v</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose up <span class="at">-d</span></span></code></pre></div>
 <p><code>-v</code> ลบ volume ของฐานข้อมูล seed จะสร้างข้อมูลตัวอย่างใหม่
 รหัสผ่านทุกคนกลับเป็นค่าเริ่มต้น (emp1/eva1 ต้องเปลี่ยนรหัสครั้งแรกอีกครั้ง) เตรียมไฟล์ PDF
 1 ไฟล์ และรูปลายเซ็น PNG/JPG 1 ไฟล์ไว้ก่อน</p>
@@ -4628,107 +4674,107 @@ Deploy (ส่วนที่ 7)</h1>
 <h2 id="81-unit-test-คิดคะแนน-ข้อ-75">8.1 Unit Test คิดคะแนน (ข้อ 7.5)</h2>
 <p>ใช้ test runner ที่มากับ Node 24 ไม่ต้องติดตั้งเพิ่ม</p>
 <p>ไฟล์ <code>backend/tests/score.test.js</code></p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ทดสอบฟังก์ชันคำนวณคะแนน (ข้อ 7.5)  รัน: npm test</span></span>
-<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> test <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;node:test&#39;</span>)<span class="op">;</span></span>
-<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> assert <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;node:assert&#39;</span>)<span class="op">;</span></span>
-<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> { percent<span class="op">,</span> validScore } <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;../helpers&#39;</span>)<span class="op">;</span></span>
-<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> indicators <span class="op">=</span> [</span>
-<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">id</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">score_type</span><span class="op">:</span> <span class="st">&#39;scale&#39;</span><span class="op">,</span> <span class="dt">weight</span><span class="op">:</span> <span class="dv">60</span> }<span class="op">,</span></span>
-<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">id</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dt">score_type</span><span class="op">:</span> <span class="st">&#39;yesno&#39;</span><span class="op">,</span> <span class="dt">weight</span><span class="op">:</span> <span class="dv">40</span> }<span class="op">,</span></span>
-<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span>
-<span id="cb67-10"><a href="#cb67-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb67-11"><a href="#cb67-11" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;คะแนนเต็มทุกข้อ ได้ 100%&#39;</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
-<span id="cb67-12"><a href="#cb67-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> scores <span class="op">=</span> [{ <span class="dt">indicator_id</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">score</span><span class="op">:</span> <span class="dv">4</span> }<span class="op">,</span> { <span class="dt">indicator_id</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dt">score</span><span class="op">:</span> <span class="dv">1</span> }]<span class="op">;</span></span>
-<span id="cb67-13"><a href="#cb67-13" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(<span class="fu">percent</span>(indicators<span class="op">,</span> scores)<span class="op">,</span> <span class="dv">100</span>)<span class="op">;</span></span>
-<span id="cb67-14"><a href="#cb67-14" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
-<span id="cb67-15"><a href="#cb67-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb67-16"><a href="#cb67-16" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;ถ่วงน้ำหนัก: ระดับ 2 จาก 4 (60) + ไม่มี (40) = 30%&#39;</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
-<span id="cb67-17"><a href="#cb67-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> scores <span class="op">=</span> [{ <span class="dt">indicator_id</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">score</span><span class="op">:</span> <span class="dv">2</span> }<span class="op">,</span> { <span class="dt">indicator_id</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dt">score</span><span class="op">:</span> <span class="dv">0</span> }]<span class="op">;</span></span>
-<span id="cb67-18"><a href="#cb67-18" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(<span class="fu">percent</span>(indicators<span class="op">,</span> scores)<span class="op">,</span> <span class="dv">30</span>)<span class="op">;</span></span>
-<span id="cb67-19"><a href="#cb67-19" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
-<span id="cb67-20"><a href="#cb67-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb67-21"><a href="#cb67-21" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;ให้คะแนนไม่ครบ ได้ null&#39;</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
-<span id="cb67-22"><a href="#cb67-22" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(<span class="fu">percent</span>(indicators<span class="op">,</span> [{ <span class="dt">indicator_id</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">score</span><span class="op">:</span> <span class="dv">4</span> }])<span class="op">,</span> <span class="kw">null</span>)<span class="op">;</span></span>
-<span id="cb67-23"><a href="#cb67-23" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
-<span id="cb67-24"><a href="#cb67-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb67-25"><a href="#cb67-25" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;ตรวจชนิดคะแนน&#39;</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
-<span id="cb67-26"><a href="#cb67-26" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(<span class="fu">validScore</span>(indicators[<span class="dv">0</span>]<span class="op">,</span> <span class="dv">5</span>)<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span></span>
-<span id="cb67-27"><a href="#cb67-27" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(<span class="fu">validScore</span>(indicators[<span class="dv">1</span>]<span class="op">,</span> <span class="dv">1</span>)<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
-<span id="cb67-28"><a href="#cb67-28" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
-<div class="sourceCode" id="cb68"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose exec backend npm test</span>
-<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a><span class="co"># หรือรันตรงในเครื่อง</span></span>
-<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> backend</span>
-<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> test</span></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ทดสอบฟังก์ชันคำนวณคะแนน (ข้อ 7.5)  รัน: npm test</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> test <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;node:test&#39;</span>)<span class="op">;</span></span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> assert <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;node:assert&#39;</span>)<span class="op">;</span></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> { percent<span class="op">,</span> validScore } <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;../helpers&#39;</span>)<span class="op">;</span></span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> indicators <span class="op">=</span> [</span>
+<span id="cb69-7"><a href="#cb69-7" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">id</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">score_type</span><span class="op">:</span> <span class="st">&#39;scale&#39;</span><span class="op">,</span> <span class="dt">weight</span><span class="op">:</span> <span class="dv">60</span> }<span class="op">,</span></span>
+<span id="cb69-8"><a href="#cb69-8" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">id</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dt">score_type</span><span class="op">:</span> <span class="st">&#39;yesno&#39;</span><span class="op">,</span> <span class="dt">weight</span><span class="op">:</span> <span class="dv">40</span> }<span class="op">,</span></span>
+<span id="cb69-9"><a href="#cb69-9" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span>
+<span id="cb69-10"><a href="#cb69-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-11"><a href="#cb69-11" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;คะแนนเต็มทุกข้อ ได้ 100%&#39;</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb69-12"><a href="#cb69-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> scores <span class="op">=</span> [{ <span class="dt">indicator_id</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">score</span><span class="op">:</span> <span class="dv">4</span> }<span class="op">,</span> { <span class="dt">indicator_id</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dt">score</span><span class="op">:</span> <span class="dv">1</span> }]<span class="op">;</span></span>
+<span id="cb69-13"><a href="#cb69-13" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(<span class="fu">percent</span>(indicators<span class="op">,</span> scores)<span class="op">,</span> <span class="dv">100</span>)<span class="op">;</span></span>
+<span id="cb69-14"><a href="#cb69-14" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb69-15"><a href="#cb69-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-16"><a href="#cb69-16" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;ถ่วงน้ำหนัก: ระดับ 2 จาก 4 (60) + ไม่มี (40) = 30%&#39;</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb69-17"><a href="#cb69-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> scores <span class="op">=</span> [{ <span class="dt">indicator_id</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">score</span><span class="op">:</span> <span class="dv">2</span> }<span class="op">,</span> { <span class="dt">indicator_id</span><span class="op">:</span> <span class="dv">2</span><span class="op">,</span> <span class="dt">score</span><span class="op">:</span> <span class="dv">0</span> }]<span class="op">;</span></span>
+<span id="cb69-18"><a href="#cb69-18" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(<span class="fu">percent</span>(indicators<span class="op">,</span> scores)<span class="op">,</span> <span class="dv">30</span>)<span class="op">;</span></span>
+<span id="cb69-19"><a href="#cb69-19" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb69-20"><a href="#cb69-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-21"><a href="#cb69-21" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;ให้คะแนนไม่ครบ ได้ null&#39;</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb69-22"><a href="#cb69-22" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(<span class="fu">percent</span>(indicators<span class="op">,</span> [{ <span class="dt">indicator_id</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span> <span class="dt">score</span><span class="op">:</span> <span class="dv">4</span> }])<span class="op">,</span> <span class="kw">null</span>)<span class="op">;</span></span>
+<span id="cb69-23"><a href="#cb69-23" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb69-24"><a href="#cb69-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-25"><a href="#cb69-25" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;ตรวจชนิดคะแนน&#39;</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb69-26"><a href="#cb69-26" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(<span class="fu">validScore</span>(indicators[<span class="dv">0</span>]<span class="op">,</span> <span class="dv">5</span>)<span class="op">,</span> <span class="kw">false</span>)<span class="op">;</span></span>
+<span id="cb69-27"><a href="#cb69-27" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(<span class="fu">validScore</span>(indicators[<span class="dv">1</span>]<span class="op">,</span> <span class="dv">1</span>)<span class="op">,</span> <span class="kw">true</span>)<span class="op">;</span></span>
+<span id="cb69-28"><a href="#cb69-28" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose exec backend npm test</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="co"># หรือรันตรงในเครื่อง</span></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> backend</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> test</span></code></pre></div>
 <p>ผลที่ต้องได้: <code>pass 4</code> <code>fail 0</code></p>
 <h2 id="82-ทดสอบ-api-อัตโนมัติ-ข้อ-7173-76">8.2 ทดสอบ API อัตโนมัติ (ข้อ
 7.1–7.3, 7.6)</h2>
 <p>ต้องเปิด back-end ไว้ก่อน</p>
 <p>ไฟล์ <code>backend/tests/api.test.js</code></p>
-<div class="sourceCode" id="cb69"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ทดสอบ API จริง (ข้อ 7.1-7.3, 7.6)  ต้องเปิด backend ไว้ก่อน</span></span>
-<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a><span class="co">// รัน: docker compose exec backend npm run test:api</span></span>
-<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> test <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;node:test&#39;</span>)<span class="op">;</span></span>
-<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> assert <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;node:assert&#39;</span>)<span class="op">;</span></span>
-<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> URL <span class="op">=</span> <span class="st">&#39;http://localhost:&#39;</span> <span class="op">+</span> (<span class="bu">process</span><span class="op">.</span><span class="at">env</span><span class="op">.</span><span class="at">PORT</span> <span class="op">||</span> <span class="dv">3000</span>) <span class="op">+</span> <span class="st">&#39;/api&#39;</span><span class="op">;</span></span>
-<span id="cb69-7"><a href="#cb69-7" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> token <span class="op">=</span> <span class="st">&#39;&#39;</span><span class="op">;</span></span>
-<span id="cb69-8"><a href="#cb69-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-9"><a href="#cb69-9" aria-hidden="true" tabindex="-1"></a><span class="co">// ฟังก์ชันเรียก API คืน { status, body }</span></span>
-<span id="cb69-10"><a href="#cb69-10" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">call</span>(path<span class="op">,</span> method <span class="op">=</span> <span class="st">&#39;GET&#39;</span><span class="op">,</span> body) {</span>
-<span id="cb69-11"><a href="#cb69-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> res <span class="op">=</span> <span class="cf">await</span> <span class="fu">fetch</span>(URL <span class="op">+</span> path<span class="op">,</span> {</span>
-<span id="cb69-12"><a href="#cb69-12" aria-hidden="true" tabindex="-1"></a>    method<span class="op">,</span></span>
-<span id="cb69-13"><a href="#cb69-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">headers</span><span class="op">:</span> { <span class="st">&#39;Content-Type&#39;</span><span class="op">:</span> <span class="st">&#39;application/json&#39;</span><span class="op">,</span> <span class="dt">Authorization</span><span class="op">:</span> <span class="st">&#39;Bearer &#39;</span> <span class="op">+</span> token }<span class="op">,</span></span>
-<span id="cb69-14"><a href="#cb69-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">body</span><span class="op">:</span> body <span class="op">?</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(body) <span class="op">:</span> <span class="kw">undefined</span><span class="op">,</span></span>
-<span id="cb69-15"><a href="#cb69-15" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
-<span id="cb69-16"><a href="#cb69-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { <span class="dt">status</span><span class="op">:</span> res<span class="op">.</span><span class="at">status</span><span class="op">,</span> <span class="dt">body</span><span class="op">:</span> <span class="cf">await</span> res<span class="op">.</span><span class="fu">json</span>() }<span class="op">;</span></span>
-<span id="cb69-17"><a href="#cb69-17" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb69-18"><a href="#cb69-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-19"><a href="#cb69-19" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;7.1 Login รหัสผิด ได้ 401&#39;</span><span class="op">,</span> <span class="kw">async</span> () <span class="kw">=&gt;</span> {</span>
-<span id="cb69-20"><a href="#cb69-20" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> r <span class="op">=</span> <span class="cf">await</span> <span class="fu">call</span>(<span class="st">&#39;/auth/login&#39;</span><span class="op">,</span> <span class="st">&#39;POST&#39;</span><span class="op">,</span> { <span class="dt">username</span><span class="op">:</span> <span class="st">&#39;admin&#39;</span><span class="op">,</span> <span class="dt">password</span><span class="op">:</span> <span class="st">&#39;wrong&#39;</span> })<span class="op">;</span></span>
-<span id="cb69-21"><a href="#cb69-21" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(r<span class="op">.</span><span class="at">status</span><span class="op">,</span> <span class="dv">401</span>)<span class="op">;</span></span>
-<span id="cb69-22"><a href="#cb69-22" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
-<span id="cb69-23"><a href="#cb69-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-24"><a href="#cb69-24" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;7.1 Login รหัสถูก ได้ token&#39;</span><span class="op">,</span> <span class="kw">async</span> () <span class="kw">=&gt;</span> {</span>
-<span id="cb69-25"><a href="#cb69-25" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> r <span class="op">=</span> <span class="cf">await</span> <span class="fu">call</span>(<span class="st">&#39;/auth/login&#39;</span><span class="op">,</span> <span class="st">&#39;POST&#39;</span><span class="op">,</span> { <span class="dt">username</span><span class="op">:</span> <span class="st">&#39;admin&#39;</span><span class="op">,</span> <span class="dt">password</span><span class="op">:</span> <span class="st">&#39;admin1234&#39;</span> })<span class="op">;</span></span>
-<span id="cb69-26"><a href="#cb69-26" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(r<span class="op">.</span><span class="at">status</span><span class="op">,</span> <span class="dv">200</span>)<span class="op">;</span></span>
-<span id="cb69-27"><a href="#cb69-27" aria-hidden="true" tabindex="-1"></a>  token <span class="op">=</span> r<span class="op">.</span><span class="at">body</span><span class="op">.</span><span class="at">data</span><span class="op">.</span><span class="at">token</span><span class="op">;</span></span>
-<span id="cb69-28"><a href="#cb69-28" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
-<span id="cb69-29"><a href="#cb69-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-30"><a href="#cb69-30" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> username <span class="op">=</span> <span class="st">&#39;test&#39;</span> <span class="op">+</span> <span class="bu">Date</span><span class="op">.</span><span class="fu">now</span>()<span class="op">;</span></span>
-<span id="cb69-31"><a href="#cb69-31" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> newId<span class="op">;</span></span>
-<span id="cb69-32"><a href="#cb69-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-33"><a href="#cb69-33" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;7.4 Validate: อีเมลผิดรูปแบบ ได้ 400&#39;</span><span class="op">,</span> <span class="kw">async</span> () <span class="kw">=&gt;</span> {</span>
-<span id="cb69-34"><a href="#cb69-34" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> r <span class="op">=</span> <span class="cf">await</span> <span class="fu">call</span>(<span class="st">&#39;/users&#39;</span><span class="op">,</span> <span class="st">&#39;POST&#39;</span><span class="op">,</span> {</span>
-<span id="cb69-35"><a href="#cb69-35" aria-hidden="true" tabindex="-1"></a>    username<span class="op">,</span> <span class="dt">password</span><span class="op">:</span> <span class="st">&#39;test12345&#39;</span><span class="op">,</span> <span class="dt">full_name</span><span class="op">:</span> <span class="st">&#39;ทดสอบ&#39;</span><span class="op">,</span> <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;evaluatee&#39;</span><span class="op">,</span> <span class="dt">email</span><span class="op">:</span> <span class="st">&#39;abc&#39;</span><span class="op">,</span></span>
-<span id="cb69-36"><a href="#cb69-36" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
-<span id="cb69-37"><a href="#cb69-37" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(r<span class="op">.</span><span class="at">status</span><span class="op">,</span> <span class="dv">400</span>)<span class="op">;</span></span>
-<span id="cb69-38"><a href="#cb69-38" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
-<span id="cb69-39"><a href="#cb69-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-40"><a href="#cb69-40" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;7.2 Insert: POST เพิ่มผู้ใช้&#39;</span><span class="op">,</span> <span class="kw">async</span> () <span class="kw">=&gt;</span> {</span>
-<span id="cb69-41"><a href="#cb69-41" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> r <span class="op">=</span> <span class="cf">await</span> <span class="fu">call</span>(<span class="st">&#39;/users&#39;</span><span class="op">,</span> <span class="st">&#39;POST&#39;</span><span class="op">,</span> {</span>
-<span id="cb69-42"><a href="#cb69-42" aria-hidden="true" tabindex="-1"></a>    username<span class="op">,</span> <span class="dt">password</span><span class="op">:</span> <span class="st">&#39;test12345&#39;</span><span class="op">,</span> <span class="dt">full_name</span><span class="op">:</span> <span class="st">&#39;ทดสอบ&#39;</span><span class="op">,</span> <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;evaluatee&#39;</span><span class="op">,</span> <span class="dt">email</span><span class="op">:</span> <span class="st">&#39;a@b.com&#39;</span><span class="op">,</span></span>
-<span id="cb69-43"><a href="#cb69-43" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
-<span id="cb69-44"><a href="#cb69-44" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(r<span class="op">.</span><span class="at">status</span><span class="op">,</span> <span class="dv">200</span>)<span class="op">;</span></span>
-<span id="cb69-45"><a href="#cb69-45" aria-hidden="true" tabindex="-1"></a>  newId <span class="op">=</span> r<span class="op">.</span><span class="at">body</span><span class="op">.</span><span class="at">data</span><span class="op">.</span><span class="at">id</span><span class="op">;</span></span>
-<span id="cb69-46"><a href="#cb69-46" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
-<span id="cb69-47"><a href="#cb69-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-48"><a href="#cb69-48" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;7.3 Update: PUT แก้ชื่อ แล้ว GET ตรวจผล&#39;</span><span class="op">,</span> <span class="kw">async</span> () <span class="kw">=&gt;</span> {</span>
-<span id="cb69-49"><a href="#cb69-49" aria-hidden="true" tabindex="-1"></a>  <span class="cf">await</span> <span class="fu">call</span>(<span class="st">&#39;/users/&#39;</span> <span class="op">+</span> newId<span class="op">,</span> <span class="st">&#39;PUT&#39;</span><span class="op">,</span> { <span class="dt">full_name</span><span class="op">:</span> <span class="st">&#39;ชื่อใหม่&#39;</span><span class="op">,</span> <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;evaluatee&#39;</span> })<span class="op">;</span></span>
-<span id="cb69-50"><a href="#cb69-50" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> r <span class="op">=</span> <span class="cf">await</span> <span class="fu">call</span>(<span class="st">&#39;/users/&#39;</span> <span class="op">+</span> newId)<span class="op">;</span></span>
-<span id="cb69-51"><a href="#cb69-51" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(r<span class="op">.</span><span class="at">body</span><span class="op">.</span><span class="at">data</span><span class="op">.</span><span class="at">full_name</span><span class="op">,</span> <span class="st">&#39;ชื่อใหม่&#39;</span>)<span class="op">;</span></span>
-<span id="cb69-52"><a href="#cb69-52" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
-<span id="cb69-53"><a href="#cb69-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-54"><a href="#cb69-54" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;DELETE ลบผู้ใช้ทดสอบ&#39;</span><span class="op">,</span> <span class="kw">async</span> () <span class="kw">=&gt;</span> {</span>
-<span id="cb69-55"><a href="#cb69-55" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> r <span class="op">=</span> <span class="cf">await</span> <span class="fu">call</span>(<span class="st">&#39;/users/&#39;</span> <span class="op">+</span> newId<span class="op">,</span> <span class="st">&#39;DELETE&#39;</span>)<span class="op">;</span></span>
-<span id="cb69-56"><a href="#cb69-56" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(r<span class="op">.</span><span class="at">status</span><span class="op">,</span> <span class="dv">200</span>)<span class="op">;</span></span>
-<span id="cb69-57"><a href="#cb69-57" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
-<span id="cb69-58"><a href="#cb69-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb69-59"><a href="#cb69-59" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;4.4 ไม่มี token ได้ 401 / ไม่มี API ได้ 404&#39;</span><span class="op">,</span> <span class="kw">async</span> () <span class="kw">=&gt;</span> {</span>
-<span id="cb69-60"><a href="#cb69-60" aria-hidden="true" tabindex="-1"></a>  token <span class="op">=</span> <span class="st">&#39;&#39;</span><span class="op">;</span></span>
-<span id="cb69-61"><a href="#cb69-61" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>((<span class="cf">await</span> <span class="fu">call</span>(<span class="st">&#39;/users&#39;</span>))<span class="op">.</span><span class="at">status</span><span class="op">,</span> <span class="dv">401</span>)<span class="op">;</span></span>
-<span id="cb69-62"><a href="#cb69-62" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>((<span class="cf">await</span> <span class="fu">call</span>(<span class="st">&#39;/nothing&#39;</span>))<span class="op">.</span><span class="at">status</span><span class="op">,</span> <span class="dv">404</span>)<span class="op">;</span></span>
-<span id="cb69-63"><a href="#cb69-63" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
-<div class="sourceCode" id="cb70"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose exec backend npm run test:api</span></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ทดสอบ API จริง (ข้อ 7.1-7.3, 7.6)  ต้องเปิด backend ไว้ก่อน</span></span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a><span class="co">// รัน: docker compose exec backend npm run test:api</span></span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> test <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;node:test&#39;</span>)<span class="op">;</span></span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> assert <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;node:assert&#39;</span>)<span class="op">;</span></span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> URL <span class="op">=</span> <span class="st">&#39;http://localhost:&#39;</span> <span class="op">+</span> (<span class="bu">process</span><span class="op">.</span><span class="at">env</span><span class="op">.</span><span class="at">PORT</span> <span class="op">||</span> <span class="dv">3000</span>) <span class="op">+</span> <span class="st">&#39;/api&#39;</span><span class="op">;</span></span>
+<span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> token <span class="op">=</span> <span class="st">&#39;&#39;</span><span class="op">;</span></span>
+<span id="cb71-8"><a href="#cb71-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-9"><a href="#cb71-9" aria-hidden="true" tabindex="-1"></a><span class="co">// ฟังก์ชันเรียก API คืน { status, body }</span></span>
+<span id="cb71-10"><a href="#cb71-10" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">call</span>(path<span class="op">,</span> method <span class="op">=</span> <span class="st">&#39;GET&#39;</span><span class="op">,</span> body) {</span>
+<span id="cb71-11"><a href="#cb71-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> res <span class="op">=</span> <span class="cf">await</span> <span class="fu">fetch</span>(URL <span class="op">+</span> path<span class="op">,</span> {</span>
+<span id="cb71-12"><a href="#cb71-12" aria-hidden="true" tabindex="-1"></a>    method<span class="op">,</span></span>
+<span id="cb71-13"><a href="#cb71-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">headers</span><span class="op">:</span> { <span class="st">&#39;Content-Type&#39;</span><span class="op">:</span> <span class="st">&#39;application/json&#39;</span><span class="op">,</span> <span class="dt">Authorization</span><span class="op">:</span> <span class="st">&#39;Bearer &#39;</span> <span class="op">+</span> token }<span class="op">,</span></span>
+<span id="cb71-14"><a href="#cb71-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">body</span><span class="op">:</span> body <span class="op">?</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">stringify</span>(body) <span class="op">:</span> <span class="kw">undefined</span><span class="op">,</span></span>
+<span id="cb71-15"><a href="#cb71-15" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb71-16"><a href="#cb71-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { <span class="dt">status</span><span class="op">:</span> res<span class="op">.</span><span class="at">status</span><span class="op">,</span> <span class="dt">body</span><span class="op">:</span> <span class="cf">await</span> res<span class="op">.</span><span class="fu">json</span>() }<span class="op">;</span></span>
+<span id="cb71-17"><a href="#cb71-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb71-18"><a href="#cb71-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-19"><a href="#cb71-19" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;7.1 Login รหัสผิด ได้ 401&#39;</span><span class="op">,</span> <span class="kw">async</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb71-20"><a href="#cb71-20" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> r <span class="op">=</span> <span class="cf">await</span> <span class="fu">call</span>(<span class="st">&#39;/auth/login&#39;</span><span class="op">,</span> <span class="st">&#39;POST&#39;</span><span class="op">,</span> { <span class="dt">username</span><span class="op">:</span> <span class="st">&#39;admin&#39;</span><span class="op">,</span> <span class="dt">password</span><span class="op">:</span> <span class="st">&#39;wrong&#39;</span> })<span class="op">;</span></span>
+<span id="cb71-21"><a href="#cb71-21" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(r<span class="op">.</span><span class="at">status</span><span class="op">,</span> <span class="dv">401</span>)<span class="op">;</span></span>
+<span id="cb71-22"><a href="#cb71-22" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb71-23"><a href="#cb71-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-24"><a href="#cb71-24" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;7.1 Login รหัสถูก ได้ token&#39;</span><span class="op">,</span> <span class="kw">async</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb71-25"><a href="#cb71-25" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> r <span class="op">=</span> <span class="cf">await</span> <span class="fu">call</span>(<span class="st">&#39;/auth/login&#39;</span><span class="op">,</span> <span class="st">&#39;POST&#39;</span><span class="op">,</span> { <span class="dt">username</span><span class="op">:</span> <span class="st">&#39;admin&#39;</span><span class="op">,</span> <span class="dt">password</span><span class="op">:</span> <span class="st">&#39;admin1234&#39;</span> })<span class="op">;</span></span>
+<span id="cb71-26"><a href="#cb71-26" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(r<span class="op">.</span><span class="at">status</span><span class="op">,</span> <span class="dv">200</span>)<span class="op">;</span></span>
+<span id="cb71-27"><a href="#cb71-27" aria-hidden="true" tabindex="-1"></a>  token <span class="op">=</span> r<span class="op">.</span><span class="at">body</span><span class="op">.</span><span class="at">data</span><span class="op">.</span><span class="at">token</span><span class="op">;</span></span>
+<span id="cb71-28"><a href="#cb71-28" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb71-29"><a href="#cb71-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-30"><a href="#cb71-30" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> username <span class="op">=</span> <span class="st">&#39;test&#39;</span> <span class="op">+</span> <span class="bu">Date</span><span class="op">.</span><span class="fu">now</span>()<span class="op">;</span></span>
+<span id="cb71-31"><a href="#cb71-31" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> newId<span class="op">;</span></span>
+<span id="cb71-32"><a href="#cb71-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-33"><a href="#cb71-33" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;7.4 Validate: อีเมลผิดรูปแบบ ได้ 400&#39;</span><span class="op">,</span> <span class="kw">async</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb71-34"><a href="#cb71-34" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> r <span class="op">=</span> <span class="cf">await</span> <span class="fu">call</span>(<span class="st">&#39;/users&#39;</span><span class="op">,</span> <span class="st">&#39;POST&#39;</span><span class="op">,</span> {</span>
+<span id="cb71-35"><a href="#cb71-35" aria-hidden="true" tabindex="-1"></a>    username<span class="op">,</span> <span class="dt">password</span><span class="op">:</span> <span class="st">&#39;test12345&#39;</span><span class="op">,</span> <span class="dt">full_name</span><span class="op">:</span> <span class="st">&#39;ทดสอบ&#39;</span><span class="op">,</span> <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;evaluatee&#39;</span><span class="op">,</span> <span class="dt">email</span><span class="op">:</span> <span class="st">&#39;abc&#39;</span><span class="op">,</span></span>
+<span id="cb71-36"><a href="#cb71-36" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb71-37"><a href="#cb71-37" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(r<span class="op">.</span><span class="at">status</span><span class="op">,</span> <span class="dv">400</span>)<span class="op">;</span></span>
+<span id="cb71-38"><a href="#cb71-38" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb71-39"><a href="#cb71-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-40"><a href="#cb71-40" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;7.2 Insert: POST เพิ่มผู้ใช้&#39;</span><span class="op">,</span> <span class="kw">async</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb71-41"><a href="#cb71-41" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> r <span class="op">=</span> <span class="cf">await</span> <span class="fu">call</span>(<span class="st">&#39;/users&#39;</span><span class="op">,</span> <span class="st">&#39;POST&#39;</span><span class="op">,</span> {</span>
+<span id="cb71-42"><a href="#cb71-42" aria-hidden="true" tabindex="-1"></a>    username<span class="op">,</span> <span class="dt">password</span><span class="op">:</span> <span class="st">&#39;test12345&#39;</span><span class="op">,</span> <span class="dt">full_name</span><span class="op">:</span> <span class="st">&#39;ทดสอบ&#39;</span><span class="op">,</span> <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;evaluatee&#39;</span><span class="op">,</span> <span class="dt">email</span><span class="op">:</span> <span class="st">&#39;a@b.com&#39;</span><span class="op">,</span></span>
+<span id="cb71-43"><a href="#cb71-43" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb71-44"><a href="#cb71-44" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(r<span class="op">.</span><span class="at">status</span><span class="op">,</span> <span class="dv">200</span>)<span class="op">;</span></span>
+<span id="cb71-45"><a href="#cb71-45" aria-hidden="true" tabindex="-1"></a>  newId <span class="op">=</span> r<span class="op">.</span><span class="at">body</span><span class="op">.</span><span class="at">data</span><span class="op">.</span><span class="at">id</span><span class="op">;</span></span>
+<span id="cb71-46"><a href="#cb71-46" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb71-47"><a href="#cb71-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-48"><a href="#cb71-48" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;7.3 Update: PUT แก้ชื่อ แล้ว GET ตรวจผล&#39;</span><span class="op">,</span> <span class="kw">async</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb71-49"><a href="#cb71-49" aria-hidden="true" tabindex="-1"></a>  <span class="cf">await</span> <span class="fu">call</span>(<span class="st">&#39;/users/&#39;</span> <span class="op">+</span> newId<span class="op">,</span> <span class="st">&#39;PUT&#39;</span><span class="op">,</span> { <span class="dt">full_name</span><span class="op">:</span> <span class="st">&#39;ชื่อใหม่&#39;</span><span class="op">,</span> <span class="dt">role</span><span class="op">:</span> <span class="st">&#39;evaluatee&#39;</span> })<span class="op">;</span></span>
+<span id="cb71-50"><a href="#cb71-50" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> r <span class="op">=</span> <span class="cf">await</span> <span class="fu">call</span>(<span class="st">&#39;/users/&#39;</span> <span class="op">+</span> newId)<span class="op">;</span></span>
+<span id="cb71-51"><a href="#cb71-51" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(r<span class="op">.</span><span class="at">body</span><span class="op">.</span><span class="at">data</span><span class="op">.</span><span class="at">full_name</span><span class="op">,</span> <span class="st">&#39;ชื่อใหม่&#39;</span>)<span class="op">;</span></span>
+<span id="cb71-52"><a href="#cb71-52" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb71-53"><a href="#cb71-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-54"><a href="#cb71-54" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;DELETE ลบผู้ใช้ทดสอบ&#39;</span><span class="op">,</span> <span class="kw">async</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb71-55"><a href="#cb71-55" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> r <span class="op">=</span> <span class="cf">await</span> <span class="fu">call</span>(<span class="st">&#39;/users/&#39;</span> <span class="op">+</span> newId<span class="op">,</span> <span class="st">&#39;DELETE&#39;</span>)<span class="op">;</span></span>
+<span id="cb71-56"><a href="#cb71-56" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>(r<span class="op">.</span><span class="at">status</span><span class="op">,</span> <span class="dv">200</span>)<span class="op">;</span></span>
+<span id="cb71-57"><a href="#cb71-57" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb71-58"><a href="#cb71-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-59"><a href="#cb71-59" aria-hidden="true" tabindex="-1"></a><span class="fu">test</span>(<span class="st">&#39;4.4 ไม่มี token ได้ 401 / ไม่มี API ได้ 404&#39;</span><span class="op">,</span> <span class="kw">async</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb71-60"><a href="#cb71-60" aria-hidden="true" tabindex="-1"></a>  token <span class="op">=</span> <span class="st">&#39;&#39;</span><span class="op">;</span></span>
+<span id="cb71-61"><a href="#cb71-61" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>((<span class="cf">await</span> <span class="fu">call</span>(<span class="st">&#39;/users&#39;</span>))<span class="op">.</span><span class="at">status</span><span class="op">,</span> <span class="dv">401</span>)<span class="op">;</span></span>
+<span id="cb71-62"><a href="#cb71-62" aria-hidden="true" tabindex="-1"></a>  assert<span class="op">.</span><span class="fu">strictEqual</span>((<span class="cf">await</span> <span class="fu">call</span>(<span class="st">&#39;/nothing&#39;</span>))<span class="op">.</span><span class="at">status</span><span class="op">,</span> <span class="dv">404</span>)<span class="op">;</span></span>
+<span id="cb71-63"><a href="#cb71-63" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose exec backend npm run test:api</span></code></pre></div>
 <p>ผลที่ต้องได้: <code>pass 7</code> <code>fail 0</code></p>
 <h2 id="83-ทดสอบด้วย-thunder-client-ให้กรรมการดูสด">8.3 ทดสอบด้วย Thunder
 Client (ให้กรรมการดูสด)</h2>
@@ -4884,28 +4930,28 @@ Results</strong> ใต้ response</p>
 </ul>
 <h2 id="85-gitlab-ทำงานเป็นทีม-ข้อ-78">8.5 GitLab ทำงานเป็นทีม (ข้อ 7.8)</h2>
 <h3 id="ครั้งแรก-หัวหน้าทีมทำ">ครั้งแรก (หัวหน้าทีมทำ)</h3>
-<div class="sourceCode" id="cb71"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> evaluation</span>
-<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> init</span>
-<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .</span>
-<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;เริ่มโปรเจกต์&quot;</span></span>
-<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch <span class="at">-M</span> main</span>
-<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> remote add origin https://gitlab.com/<span class="op">&lt;</span>ชื่อทีม<span class="op">&gt;</span>/evaluation-2569.git</span>
-<span id="cb71-7"><a href="#cb71-7" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin main</span></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> evaluation</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> init</span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .</span>
+<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;เริ่มโปรเจกต์&quot;</span></span>
+<span id="cb73-5"><a href="#cb73-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> branch <span class="at">-M</span> main</span>
+<span id="cb73-6"><a href="#cb73-6" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> remote add origin https://gitlab.com/<span class="op">&lt;</span>ชื่อทีม<span class="op">&gt;</span>/evaluation-2569.git</span>
+<span id="cb73-7"><a href="#cb73-7" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin main</span></code></pre></div>
 <blockquote>
 <p>ตรวจว่ามี <code>.gitignore</code> ที่มี <code>node_modules</code> และ
 <code>uploads/</code> ก่อน <code>git add</code></p>
 </blockquote>
 <h3 id="สมาชิกแต่ละคน">สมาชิกแต่ละคน</h3>
-<div class="sourceCode" id="cb72"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://gitlab.com/<span class="op">&lt;</span>ชื่อทีม<span class="op">&gt;</span>/evaluation-2569.git</span>
-<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> evaluation-2569</span>
-<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> backend        <span class="co"># คนที่ 1</span></span>
-<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a><span class="co"># git checkout -b frontend     # คนที่ 2</span></span>
-<span id="cb72-5"><a href="#cb72-5" aria-hidden="true" tabindex="-1"></a><span class="co"># git checkout -b docs         # คนที่ 3</span></span>
-<span id="cb72-6"><a href="#cb72-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb72-7"><a href="#cb72-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ทำงานเสร็จทีละส่วน</span></span>
-<span id="cb72-8"><a href="#cb72-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .</span>
-<span id="cb72-9"><a href="#cb72-9" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;เพิ่ม API ช่วงเวลาประเมิน&quot;</span></span>
-<span id="cb72-10"><a href="#cb72-10" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin backend</span></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://gitlab.com/<span class="op">&lt;</span>ชื่อทีม<span class="op">&gt;</span>/evaluation-2569.git</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> evaluation-2569</span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout <span class="at">-b</span> backend        <span class="co"># คนที่ 1</span></span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a><span class="co"># git checkout -b frontend     # คนที่ 2</span></span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a><span class="co"># git checkout -b docs         # คนที่ 3</span></span>
+<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a><span class="co"># ทำงานเสร็จทีละส่วน</span></span>
+<span id="cb74-8"><a href="#cb74-8" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> add .</span>
+<span id="cb74-9"><a href="#cb74-9" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">&quot;เพิ่ม API ช่วงเวลาประเมิน&quot;</span></span>
+<span id="cb74-10"><a href="#cb74-10" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> push <span class="at">-u</span> origin backend</span></code></pre></div>
 <h3 id="รวมงาน">รวมงาน</h3>
 <ol type="1">
 <li>เปิดเว็บ GitLab → <strong>Merge requests</strong> → <strong>New merge
@@ -4914,32 +4960,32 @@ request</strong></li>
 <strong>Create</strong> → <strong>Merge</strong></li>
 <li>ทุกคนดึงงานล่าสุดมา</li>
 </ol>
-<div class="sourceCode" id="cb73"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout main</span>
-<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull origin main</span>
-<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout backend</span>
-<span id="cb73-4"><a href="#cb73-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> merge main</span></code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout main</span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull origin main</span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> checkout backend</span>
+<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> merge main</span></code></pre></div>
 <p>กรรมการจะดู <strong>ประวัติ commit ของแต่ละคน</strong> ให้ commit บ่อย ๆ
 ข้อความสั้นและบอกว่าทำอะไร</p>
 <h2 id="86-deploy-ขึ้นเครื่อง-server-ข้อ-79">8.6 Deploy ขึ้นเครื่อง Server (ข้อ
 7.9)</h2>
 <p>บนเครื่อง Server ที่ติดตั้ง Docker แล้ว</p>
-<div class="sourceCode" id="cb74"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://gitlab.com/<span class="op">&lt;</span>ชื่อทีม<span class="op">&gt;</span>/evaluation-2569.git</span>
-<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> evaluation-2569</span>
-<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose up <span class="at">-d</span></span>
-<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose ps          <span class="co"># ทุกตัวต้อง Up / healthy</span></span></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://gitlab.com/<span class="op">&lt;</span>ชื่อทีม<span class="op">&gt;</span>/evaluation-2569.git</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> evaluation-2569</span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose up <span class="at">-d</span></span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose ps          <span class="co"># ทุกตัวต้อง Up / healthy</span></span></code></pre></div>
 <p>ดู IP ของ Server</p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ip</span> a          <span class="co"># Linux</span></span>
-<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ipconfig</span>      <span class="co"># Windows</span></span></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ip</span> a          <span class="co"># Linux</span></span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="ex">ipconfig</span>      <span class="co"># Windows</span></span></code></pre></div>
 <p>เปิดจากเครื่องอื่นด้วย <code>http://&lt;IP&gt;:5173</code></p>
 <p>ถ้าเปิดไม่ได้ ให้เปิดพอร์ต Firewall</p>
-<div class="sourceCode" id="cb76"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Linux (ufw)</span></span>
-<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ufw allow 5173</span>
-<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ufw allow 3000</span></code></pre></div>
-<div class="sourceCode" id="cb77"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Windows (PowerShell แบบ Administrator)</span></span>
-<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>New-NetFirewallRule <span class="op">-</span>DisplayName <span class="st">&quot;evaluation&quot;</span> <span class="op">-</span>Direction Inbound <span class="op">-</span>Protocol TCP <span class="op">-</span>LocalPort <span class="dv">5173</span><span class="op">,</span><span class="dv">3000</span> <span class="op">-</span>Action Allow</span></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Linux (ufw)</span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ufw allow 5173</span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> ufw allow 3000</span></code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Windows (PowerShell แบบ Administrator)</span></span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>New-NetFirewallRule <span class="op">-</span>DisplayName <span class="st">&quot;evaluation&quot;</span> <span class="op">-</span>Direction Inbound <span class="op">-</span>Protocol TCP <span class="op">-</span>LocalPort <span class="dv">5173</span><span class="op">,</span><span class="dv">3000</span> <span class="op">-</span>Action Allow</span></code></pre></div>
 <p>อัปเดตงานใหม่บน Server</p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull</span>
-<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose restart backend frontend</span></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull</span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose restart backend frontend</span></code></pre></div>
 <h2 id="87-responsive-ข้อ-710">8.7 Responsive (ข้อ 7.10)</h2>
 <ol type="1">
 <li>กด F12 → กดไอคอนมือถือ (Toggle device toolbar) หรือ
@@ -5255,7 +5301,23 @@ vite.config.js หรือ <code>docker compose restart</code></td>
 <tr>
 <td><code>npm create vite</code> ถามคำถามเยอะ</td>
 <td>ใช้ npm เวอร์ชันใหม่</td>
-<td>เลือก <code>Vue</code> → <code>JavaScript</code></td>
+<td>เลือก <code>Vue</code> → <code>JavaScript</code> คำถามอื่น (rolldown,
+ติดตั้งและเปิดเลยไหม) ตอบ No</td>
+</tr>
+<tr>
+<td>กด Export PDF แล้วไม่ได้ไฟล์ Console ขึ้น
+<code>unsupported color function</code></td>
+<td>ติดตั้ง Vuetify 4 (พิมพ์ <code>npm install vuetify</code>
+โดยไม่ใส่เวอร์ชัน)</td>
+<td>ในโฟลเดอร์ frontend พิมพ์
+<code>npm install vuetify@3 html2pdf.js@0.10</code> แล้วปิดเปิด
+<code>npm run dev</code> ใหม่ (ถ้ายังไม่หาย ลบโฟลเดอร์
+<code>node_modules/.vite</code>)</td>
+</tr>
+<tr>
+<td>หน้าเว็บเปิดมาพื้นดำ ปุ่มเป็นตัวพิมพ์เล็ก</td>
+<td>ได้ Vuetify 4 (ใช้ธีมตาม Windows) แทน Vuetify 3</td>
+<td>ติดตั้งใหม่ด้วย <code>npm install vuetify@3</code> ตามข้อ 5.1</td>
 </tr>
 <tr>
 <td>login ด้วยรหัสในคู่มือแล้วได้ 401 ทั้งที่พิมพ์ถูก</td>
@@ -5288,24 +5350,24 @@ Docker Desktop ว่า container ไหนเปิดอยู่</td>
 </tbody>
 </table>
 <h2 id="พอร์ตถูกใช้">พอร์ตถูกใช้</h2>
-<div class="sourceCode" id="cb79"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Windows ดูว่าใครใช้พอร์ต 3000</span></span>
-<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>netstat <span class="op">-</span>ano <span class="op">|</span> findstr <span class="op">:</span><span class="dv">3000</span></span>
-<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a><span class="dt">taskkill</span> <span class="op">/</span>PID <span class="op">&lt;</span>เลข PID<span class="op">&gt;</span> <span class="op">/</span>F</span></code></pre></div>
-<div class="sourceCode" id="cb80"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="co"># macOS / Linux</span></span>
-<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a><span class="ex">lsof</span> <span class="at">-i</span> :3000</span>
-<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a><span class="bu">kill</span> <span class="op">&lt;</span>PID<span class="op">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Windows ดูว่าใครใช้พอร์ต 3000</span></span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>netstat <span class="op">-</span>ano <span class="op">|</span> findstr <span class="op">:</span><span class="dv">3000</span></span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a><span class="dt">taskkill</span> <span class="op">/</span>PID <span class="op">&lt;</span>เลข PID<span class="op">&gt;</span> <span class="op">/</span>F</span></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="co"># macOS / Linux</span></span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a><span class="ex">lsof</span> <span class="at">-i</span> :3000</span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a><span class="bu">kill</span> <span class="op">&lt;</span>PID<span class="op">&gt;</span></span></code></pre></div>
 <p>หรือเปลี่ยนพอร์ตฝั่งซ้ายใน docker-compose.yml เช่น
 <code>&quot;3001:3000&quot;</code></p>
 <h2 id="เริ่มใหม่หมดแบบสะอาด">เริ่มใหม่หมดแบบสะอาด</h2>
 <p>ใช้เมื่อฐานข้อมูลเพี้ยนจนแก้ไม่ไหว (ข้อมูลทั้งหมดจะหาย)</p>
-<div class="sourceCode" id="cb81"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose down <span class="at">-v</span></span>
-<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose up <span class="at">-d</span></span>
-<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose logs <span class="at">-f</span> backend</span></code></pre></div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose down <span class="at">-v</span></span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose up <span class="at">-d</span></span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose logs <span class="at">-f</span> backend</span></code></pre></div>
 <h2 id="ดู-log-เมื่อไม่รู้ว่าพังตรงไหน">ดู log เมื่อไม่รู้ว่าพังตรงไหน</h2>
-<div class="sourceCode" id="cb82"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose ps                 <span class="co"># ตัวไหนไม่ Up</span></span>
-<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose logs backend       <span class="co"># ดู error หลังบ้าน</span></span>
-<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose logs frontend      <span class="co"># ดู error หน้าบ้าน</span></span>
-<span id="cb82-4"><a href="#cb82-4" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose exec db mysql <span class="at">-uroot</span> <span class="at">-proot1234</span> evaluation <span class="at">-e</span> <span class="st">&quot;SHOW TABLES;&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose ps                 <span class="co"># ตัวไหนไม่ Up</span></span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose logs backend       <span class="co"># ดู error หลังบ้าน</span></span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose logs frontend      <span class="co"># ดู error หน้าบ้าน</span></span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose exec db mysql <span class="at">-uroot</span> <span class="at">-proot1234</span> evaluation <span class="at">-e</span> <span class="st">&quot;SHOW TABLES;&quot;</span></span></code></pre></div>
 <p>phpMyAdmin เปิดที่ <code>http://localhost:8080</code> (ผู้ใช้
 <code>root</code> รหัส <code>root1234</code>)</p>
 </body>
