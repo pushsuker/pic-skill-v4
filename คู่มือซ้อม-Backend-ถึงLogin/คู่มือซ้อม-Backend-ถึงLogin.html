@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="th" xml:lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>คู่มือซ้อม Back-end ถึงขั้น Login</title>
+  <style>
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+  <style type="text/css">body{font-family:"Sarabun","Noto Sans Thai",sans-serif;max-width:960px;margin:auto;padding:16px;line-height:1.7;color:#222;background:#fff}
+h1{border-bottom:3px solid #1867c0;padding-bottom:6px;margin-top:2.5em;color:#1867c0}h2{margin-top:1.8em;color:#0d47a1}
+pre{background:#f5f7fa;border:1px solid #dde;padding:10px;overflow-x:auto;font-size:13px;line-height:1.45}
+code{font-family:Consolas,monospace;overflow-wrap:anywhere;background:#f0f2f5;padding:1px 4px;border-radius:3px}pre code{background:none;padding:0}
+table{border-collapse:collapse;width:100%;margin:1em 0;display:block;overflow-x:auto}td,th{border:1px solid #ccd;padding:6px 8px;vertical-align:top}th{background:#e8f0fe}
+img{max-width:100%;border:1px solid #ddd}blockquote{border-left:4px solid #fb8c00;background:#fff8e1;margin:1em 0;padding:6px 14px}
+nav#TOC{background:#f5f7fa;padding:8px 20px;border:1px solid #dde}@media print{h1{page-break-before:always}pre{white-space:pre-wrap}}</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">คู่มือซ้อม Back-end ถึงขั้น Login</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#คู่มือซ้อม-back-end-ถึงขั้น-login-คนที่-1" id="toc-คู่มือซ้อม-back-end-ถึงขั้น-login-คนที่-1">คู่มือซ้อม Back-end ถึงขั้น Login
+(คนที่ 1)</a>
+<ul>
+<li><a href="#b0-ตรวจเครื่องมือ" id="toc-b0-ตรวจเครื่องมือ">B0
+ตรวจเครื่องมือ</a></li>
+<li><a href="#b1-สร้างโฟลเดอร์และติดตั้งแพ็กเกจ" id="toc-b1-สร้างโฟลเดอร์และติดตั้งแพ็กเกจ">B1
+สร้างโฟลเดอร์และติดตั้งแพ็กเกจ</a></li>
+<li><a href="#b2-docker-composeyml-และ-gitignore" id="toc-b2-docker-composeyml-และ-gitignore">B2
+<code>docker-compose.yml</code> และ <code>.gitignore</code></a></li>
+<li><a href="#b3-ฐานข้อมูล" id="toc-b3-ฐานข้อมูล">B3 ฐานข้อมูล</a></li>
+<li><a href="#b4-helpersjs-และ-authjs" id="toc-b4-helpersjs-และ-authjs">B4 <code>helpers.js</code> และ
+<code>auth.js</code></a></li>
+<li><a href="#b5-serverjs-รุ่นซ้อม-login-และ-routesauthjs" id="toc-b5-serverjs-รุ่นซ้อม-login-และ-routesauthjs">B5
+<code>server.js</code> (รุ่นซ้อม Login) และ
+<code>routes/auth.js</code></a></li>
+<li><a href="#b6-ทดสอบ-api-ครบชุด" id="toc-b6-ทดสอบ-api-ครบชุด">B6 ทดสอบ
+API ครบชุด</a></li>
+<li><a href="#เทียบกับเฉลย" id="toc-เทียบกับเฉลย">เทียบกับเฉลย</a></li>
+<li><a href="#ไปต่อคู่มือหลัก-ขั้น-34" id="toc-ไปต่อคู่มือหลัก-ขั้น-34">ไปต่อคู่มือหลัก (ขั้น
+3–4)</a></li>
+<li><a href="#ปัญหาที่เจอบ่อยในเล่มนี้" id="toc-ปัญหาที่เจอบ่อยในเล่มนี้">ปัญหาที่เจอบ่อยในเล่มนี้</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="คู่มือซ้อม-back-end-ถึงขั้น-login-คนที่-1">คู่มือซ้อม Back-end ถึงขั้น Login
+(คนที่ 1)</h1>
+<p>เล่มนี้แยกจากคู่มือหลัก ใช้ซ้อมหลังบ้านให้ <strong>login ได้จริง</strong>
+ในรอบเดียว: Docker + MySQL 8 ตาราง + ผู้ใช้ตัวอย่าง + API ชุด
+<code>/api/auth</code> (login, ดู/แก้ข้อมูลตัวเอง, เปลี่ยนรหัสผ่าน) พร้อม JWT
+ทุกขั้นจบด้วย <strong>✔ ตรวจ</strong> ที่รันได้จริง ไม่มี error ค้างระหว่างทาง</p>
+<blockquote>
+<p>ใช้คู่กับ &quot;คู่มือซ้อม Front-end ถึงขั้น Login&quot; ได้เลย: คนที่ 1 ทำเล่มนี้ คนที่ 2
+ทำเล่มหน้าบ้าน แล้วหน้าบ้านจะ login ผ่านหลังบ้านที่ทีมเขียนเอง
+โค้ดที่ทำเสร็จตามเล่มนี้อยู่ในโฟลเดอร์ <code>เฉลย-backend</code> (ข้างไฟล์คู่มือนี้)
+ใช้เทียบเมื่อติดปัญหา</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>ขั้น</th>
+<th>ทำอะไร</th>
+<th>ใช้เวลา</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>B0</td>
+<td>ตรวจเครื่องมือ</td>
+<td>5 นาที</td>
+</tr>
+<tr>
+<td>B1</td>
+<td>สร้างโฟลเดอร์ ติดตั้งแพ็กเกจ</td>
+<td>10 นาที</td>
+</tr>
+<tr>
+<td>B2</td>
+<td><code>docker-compose.yml</code> + <code>.gitignore</code></td>
+<td>10 นาที</td>
+</tr>
+<tr>
+<td>B3</td>
+<td>ฐานข้อมูล: <code>schema.sql</code> <code>db.js</code>
+<code>seed.js</code></td>
+<td>20 นาที</td>
+</tr>
+<tr>
+<td>B4</td>
+<td><code>helpers.js</code> + <code>auth.js</code> (JWT)</td>
+<td>15 นาที</td>
+</tr>
+<tr>
+<td>B5</td>
+<td><code>server.js</code> (รุ่นซ้อม Login) +
+<code>routes/auth.js</code></td>
+<td>20 นาที</td>
+</tr>
+<tr>
+<td>B6</td>
+<td>ทดสอบ API ครบชุด</td>
+<td>15 นาที</td>
+</tr>
+</tbody>
+</table>
+<p>บัญชีตัวอย่าง (seed สร้างให้)</p>
+<table>
+<thead>
+<tr>
+<th>ชื่อผู้ใช้</th>
+<th>รหัสผ่าน</th>
+<th>บทบาท</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>admin</td>
+<td>admin1234</td>
+<td>ฝ่ายบุคลากร</td>
+</tr>
+<tr>
+<td>emp1, emp2</td>
+<td>emp12345</td>
+<td>ผู้รับการประเมิน (ต้องเปลี่ยนรหัสครั้งแรก)</td>
+</tr>
+<tr>
+<td>eva1, eva2</td>
+<td>eva12345</td>
+<td>กรรมการ (ต้องเปลี่ยนรหัสครั้งแรก)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="b0-ตรวจเครื่องมือ">B0 ตรวจเครื่องมือ</h2>
+<p>เปิด Docker Desktop ให้ไอคอนเป็นสีเขียวก่อน แล้วพิมพ์ใน PowerShell</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">node</span> <span class="at">-v</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> <span class="at">-v</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> <span class="at">-v</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose version</span></code></pre></div>
+<h3 id="-ตรวจ-b0">✔ ตรวจ B0</h3>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>ทุกคำสั่งขึ้นเลขเวอร์ชัน (Node ต้อง 20
+ขึ้นไป)</label></li>
+<li><label><input type="checkbox"></input><code>docker compose version</code>
+ไม่ขึ้น <code>error during connect</code> (ถ้าขึ้น = Docker Desktop
+ยังไม่เปิด)</label></li>
+<li><label><input type="checkbox"></input>ถ้าเคยรันเฉลยหรือโปรเจกต์อื่นค้างไว้
+ให้ไปที่โฟลเดอร์นั้นแล้ว <code>docker compose down</code> ก่อน ไม่อย่างนั้นพอร์ต 3000
+/ 3307 / 8080 จะชนกัน</label></li>
+</ul>
+<h2 id="b1-สร้างโฟลเดอร์และติดตั้งแพ็กเกจ">B1 สร้างโฟลเดอร์และติดตั้งแพ็กเกจ</h2>
+<p>ที่โฟลเดอร์ซ้อม (เช่น <code>D:\ซ้อม</code>)</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> evaluation</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> evaluation</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> backend</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> backend</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> routes</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> init <span class="at">-y</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install express@5 mysql2 jsonwebtoken bcryptjs multer cors</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install <span class="at">-D</span> nodemon</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ..</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="ex">code</span> .</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>แพ็กเกจ</th>
+<th>ใช้ทำอะไร</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>express@5</code></td>
+<td>สร้าง API (เวอร์ชัน 5 จับ error ของ async ให้เอง ไม่ต้องเขียน try/catch
+ทุกที่)</td>
+</tr>
+<tr>
+<td><code>mysql2</code></td>
+<td>เชื่อมต่อ MySQL</td>
+</tr>
+<tr>
+<td><code>jsonwebtoken</code></td>
+<td>สร้าง/ตรวจ JWT Token</td>
+</tr>
+<tr>
+<td><code>bcryptjs</code></td>
+<td>เข้ารหัสรหัสผ่าน</td>
+</tr>
+<tr>
+<td><code>multer</code></td>
+<td>รับไฟล์อัปโหลด (ยังไม่ใช้ในเล่มนี้ แต่ติดตั้งไว้เลยเพื่อทำต่อในคู่มือหลัก)</td>
+</tr>
+<tr>
+<td><code>cors</code></td>
+<td>ให้เว็บจากพอร์ตอื่นเรียก API ได้</td>
+</tr>
+<tr>
+<td><code>nodemon</code> (dev)</td>
+<td>แก้ไฟล์แล้วรีสตาร์ตเซิร์ฟเวอร์อัตโนมัติ</td>
+</tr>
+</tbody>
+</table>
+<p>แก้ <code>backend/package.json</code> ให้เป็นแบบนี้ (สำคัญที่ส่วน
+<code>&quot;scripts&quot;</code> เลขเวอร์ชันแพ็กเกจของเครื่องอาจใหม่กว่าได้)</p>
+<p>ไฟล์ <code>backend/package.json</code></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;evaluation-api&quot;</span><span class="fu">,</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;private&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;version&quot;</span><span class="fu">:</span> <span class="st">&quot;2569.0.0&quot;</span><span class="fu">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;engines&quot;</span><span class="fu">:</span> <span class="fu">{</span> <span class="dt">&quot;node&quot;</span><span class="fu">:</span> <span class="st">&quot;&gt;=24&quot;</span> <span class="fu">},</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;scripts&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;seed&quot;</span><span class="fu">:</span> <span class="st">&quot;node seed.js&quot;</span><span class="fu">,</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;start&quot;</span><span class="fu">:</span> <span class="st">&quot;node server.js&quot;</span><span class="fu">,</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;dev&quot;</span><span class="fu">:</span> <span class="st">&quot;nodemon -L server.js&quot;</span><span class="fu">,</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;test&quot;</span><span class="fu">:</span> <span class="st">&quot;node --test tests/score.test.js&quot;</span><span class="fu">,</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;test:api&quot;</span><span class="fu">:</span> <span class="st">&quot;node --test tests/api.test.js&quot;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;dependencies&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;bcryptjs&quot;</span><span class="fu">:</span> <span class="st">&quot;^3.0.2&quot;</span><span class="fu">,</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;cors&quot;</span><span class="fu">:</span> <span class="st">&quot;^2.8.5&quot;</span><span class="fu">,</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;express&quot;</span><span class="fu">:</span> <span class="st">&quot;^5.1.0&quot;</span><span class="fu">,</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;jsonwebtoken&quot;</span><span class="fu">:</span> <span class="st">&quot;^9.0.2&quot;</span><span class="fu">,</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;multer&quot;</span><span class="fu">:</span> <span class="st">&quot;^2.0.2&quot;</span><span class="fu">,</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;mysql2&quot;</span><span class="fu">:</span> <span class="st">&quot;^3.14.0&quot;</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">},</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;devDependencies&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;nodemon&quot;</span><span class="fu">:</span> <span class="st">&quot;^3.1.10&quot;</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<h3 id="-ตรวจ-b1">✔ ตรวจ B1</h3>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>มีโฟลเดอร์
+<code>evaluation/backend/node_modules</code> และ
+<code>evaluation/backend/routes</code></label></li>
+<li><label><input type="checkbox"></input><code>backend/package.json</code> มี
+scripts <code>seed</code> และ <code>dev</code></label></li>
+</ul>
+<h2 id="b2-docker-composeyml-และ-gitignore">B2
+<code>docker-compose.yml</code> และ <code>.gitignore</code></h2>
+<p>วางไว้ที่โฟลเดอร์บนสุด <code>evaluation/</code> ไฟล์นี้เหมือนเฉลยทุกบรรทัด
+มีบริการ <code>frontend</code> ด้วย แต่เล่มนี้จะสั่งเปิดแค่ <code>db</code>
+<code>phpmyadmin</code> <code>backend</code></p>
+<p>ไฟล์ <code>docker-compose.yml</code></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># รันทั้งระบบด้วยคำสั่งเดียว: docker compose up</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># db = MySQL, phpmyadmin = ดูตาราง, backend = Express API, frontend = Vue</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">services</span><span class="kw">:</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">db</span><span class="kw">:</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> mysql:8.4</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_ROOT_PASSWORD</span><span class="kw">:</span><span class="at"> root1234</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">MYSQL_DATABASE</span><span class="kw">:</span><span class="at"> evaluation</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">command</span><span class="kw">:</span><span class="at"> --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;3307:3306&quot;</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> db_data:/var/lib/mysql</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">healthcheck</span><span class="kw">:</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">test</span><span class="kw">:</span><span class="at"> </span><span class="kw">[</span><span class="st">&quot;CMD&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;mysqladmin&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;ping&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-h&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;127.0.0.1&quot;</span><span class="kw">,</span><span class="at"> </span><span class="st">&quot;-proot1234&quot;</span><span class="kw">]</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">interval</span><span class="kw">:</span><span class="at"> 5s</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">retries</span><span class="kw">:</span><span class="at"> </span><span class="dv">30</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">phpmyadmin</span><span class="kw">:</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> phpmyadmin:5</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">PMA_HOST</span><span class="kw">:</span><span class="at"> db</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">PMA_USER</span><span class="kw">:</span><span class="at"> root</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">PMA_PASSWORD</span><span class="kw">:</span><span class="at"> root1234</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;8080:80&quot;</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">depends_on</span><span class="kw">:</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> db</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">backend</span><span class="kw">:</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> node:24-alpine</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">working_dir</span><span class="kw">:</span><span class="at"> /app</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">command</span><span class="kw">:</span><span class="at"> sh -c &quot;npm install &amp;&amp; npm run seed &amp;&amp; npm run dev&quot;</span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">DB_HOST</span><span class="kw">:</span><span class="at"> db</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">DB_USER</span><span class="kw">:</span><span class="at"> root</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">DB_PASSWORD</span><span class="kw">:</span><span class="at"> root1234</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">DB_NAME</span><span class="kw">:</span><span class="at"> evaluation</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">PORT</span><span class="kw">:</span><span class="at"> </span><span class="dv">3000</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">JWT_SECRET</span><span class="kw">:</span><span class="at"> evaluation-2569-secret-key-change-me</span></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;3000:3000&quot;</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> ./backend:/app</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> /app/node_modules</span></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">depends_on</span><span class="kw">:</span></span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">db</span><span class="kw">:</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a><span class="at">        </span><span class="fu">condition</span><span class="kw">:</span><span class="at"> service_healthy</span></span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">frontend</span><span class="kw">:</span></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">image</span><span class="kw">:</span><span class="at"> node:24-alpine</span></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">working_dir</span><span class="kw">:</span><span class="at"> /app</span></span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">command</span><span class="kw">:</span><span class="at"> sh -c &quot;npm install &amp;&amp; npm run dev&quot;</span></span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">environment</span><span class="kw">:</span></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="fu">API_URL</span><span class="kw">:</span><span class="at"> http://backend:3000</span></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">ports</span><span class="kw">:</span></span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;5173:5173&quot;</span></span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> ./frontend:/app</span></span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> /app/node_modules</span></span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">depends_on</span><span class="kw">:</span></span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> backend</span></span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">db_data</span><span class="kw">:</span></span></code></pre></div>
+<ul>
+<li><code>ports: &quot;3307:3306&quot;</code> = พอร์ตเครื่องเรา 3307 ต่อเข้า MySQL ใน
+container (กันชนกับ MySQL ที่อาจติดตั้งในเครื่องอยู่แล้ว)</li>
+<li><code>healthcheck</code> + <code>condition: service_healthy</code> =
+รอ MySQL พร้อมก่อน backend จึงเริ่ม</li>
+<li><code>./backend:/app</code> = แก้ไฟล์ในเครื่อง container เห็นทันที</li>
+<li>backend รัน
+<code>npm install &amp;&amp; npm run seed &amp;&amp; npm run dev</code>
+= ติดตั้ง → สร้างตาราง + ผู้ใช้ตัวอย่าง → เปิดเซิร์ฟเวอร์</li>
+</ul>
+<p>ไฟล์ <code>.gitignore</code></p>
+<pre><code>node_modules/
+dist/
+backend/uploads/</code></pre>
+<h3 id="-ตรวจ-b2">✔ ตรวจ B2</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose up <span class="at">-d</span> db phpmyadmin</span></code></pre></div>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>ขึ้น
+<code>Container evaluation-db-1 Started</code> และ
+<code>evaluation-phpmyadmin-1 Started</code></label></li>
+<li><label><input type="checkbox"></input>เปิด http://localhost:8080 เห็น
+phpMyAdmin และมีฐานข้อมูล <code>evaluation</code> (ยังไม่มีตาราง ตารางจะมาใน
+B3)</label></li>
+</ul>
+<h2 id="b3-ฐานข้อมูล">B3 ฐานข้อมูล</h2>
+<h3 id="b31-backendschemasql--8-ตาราง">B3.1
+<code>backend/schema.sql</code> — 8 ตาราง</h3>
+<p>สร้างครบ 8 ตารางเลย เพราะ <code>seed.js</code>
+จะใส่ข้อมูลตัวอย่างลงหลายตาราง (รอบ หัวข้อ ตัวชี้วัด การมอบหมาย) ไว้ใช้ต่อในคู่มือหลัก</p>
+<p>ไฟล์ <code>backend/schema.sql</code></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- ฐานข้อมูลระบบประเมินบุคลากร 8 ตาราง</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">-- อ่านจากบนลงล่าง: ตารางลูกอ้างถึงตารางแม่ด้วย FOREIGN KEY</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">-- 1) ผู้ใช้ทุกคน แยกด้วย role</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> users (</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">INT</span> AUTO_INCREMENT <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  username <span class="dt">VARCHAR</span>(<span class="dv">50</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">UNIQUE</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">password</span> <span class="dt">VARCHAR</span>(<span class="dv">255</span>) <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  full_name <span class="dt">VARCHAR</span>(<span class="dv">100</span>) <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  email <span class="dt">VARCHAR</span>(<span class="dv">100</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="st">&#39;&#39;</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  department <span class="dt">VARCHAR</span>(<span class="dv">100</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="st">&#39;&#39;</span>,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">role</span> ENUM(<span class="st">&#39;admin&#39;</span>,<span class="st">&#39;evaluatee&#39;</span>,<span class="st">&#39;evaluator&#39;</span>) <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  must_change_password <span class="dt">BOOLEAN</span> <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="kw">TRUE</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">-- 2) รอบการประเมิน มีวันเปิด-ปิด</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> periods (</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">INT</span> AUTO_INCREMENT <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  name <span class="dt">VARCHAR</span>(<span class="dv">100</span>) <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  start_date <span class="dt">DATE</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  end_date <span class="dt">DATE</span> <span class="kw">NOT</span> <span class="kw">NULL</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co">-- 3) หัวข้อการประเมิน อยู่ในรอบ</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> topics (</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">INT</span> AUTO_INCREMENT <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  period_id <span class="dt">INT</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  name <span class="dt">VARCHAR</span>(<span class="dv">150</span>) <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (period_id) <span class="kw">REFERENCES</span> periods(<span class="kw">id</span>) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="co">-- 4) ตัวชี้วัด อยู่ในหัวข้อ</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co">--    score_type: yesno = มี/ไม่มี (0-1), scale = ระดับ 1-4</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> indicators (</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">INT</span> AUTO_INCREMENT <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>  topic_id <span class="dt">INT</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>  name <span class="dt">VARCHAR</span>(<span class="dv">150</span>) <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>  detail TEXT,</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>  weight <span class="dt">DECIMAL</span>(<span class="dv">6</span>,<span class="dv">2</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="dv">1</span>,</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>  score_type ENUM(<span class="st">&#39;yesno&#39;</span>,<span class="st">&#39;scale&#39;</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="st">&#39;scale&#39;</span>,</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>  evidence <span class="dt">VARCHAR</span>(<span class="dv">255</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="st">&#39;&#39;</span>,</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (topic_id) <span class="kw">REFERENCES</span> topics(<span class="kw">id</span>) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a><span class="co">-- 5) การมอบหมายกรรมการ 1 แถว = กรรมการ 1 คน ประเมินผู้รับ 1 คน ในรอบ 1 รอบ</span></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="co">--    status: pending = ยังไม่ประเมิน, draft = บันทึกร่าง, confirmed = ยืนยันผลแล้ว</span></span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> assignments (</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">INT</span> AUTO_INCREMENT <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>  period_id <span class="dt">INT</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>  evaluatee_id <span class="dt">INT</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>  evaluator_id <span class="dt">INT</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>  committee_role ENUM(<span class="st">&#39;chair&#39;</span>,<span class="st">&#39;member&#39;</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="st">&#39;member&#39;</span>,</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>  status ENUM(<span class="st">&#39;pending&#39;</span>,<span class="st">&#39;draft&#39;</span>,<span class="st">&#39;confirmed&#39;</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="st">&#39;pending&#39;</span>,</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>  <span class="kw">comment</span> TEXT,</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>  signature <span class="dt">VARCHAR</span>(<span class="dv">255</span>),</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>  <span class="kw">UNIQUE</span> (period_id, evaluatee_id, evaluator_id),</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (period_id) <span class="kw">REFERENCES</span> periods(<span class="kw">id</span>) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>,</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (evaluatee_id) <span class="kw">REFERENCES</span> users(<span class="kw">id</span>) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>,</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (evaluator_id) <span class="kw">REFERENCES</span> users(<span class="kw">id</span>) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a><span class="co">-- 6) คะแนนที่ผู้รับประเมินตนเอง (ตัวชี้วัดละ 1 คะแนน)</span></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> self_scores (</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">INT</span> AUTO_INCREMENT <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>  evaluatee_id <span class="dt">INT</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>  indicator_id <span class="dt">INT</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>  score <span class="dt">INT</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>  <span class="kw">UNIQUE</span> (evaluatee_id, indicator_id),</span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (evaluatee_id) <span class="kw">REFERENCES</span> users(<span class="kw">id</span>) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>,</span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (indicator_id) <span class="kw">REFERENCES</span> indicators(<span class="kw">id</span>) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span></span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a><span class="co">-- 7) รายละเอียดและหลักฐานของผู้รับ (ตัวชี้วัดละกี่รายการก็ได้)</span></span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> self_details (</span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">INT</span> AUTO_INCREMENT <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>  evaluatee_id <span class="dt">INT</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>  indicator_id <span class="dt">INT</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>  detail TEXT <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>  url <span class="dt">VARCHAR</span>(<span class="dv">500</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="st">&#39;&#39;</span>,</span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>  file_name <span class="dt">VARCHAR</span>(<span class="dv">255</span>) <span class="kw">NOT</span> <span class="kw">NULL</span> <span class="kw">DEFAULT</span> <span class="st">&#39;&#39;</span>,</span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (evaluatee_id) <span class="kw">REFERENCES</span> users(<span class="kw">id</span>) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>,</span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (indicator_id) <span class="kw">REFERENCES</span> indicators(<span class="kw">id</span>) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span></span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a><span class="co">-- 8) คะแนนที่กรรมการให้ (ตัวชี้วัดละ 1 คะแนน ต่อการมอบหมาย 1 แถว)</span></span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> <span class="cf">IF</span> <span class="kw">NOT</span> <span class="kw">EXISTS</span> scores (</span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">INT</span> AUTO_INCREMENT <span class="kw">PRIMARY</span> <span class="kw">KEY</span>,</span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>  assignment_id <span class="dt">INT</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>  indicator_id <span class="dt">INT</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>  score <span class="dt">INT</span> <span class="kw">NOT</span> <span class="kw">NULL</span>,</span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>  <span class="kw">UNIQUE</span> (assignment_id, indicator_id),</span>
+<span id="cb7-92"><a href="#cb7-92" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (assignment_id) <span class="kw">REFERENCES</span> assignments(<span class="kw">id</span>) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span>,</span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a>  <span class="kw">FOREIGN</span> <span class="kw">KEY</span> (indicator_id) <span class="kw">REFERENCES</span> indicators(<span class="kw">id</span>) <span class="kw">ON</span> <span class="kw">DELETE</span> <span class="kw">CASCADE</span></span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<ul>
+<li><code>ON DELETE CASCADE</code> = ลบแม่แล้วลูกหายตาม</li>
+<li><code>UNIQUE</code> กันข้อมูลซ้ำ เช่น <code>username</code> ห้ามซ้ำ</li>
+</ul>
+<h3 id="b32-backenddbjs--เชื่อมต่อฐานข้อมูล">B3.2 <code>backend/db.js</code>
+— เชื่อมต่อฐานข้อมูล</h3>
+<p>ไฟล์ <code>backend/db.js</code></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">// เชื่อมต่อ MySQL (ค่ามาจาก environment ใน docker-compose.yml)</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> mysql <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;mysql2/promise&#39;</span>)<span class="op">;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> pool <span class="op">=</span> mysql<span class="op">.</span><span class="fu">createPool</span>({</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">host</span><span class="op">:</span> <span class="bu">process</span><span class="op">.</span><span class="at">env</span><span class="op">.</span><span class="at">DB_HOST</span> <span class="op">||</span> <span class="st">&#39;localhost&#39;</span><span class="op">,</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">port</span><span class="op">:</span> <span class="bu">process</span><span class="op">.</span><span class="at">env</span><span class="op">.</span><span class="at">DB_PORT</span> <span class="op">||</span> <span class="dv">3306</span><span class="op">,</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">user</span><span class="op">:</span> <span class="bu">process</span><span class="op">.</span><span class="at">env</span><span class="op">.</span><span class="at">DB_USER</span> <span class="op">||</span> <span class="st">&#39;root&#39;</span><span class="op">,</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">password</span><span class="op">:</span> <span class="bu">process</span><span class="op">.</span><span class="at">env</span><span class="op">.</span><span class="at">DB_PASSWORD</span> <span class="op">||</span> <span class="st">&#39;&#39;</span><span class="op">,</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">database</span><span class="op">:</span> <span class="bu">process</span><span class="op">.</span><span class="at">env</span><span class="op">.</span><span class="at">DB_NAME</span> <span class="op">||</span> <span class="st">&#39;evaluation&#39;</span><span class="op">,</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">dateStrings</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span> <span class="co">// ให้วันที่ออกมาเป็นข้อความ 2026-10-26</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">// ใช้ query(sql, [ค่า]) ได้ทุกไฟล์ คืนค่าเป็นแถวข้อมูล</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">query</span>(sql<span class="op">,</span> values <span class="op">=</span> []) {</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> [rows] <span class="op">=</span> <span class="cf">await</span> pool<span class="op">.</span><span class="fu">query</span>(sql<span class="op">,</span> values)<span class="op">;</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> rows<span class="op">;</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>module<span class="op">.</span><span class="at">exports</span> <span class="op">=</span> { pool<span class="op">,</span> query }<span class="op">;</span></span></code></pre></div>
+<ul>
+<li><code>query(sql, [ค่า])</code> ใช้ <code>?</code> แทนค่า mysql2 จะ
+escape ให้ <strong>กัน SQL Injection</strong> ห้ามต่อสตริงค่าจากผู้ใช้เข้า SQL ตรง
+ๆ</li>
+</ul>
+<h3 id="b33-backendseedjs--สร้างตาราง--ผู้ใช้ตัวอย่าง">B3.3
+<code>backend/seed.js</code> — สร้างตาราง + ผู้ใช้ตัวอย่าง</h3>
+<p>ไฟล์ <code>backend/seed.js</code></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co">// สร้างตารางจาก schema.sql และใส่ข้อมูลตัวอย่าง (รันซ้ำได้ ไม่ลบข้อมูลเดิม)</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> fs <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;node:fs&#39;</span>)<span class="op">;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> bcrypt <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;bcryptjs&#39;</span>)<span class="op">;</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> { query } <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;./db&#39;</span>)<span class="op">;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">seed</span>() {</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">// 1) สร้างตาราง: แยกคำสั่งด้วย ; แล้วรันทีละคำสั่ง</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> sql <span class="op">=</span> fs<span class="op">.</span><span class="fu">readFileSync</span>(<span class="bu">__dirname</span> <span class="op">+</span> <span class="st">&#39;/schema.sql&#39;</span><span class="op">,</span> <span class="st">&#39;utf8&#39;</span>)<span class="op">;</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> command <span class="kw">of</span> sql<span class="op">.</span><span class="fu">split</span>(<span class="st">&#39;;&#39;</span>)) {</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (command<span class="op">.</span><span class="fu">trim</span>()) <span class="cf">await</span> <span class="fu">query</span>(command)<span class="op">;</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="co">// 2) ผู้ใช้ตัวอย่าง (admin ไม่ต้องเปลี่ยนรหัสครั้งแรก)</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> users <span class="op">=</span> [</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>    [<span class="st">&#39;admin&#39;</span><span class="op">,</span> <span class="st">&#39;admin1234&#39;</span><span class="op">,</span> <span class="st">&#39;ฝ่ายบุคลากร&#39;</span><span class="op">,</span> <span class="st">&#39;admin&#39;</span><span class="op">,</span> <span class="dv">0</span>]<span class="op">,</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    [<span class="st">&#39;emp1&#39;</span><span class="op">,</span> <span class="st">&#39;emp12345&#39;</span><span class="op">,</span> <span class="st">&#39;สมชาย ใจดี&#39;</span><span class="op">,</span> <span class="st">&#39;evaluatee&#39;</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    [<span class="st">&#39;emp2&#39;</span><span class="op">,</span> <span class="st">&#39;emp12345&#39;</span><span class="op">,</span> <span class="st">&#39;สมหญิง ตั้งใจ&#39;</span><span class="op">,</span> <span class="st">&#39;evaluatee&#39;</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    [<span class="st">&#39;eva1&#39;</span><span class="op">,</span> <span class="st">&#39;eva12345&#39;</span><span class="op">,</span> <span class="st">&#39;ประธาน กรรมการ&#39;</span><span class="op">,</span> <span class="st">&#39;evaluator&#39;</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>    [<span class="st">&#39;eva2&#39;</span><span class="op">,</span> <span class="st">&#39;eva12345&#39;</span><span class="op">,</span> <span class="st">&#39;กรรมการ ร่วม&#39;</span><span class="op">,</span> <span class="st">&#39;evaluator&#39;</span><span class="op">,</span> <span class="dv">1</span>]<span class="op">,</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  ]<span class="op">;</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> [username<span class="op">,</span> password<span class="op">,</span> name<span class="op">,</span> role<span class="op">,</span> mustChange] <span class="kw">of</span> users) {</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> hash <span class="op">=</span> <span class="cf">await</span> bcrypt<span class="op">.</span><span class="fu">hash</span>(password<span class="op">,</span> <span class="dv">10</span>)<span class="op">;</span></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">await</span> <span class="fu">query</span>(</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>      <span class="st">&#39;INSERT IGNORE INTO users (username, password, full_name, role, must_change_password) VALUES (?, ?, ?, ?, ?)&#39;</span><span class="op">,</span></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>      [username<span class="op">,</span> hash<span class="op">,</span> name<span class="op">,</span> role<span class="op">,</span> mustChange]<span class="op">,</span></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>    )<span class="op">;</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  <span class="co">// 3) รอบตัวอย่าง พร้อมหัวข้อ ตัวชี้วัด และการมอบหมาย (ใส่เฉพาะตอนยังไม่มีรอบ)</span></span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> periods <span class="op">=</span> <span class="cf">await</span> <span class="fu">query</span>(<span class="st">&#39;SELECT id FROM periods&#39;</span>)<span class="op">;</span></span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (periods<span class="op">.</span><span class="at">length</span> <span class="op">===</span> <span class="dv">0</span>) {</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> year <span class="op">=</span> <span class="kw">new</span> <span class="bu">Date</span>()<span class="op">.</span><span class="fu">getFullYear</span>()<span class="op">;</span></span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> p <span class="op">=</span> <span class="cf">await</span> <span class="fu">query</span>(<span class="st">&#39;INSERT INTO periods (name, start_date, end_date) VALUES (?, ?, ?)&#39;</span><span class="op">,</span> [</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>      <span class="st">&#39;ประเมินประจำปี &#39;</span> <span class="op">+</span> (year <span class="op">+</span> <span class="dv">543</span>)<span class="op">,</span> year <span class="op">+</span> <span class="st">&#39;-01-01&#39;</span><span class="op">,</span> year <span class="op">+</span> <span class="st">&#39;-12-31&#39;</span><span class="op">,</span></span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>    ])<span class="op">;</span></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> t <span class="op">=</span> <span class="cf">await</span> <span class="fu">query</span>(<span class="st">&#39;INSERT INTO topics (period_id, name) VALUES (?, ?)&#39;</span><span class="op">,</span> [p<span class="op">.</span><span class="at">insertId</span><span class="op">,</span> <span class="st">&#39;ด้านการจัดการเรียนการสอน&#39;</span>])<span class="op">;</span></span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">await</span> <span class="fu">query</span>(</span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>      <span class="st">&#39;INSERT INTO indicators (topic_id, name, detail, weight, score_type, evidence) VALUES (?, ?, ?, ?, ?, ?), (?, ?, ?, ?, ?, ?)&#39;</span><span class="op">,</span></span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>      [</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>        t<span class="op">.</span><span class="at">insertId</span><span class="op">,</span> <span class="st">&#39;จัดทำแผนการสอน&#39;</span><span class="op">,</span> <span class="st">&#39;มีแผนการสอนครบทุกรายวิชา&#39;</span><span class="op">,</span> <span class="dv">60</span><span class="op">,</span> <span class="st">&#39;scale&#39;</span><span class="op">,</span> <span class="st">&#39;ไฟล์แผนการสอน PDF&#39;</span><span class="op">,</span></span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>        t<span class="op">.</span><span class="at">insertId</span><span class="op">,</span> <span class="st">&#39;เข้าอบรมพัฒนาตนเอง&#39;</span><span class="op">,</span> <span class="st">&#39;เข้าอบรมอย่างน้อย 1 ครั้ง&#39;</span><span class="op">,</span> <span class="dv">40</span><span class="op">,</span> <span class="st">&#39;yesno&#39;</span><span class="op">,</span> <span class="st">&#39;เกียรติบัตร&#39;</span><span class="op">,</span></span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>      ]<span class="op">,</span></span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>    )<span class="op">;</span></span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> ids <span class="op">=</span> {}<span class="op">;</span></span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">const</span> u <span class="kw">of</span> <span class="cf">await</span> <span class="fu">query</span>(<span class="st">&#39;SELECT id, username FROM users&#39;</span>)) ids[u<span class="op">.</span><span class="at">username</span>] <span class="op">=</span> u<span class="op">.</span><span class="at">id</span><span class="op">;</span></span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> (<span class="kw">const</span> emp <span class="kw">of</span> [<span class="st">&#39;emp1&#39;</span><span class="op">,</span> <span class="st">&#39;emp2&#39;</span>]) {</span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>      <span class="cf">await</span> <span class="fu">query</span>(</span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>        <span class="st">&#39;INSERT INTO assignments (period_id, evaluatee_id, evaluator_id, committee_role) VALUES (?, ?, ?, ?), (?, ?, ?, ?)&#39;</span><span class="op">,</span></span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>        [p<span class="op">.</span><span class="at">insertId</span><span class="op">,</span> ids[emp]<span class="op">,</span> ids<span class="op">.</span><span class="at">eva1</span><span class="op">,</span> <span class="st">&#39;chair&#39;</span><span class="op">,</span> p<span class="op">.</span><span class="at">insertId</span><span class="op">,</span> ids[emp]<span class="op">,</span> ids<span class="op">.</span><span class="at">eva2</span><span class="op">,</span> <span class="st">&#39;member&#39;</span>]<span class="op">,</span></span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a>      )<span class="op">;</span></span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">&#39;seed เสร็จแล้ว&#39;</span>)<span class="op">;</span></span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a>  <span class="bu">process</span><span class="op">.</span><span class="fu">exit</span>(<span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a><span class="fu">seed</span>()<span class="op">.</span><span class="fu">catch</span>((err) <span class="kw">=&gt;</span> {</span>
+<span id="cb9-58"><a href="#cb9-58" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">error</span>(<span class="st">&#39;seed ไม่สำเร็จ:&#39;</span><span class="op">,</span> err<span class="op">.</span><span class="at">message</span>)<span class="op">;</span></span>
+<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a>  <span class="bu">process</span><span class="op">.</span><span class="fu">exit</span>(<span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<ul>
+<li>รหัสผ่านเก็บเป็น hash ด้วย <code>bcrypt.hash</code> ไม่เก็บรหัสจริง</li>
+<li><code>INSERT IGNORE</code> = รันซ้ำได้ ผู้ใช้ที่มีแล้วจะไม่ถูกเขียนทับ</li>
+</ul>
+<h3 id="-ตรวจ-b3">✔ ตรวจ B3</h3>
+<p>ยังไม่มี <code>server.js</code> จึงสั่งรันแค่ seed ครั้งเดียวผ่าน container ของ
+backend</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose run <span class="at">--rm</span> backend sh <span class="at">-c</span> <span class="st">&quot;npm install &amp;&amp; npm run seed&quot;</span></span></code></pre></div>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>บรรทัดท้ายขึ้น <code>seed เสร็จแล้ว</code>
+(ถ้าขึ้น <code>seed ไม่สำเร็จ: ...</code> ให้อ่านข้อความ ส่วนใหญ่คือพิมพ์ SQL
+ผิด)</label></li>
+<li><label><input type="checkbox"></input>phpMyAdmin → <code>evaluation</code>
+มี <strong>8 ตาราง</strong> ตาราง <code>users</code> มี 5 แถว ช่อง
+<code>password</code> เป็นข้อความยาวขึ้นต้นด้วย <code>$2</code>
+(hash)</label></li>
+<li><label><input type="checkbox"></input>ตาราง <code>periods</code> มี 1 รอบ
+<code>indicators</code> มี 2 ตัวชี้วัด <code>assignments</code> มี 4
+แถว</label></li>
+</ul>
+<h2 id="b4-helpersjs-และ-authjs">B4 <code>helpers.js</code> และ
+<code>auth.js</code></h2>
+<h3 id="b41-backendhelpersjs--ฟังก์ชันใช้ซ้ำ">B4.1
+<code>backend/helpers.js</code> — ฟังก์ชันใช้ซ้ำ</h3>
+<p>เขียนตัวเต็มเหมือนเฉลยไปเลย เล่มนี้ใช้แค่ <code>ok()</code> กับ
+<code>error()</code> ส่วนฟังก์ชันคิดคะแนนใช้ต่อในคู่มือหลัก</p>
+<p>ไฟล์ <code>backend/helpers.js</code></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ฟังก์ชันช่วยที่ใช้ซ้ำหลายไฟล์</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> { query } <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;./db&#39;</span>)<span class="op">;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">// ตอบกลับเมื่อสำเร็จ: { status, message, data }</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">ok</span>(res<span class="op">,</span> data <span class="op">=</span> <span class="kw">null</span><span class="op">,</span> message <span class="op">=</span> <span class="st">&#39;สำเร็จ&#39;</span>) {</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  res<span class="op">.</span><span class="fu">json</span>({ <span class="dt">status</span><span class="op">:</span> <span class="st">&#39;success&#39;</span><span class="op">,</span> message<span class="op">,</span> data })<span class="op">;</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">// ตอบกลับเมื่อผิดพลาด เช่น error(res, 404, &#39;ไม่พบข้อมูล&#39;)</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">error</span>(res<span class="op">,</span> code<span class="op">,</span> message) {</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>  res<span class="op">.</span><span class="fu">status</span>(code)<span class="op">.</span><span class="fu">json</span>({ <span class="dt">status</span><span class="op">:</span> <span class="st">&#39;error&#39;</span><span class="op">,</span> message<span class="op">,</span> <span class="dt">data</span><span class="op">:</span> <span class="kw">null</span> })<span class="op">;</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co">// วันนี้อยู่ในช่วงเปิดประเมินของรอบหรือไม่</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">isOpen</span>(period) {</span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> today <span class="op">=</span> <span class="kw">new</span> <span class="bu">Date</span>()<span class="op">.</span><span class="fu">toLocaleDateString</span>(<span class="st">&#39;sv-SE&#39;</span>)<span class="op">;</span> <span class="co">// รูปแบบ 2026-10-26</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> today <span class="op">&gt;=</span> period<span class="op">.</span><span class="at">start_date</span> <span class="op">&amp;&amp;</span> today <span class="op">&lt;=</span> period<span class="op">.</span><span class="at">end_date</span><span class="op">;</span></span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="co">// คะแนนถูกชนิดหรือไม่: มี/ไม่มี = 0,1  สเกล = 1-4</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">validScore</span>(indicator<span class="op">,</span> score) {</span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (indicator<span class="op">.</span><span class="at">score_type</span> <span class="op">===</span> <span class="st">&#39;yesno&#39;</span>) <span class="cf">return</span> score <span class="op">===</span> <span class="dv">0</span> <span class="op">||</span> score <span class="op">===</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> [<span class="dv">1</span><span class="op">,</span> <span class="dv">2</span><span class="op">,</span> <span class="dv">3</span><span class="op">,</span> <span class="dv">4</span>]<span class="op">.</span><span class="fu">includes</span>(score)<span class="op">;</span></span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a><span class="co">// คิดคะแนนร้อยละแบบถ่วงน้ำหนัก ถ้ายังให้คะแนนไม่ครบทุกตัวชี้วัด คืนค่า null</span></span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">percent</span>(indicators<span class="op">,</span> scores) {</span>
+<span id="cb11-28"><a href="#cb11-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (indicators<span class="op">.</span><span class="at">length</span> <span class="op">===</span> <span class="dv">0</span>) <span class="cf">return</span> <span class="kw">null</span><span class="op">;</span></span>
+<span id="cb11-29"><a href="#cb11-29" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> total <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb11-30"><a href="#cb11-30" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> totalWeight <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb11-31"><a href="#cb11-31" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">const</span> item <span class="kw">of</span> indicators) {</span>
+<span id="cb11-32"><a href="#cb11-32" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> row <span class="op">=</span> scores<span class="op">.</span><span class="fu">find</span>((s) <span class="kw">=&gt;</span> s<span class="op">.</span><span class="at">indicator_id</span> <span class="op">===</span> item<span class="op">.</span><span class="at">id</span>)<span class="op">;</span></span>
+<span id="cb11-33"><a href="#cb11-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="op">!</span>row) <span class="cf">return</span> <span class="kw">null</span><span class="op">;</span></span>
+<span id="cb11-34"><a href="#cb11-34" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> max <span class="op">=</span> item<span class="op">.</span><span class="at">score_type</span> <span class="op">===</span> <span class="st">&#39;yesno&#39;</span> <span class="op">?</span> <span class="dv">1</span> <span class="op">:</span> <span class="dv">4</span><span class="op">;</span></span>
+<span id="cb11-35"><a href="#cb11-35" aria-hidden="true" tabindex="-1"></a>    total <span class="op">+=</span> (row<span class="op">.</span><span class="at">score</span> <span class="op">/</span> max) <span class="op">*</span> <span class="bu">Number</span>(item<span class="op">.</span><span class="at">weight</span>)<span class="op">;</span></span>
+<span id="cb11-36"><a href="#cb11-36" aria-hidden="true" tabindex="-1"></a>    totalWeight <span class="op">+=</span> <span class="bu">Number</span>(item<span class="op">.</span><span class="at">weight</span>)<span class="op">;</span></span>
+<span id="cb11-37"><a href="#cb11-37" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb11-38"><a href="#cb11-38" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">round</span>((total <span class="op">/</span> totalWeight) <span class="op">*</span> <span class="dv">10000</span>) <span class="op">/</span> <span class="dv">100</span><span class="op">;</span></span>
+<span id="cb11-39"><a href="#cb11-39" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-40"><a href="#cb11-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-41"><a href="#cb11-41" aria-hidden="true" tabindex="-1"></a><span class="co">// ตัวชี้วัดทั้งหมดของรอบ (พร้อมชื่อหัวข้อ)</span></span>
+<span id="cb11-42"><a href="#cb11-42" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getIndicators</span>(periodId) {</span>
+<span id="cb11-43"><a href="#cb11-43" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="fu">query</span>(</span>
+<span id="cb11-44"><a href="#cb11-44" aria-hidden="true" tabindex="-1"></a>    <span class="vs">`SELECT i.*, t.name AS topic_name FROM indicators i</span></span>
+<span id="cb11-45"><a href="#cb11-45" aria-hidden="true" tabindex="-1"></a><span class="vs">     JOIN topics t ON t.id = i.topic_id</span></span>
+<span id="cb11-46"><a href="#cb11-46" aria-hidden="true" tabindex="-1"></a><span class="vs">     WHERE t.period_id = ? ORDER BY t.id, i.id`</span><span class="op">,</span></span>
+<span id="cb11-47"><a href="#cb11-47" aria-hidden="true" tabindex="-1"></a>    [periodId]<span class="op">,</span></span>
+<span id="cb11-48"><a href="#cb11-48" aria-hidden="true" tabindex="-1"></a>  )<span class="op">;</span></span>
+<span id="cb11-49"><a href="#cb11-49" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-50"><a href="#cb11-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-51"><a href="#cb11-51" aria-hidden="true" tabindex="-1"></a><span class="co">// หารอบของตัวชี้วัด (ใช้ตรวจว่ารอบเปิดอยู่หรือไม่)</span></span>
+<span id="cb11-52"><a href="#cb11-52" aria-hidden="true" tabindex="-1"></a><span class="kw">async</span> <span class="kw">function</span> <span class="fu">getPeriodOfIndicator</span>(indicatorId) {</span>
+<span id="cb11-53"><a href="#cb11-53" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> rows <span class="op">=</span> <span class="cf">await</span> <span class="fu">query</span>(</span>
+<span id="cb11-54"><a href="#cb11-54" aria-hidden="true" tabindex="-1"></a>    <span class="vs">`SELECT p.* FROM periods p</span></span>
+<span id="cb11-55"><a href="#cb11-55" aria-hidden="true" tabindex="-1"></a><span class="vs">     JOIN topics t ON t.period_id = p.id</span></span>
+<span id="cb11-56"><a href="#cb11-56" aria-hidden="true" tabindex="-1"></a><span class="vs">     JOIN indicators i ON i.topic_id = t.id</span></span>
+<span id="cb11-57"><a href="#cb11-57" aria-hidden="true" tabindex="-1"></a><span class="vs">     WHERE i.id = ?`</span><span class="op">,</span></span>
+<span id="cb11-58"><a href="#cb11-58" aria-hidden="true" tabindex="-1"></a>    [indicatorId]<span class="op">,</span></span>
+<span id="cb11-59"><a href="#cb11-59" aria-hidden="true" tabindex="-1"></a>  )<span class="op">;</span></span>
+<span id="cb11-60"><a href="#cb11-60" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> rows[<span class="dv">0</span>]<span class="op">;</span></span>
+<span id="cb11-61"><a href="#cb11-61" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-62"><a href="#cb11-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-63"><a href="#cb11-63" aria-hidden="true" tabindex="-1"></a>module<span class="op">.</span><span class="at">exports</span> <span class="op">=</span> { ok<span class="op">,</span> error<span class="op">,</span> isOpen<span class="op">,</span> validScore<span class="op">,</span> percent<span class="op">,</span> getIndicators<span class="op">,</span> getPeriodOfIndicator }<span class="op">;</span></span></code></pre></div>
+<ul>
+<li><code>ok()</code> / <code>error()</code> ทำให้ทุก API ตอบรูปแบบเดียวกัน
+<code>{ status, message, data }</code></li>
+</ul>
+<h3 id="b42-backendauthjs--jwt-และตรวจสิทธิ์">B4.2
+<code>backend/auth.js</code> — JWT และตรวจสิทธิ์</h3>
+<p>ไฟล์ <code>backend/auth.js</code></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">// ตรวจ JWT Token และสิทธิ์ตามบทบาท</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> jwt <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;jsonwebtoken&#39;</span>)<span class="op">;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> { error } <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;./helpers&#39;</span>)<span class="op">;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> SECRET <span class="op">=</span> <span class="bu">process</span><span class="op">.</span><span class="at">env</span><span class="op">.</span><span class="at">JWT_SECRET</span> <span class="op">||</span> <span class="st">&#39;change-this-secret-key&#39;</span><span class="op">;</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">// สร้าง token (ลงนามด้วย SECRET) อายุ 8 ชั่วโมง</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">createToken</span>(user) {</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> jwt<span class="op">.</span><span class="fu">sign</span>(</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">id</span><span class="op">:</span> user<span class="op">.</span><span class="at">id</span><span class="op">,</span> <span class="dt">role</span><span class="op">:</span> user<span class="op">.</span><span class="at">role</span><span class="op">,</span> <span class="dt">must_change_password</span><span class="op">:</span> <span class="op">!!</span>user<span class="op">.</span><span class="at">must_change_password</span> }<span class="op">,</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>    SECRET<span class="op">,</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>    { <span class="dt">expiresIn</span><span class="op">:</span> <span class="st">&#39;8h&#39;</span> }<span class="op">,</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>  )<span class="op">;</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co">// middleware: ต้อง login ก่อน</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="co">// รับ token จาก header &quot;Authorization: Bearer xxx&quot; หรือ ?token=xxx (ใช้ตอนดาวน์โหลดไฟล์)</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">login</span>(req<span class="op">,</span> res<span class="op">,</span> next) {</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> token <span class="op">=</span> (req<span class="op">.</span><span class="at">headers</span><span class="op">.</span><span class="at">authorization</span> <span class="op">||</span> <span class="st">&#39;&#39;</span>)<span class="op">.</span><span class="fu">replace</span>(<span class="st">&#39;Bearer &#39;</span><span class="op">,</span> <span class="st">&#39;&#39;</span>) <span class="op">||</span> req<span class="op">.</span><span class="at">query</span><span class="op">.</span><span class="at">token</span><span class="op">;</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>  <span class="cf">try</span> {</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a>    req<span class="op">.</span><span class="at">user</span> <span class="op">=</span> jwt<span class="op">.</span><span class="fu">verify</span>(token<span class="op">,</span> SECRET)<span class="op">;</span></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">catch</span> {</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">error</span>(res<span class="op">,</span> <span class="dv">401</span><span class="op">,</span> <span class="st">&#39;กรุณาเข้าสู่ระบบ&#39;</span>)<span class="op">;</span></span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>  <span class="co">// ผู้ใช้ใหม่ต้องเปลี่ยนรหัสผ่านก่อน จึงจะใช้ API อื่นได้</span></span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> allowed <span class="op">=</span> [<span class="st">&#39;/api/auth/me&#39;</span><span class="op">,</span> <span class="st">&#39;/api/auth/password&#39;</span>]<span class="op">;</span></span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (req<span class="op">.</span><span class="at">user</span><span class="op">.</span><span class="at">must_change_password</span> <span class="op">&amp;&amp;</span> <span class="op">!</span>allowed<span class="op">.</span><span class="fu">includes</span>(req<span class="op">.</span><span class="at">originalUrl</span>)) {</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">error</span>(res<span class="op">,</span> <span class="dv">403</span><span class="op">,</span> <span class="st">&#39;กรุณาเปลี่ยนรหัสผ่านก่อนใช้งาน&#39;</span>)<span class="op">;</span></span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">next</span>()<span class="op">;</span></span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a><span class="co">// middleware: อนุญาตเฉพาะบทบาทที่กำหนด เช่น allow(&#39;admin&#39;)</span></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">allow</span>(<span class="op">...</span>roles) {</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> (req<span class="op">,</span> res<span class="op">,</span> next) <span class="kw">=&gt;</span> {</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="op">!</span>roles<span class="op">.</span><span class="fu">includes</span>(req<span class="op">.</span><span class="at">user</span><span class="op">.</span><span class="at">role</span>)) <span class="cf">return</span> <span class="fu">error</span>(res<span class="op">,</span> <span class="dv">403</span><span class="op">,</span> <span class="st">&#39;ไม่มีสิทธิ์ใช้งานส่วนนี้&#39;</span>)<span class="op">;</span></span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>    <span class="fu">next</span>()<span class="op">;</span></span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a>  }<span class="op">;</span></span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a>module<span class="op">.</span><span class="at">exports</span> <span class="op">=</span> { createToken<span class="op">,</span> login<span class="op">,</span> allow }<span class="op">;</span></span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>ฟังก์ชัน</th>
+<th>ทำอะไร</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>createToken(user)</code></td>
+<td>สร้าง JWT เก็บ <code>id</code>, <code>role</code>,
+<code>must_change_password</code> ลงนามด้วย <code>JWT_SECRET</code> อายุ 8
+ชั่วโมง</td>
+</tr>
+<tr>
+<td><code>login</code></td>
+<td>middleware ตรวจ token จาก header
+<code>Authorization: Bearer ...</code> ผ่านแล้วใส่ <code>req.user</code>
+ไม่ผ่านตอบ 401 ถ้ายังไม่เปลี่ยนรหัสครั้งแรก ใช้ได้แค่ <code>/me</code> กับ
+<code>/password</code></td>
+</tr>
+<tr>
+<td><code>allow(...roles)</code></td>
+<td>middleware ปล่อยผ่านเฉพาะบทบาทที่กำหนด (ใช้ในคู่มือหลัก)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="b5-serverjs-รุ่นซ้อม-login-และ-routesauthjs">B5
+<code>server.js</code> (รุ่นซ้อม Login) และ
+<code>routes/auth.js</code></h2>
+<h3 id="b51-backendserverjs-รุ่นซ้อม-login">B5.1
+<code>backend/server.js</code> (รุ่นซ้อม Login)</h3>
+<p>รุ่นนี้ผูกแค่ <code>/api/auth</code> ไฟล์เดียว <strong>จึงไม่ต้องสร้างไฟล์ routes
+เปล่า</strong> ส่วนจัดการ 404 และ error เหมือนเฉลยทุกบรรทัด</p>
+<p>ไฟล์ <code>backend/server.js</code> (รุ่นซ้อม Login)</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">// จุดเริ่มของ Back-end (รุ่นซ้อม Login: มีแค่ /api/auth)</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> express <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;express&#39;</span>)<span class="op">;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> cors <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;cors&#39;</span>)<span class="op">;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> app <span class="op">=</span> <span class="fu">express</span>()<span class="op">;</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">use</span>(<span class="fu">cors</span>())<span class="op">;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">use</span>(express<span class="op">.</span><span class="fu">json</span>({ <span class="dt">limit</span><span class="op">:</span> <span class="st">&#39;10mb&#39;</span> }))<span class="op">;</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">use</span>((req<span class="op">,</span> res<span class="op">,</span> next) <span class="kw">=&gt;</span> {</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  req<span class="op">.</span><span class="at">body</span> <span class="op">=</span> req<span class="op">.</span><span class="at">body</span> <span class="op">||</span> {}<span class="op">;</span> <span class="co">// กันกรณีไม่ได้ส่ง body มา</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">next</span>()<span class="op">;</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co">// ---- API ----</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">use</span>(<span class="st">&#39;/api/auth&#39;</span><span class="op">,</span> <span class="pp">require</span>(<span class="st">&#39;./routes/auth&#39;</span>))<span class="op">;</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co">// คู่มือหลักจะเพิ่ม /api/users, /api/periods, ... ตรงนี้</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="co">// ไม่พบ API → 404</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">use</span>((req<span class="op">,</span> res) <span class="kw">=&gt;</span> {</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>  res<span class="op">.</span><span class="fu">status</span>(<span class="dv">404</span>)<span class="op">.</span><span class="fu">json</span>({ <span class="dt">status</span><span class="op">:</span> <span class="st">&#39;error&#39;</span><span class="op">,</span> <span class="dt">message</span><span class="op">:</span> <span class="st">&#39;ไม่พบ API นี้&#39;</span><span class="op">,</span> <span class="dt">data</span><span class="op">:</span> <span class="kw">null</span> })<span class="op">;</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="co">// จัดการ error ทุกชนิดที่จุดเดียว (Exception Handling)</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">use</span>((err<span class="op">,</span> req<span class="op">,</span> res<span class="op">,</span> next) <span class="kw">=&gt;</span> {</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  <span class="bu">console</span><span class="op">.</span><span class="fu">error</span>(err<span class="op">.</span><span class="at">message</span>)<span class="op">;</span></span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> code <span class="op">=</span> <span class="dv">500</span><span class="op">;</span></span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> message <span class="op">=</span> <span class="st">&#39;ระบบขัดข้อง: &#39;</span> <span class="op">+</span> err<span class="op">.</span><span class="at">message</span><span class="op">;</span></span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (err<span class="op">.</span><span class="at">code</span> <span class="op">===</span> <span class="st">&#39;ER_DUP_ENTRY&#39;</span>) { code <span class="op">=</span> <span class="dv">400</span><span class="op">;</span> message <span class="op">=</span> <span class="st">&#39;ข้อมูลซ้ำกับที่มีอยู่แล้ว&#39;</span><span class="op">;</span> }</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (err<span class="op">.</span><span class="at">code</span> <span class="op">===</span> <span class="st">&#39;LIMIT_FILE_SIZE&#39;</span>) { code <span class="op">=</span> <span class="dv">400</span><span class="op">;</span> message <span class="op">=</span> <span class="st">&#39;ไฟล์ใหญ่เกิน 5 MB&#39;</span><span class="op">;</span> }</span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (err<span class="op">.</span><span class="at">message</span><span class="op">.</span><span class="fu">startsWith</span>(<span class="st">&#39;รับเฉพาะไฟล์&#39;</span>)) { code <span class="op">=</span> <span class="dv">400</span><span class="op">;</span> message <span class="op">=</span> err<span class="op">.</span><span class="at">message</span><span class="op">;</span> }</span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>  res<span class="op">.</span><span class="fu">status</span>(code)<span class="op">.</span><span class="fu">json</span>({ <span class="dt">status</span><span class="op">:</span> <span class="st">&#39;error&#39;</span><span class="op">,</span> message<span class="op">,</span> <span class="dt">data</span><span class="op">:</span> <span class="kw">null</span> })<span class="op">;</span></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> PORT <span class="op">=</span> <span class="bu">process</span><span class="op">.</span><span class="at">env</span><span class="op">.</span><span class="at">PORT</span> <span class="op">||</span> <span class="dv">3000</span><span class="op">;</span></span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">listen</span>(PORT<span class="op">,</span> () <span class="kw">=&gt;</span> <span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="st">&#39;API พร้อมที่ http://localhost:&#39;</span> <span class="op">+</span> PORT))<span class="op">;</span></span></code></pre></div>
+<ul>
+<li><code>app.use(&#39;/api/auth&#39;, require(&#39;./routes/auth&#39;))</code> = ทุก API
+ในไฟล์ <code>routes/auth.js</code> ขึ้นต้นด้วย <code>/api/auth</code></li>
+<li>error middleware ตัวสุดท้าย (4 พารามิเตอร์
+<code>err, req, res, next</code>) คือ <strong>Exception Handling</strong>
+(ข้อ 6.7)</li>
+</ul>
+<h3 id="b52-backendroutesauthjs--login-ข้อมูลส่วนตัว-เปลี่ยนรหัส">B5.2
+<code>backend/routes/auth.js</code> — Login, ข้อมูลส่วนตัว, เปลี่ยนรหัส</h3>
+<p>ไฟล์ <code>backend/routes/auth.js</code></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode js"><code class="sourceCode javascript"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">// /api/auth — เข้าสู่ระบบ ข้อมูลส่วนตัว เปลี่ยนรหัสผ่าน</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> router <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;express&#39;</span>)<span class="op">.</span><span class="fu">Router</span>()<span class="op">;</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> bcrypt <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;bcryptjs&#39;</span>)<span class="op">;</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> { query } <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;../db&#39;</span>)<span class="op">;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> { ok<span class="op">,</span> error } <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;../helpers&#39;</span>)<span class="op">;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> { createToken<span class="op">,</span> login } <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;../auth&#39;</span>)<span class="op">;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">// POST /api/auth/login  body: username, password</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>router<span class="op">.</span><span class="fu">post</span>(<span class="st">&#39;/login&#39;</span><span class="op">,</span> <span class="kw">async</span> (req<span class="op">,</span> res) <span class="kw">=&gt;</span> {</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> { username<span class="op">,</span> password } <span class="op">=</span> req<span class="op">.</span><span class="at">body</span><span class="op">;</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>username <span class="op">||</span> <span class="op">!</span>password) <span class="cf">return</span> <span class="fu">error</span>(res<span class="op">,</span> <span class="dv">400</span><span class="op">,</span> <span class="st">&#39;กรอกชื่อผู้ใช้และรหัสผ่าน&#39;</span>)<span class="op">;</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> rows <span class="op">=</span> <span class="cf">await</span> <span class="fu">query</span>(<span class="st">&#39;SELECT * FROM users WHERE username = ?&#39;</span><span class="op">,</span> [username])<span class="op">;</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> user <span class="op">=</span> rows[<span class="dv">0</span>]<span class="op">;</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>user <span class="op">||</span> <span class="op">!</span>(<span class="cf">await</span> bcrypt<span class="op">.</span><span class="fu">compare</span>(password<span class="op">,</span> user<span class="op">.</span><span class="at">password</span>))) {</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">error</span>(res<span class="op">,</span> <span class="dv">401</span><span class="op">,</span> <span class="st">&#39;ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง&#39;</span>)<span class="op">;</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  <span class="kw">delete</span> user<span class="op">.</span><span class="at">password</span><span class="op">;</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ok</span>(res<span class="op">,</span> { <span class="dt">token</span><span class="op">:</span> <span class="fu">createToken</span>(user)<span class="op">,</span> user }<span class="op">,</span> <span class="st">&#39;เข้าสู่ระบบสำเร็จ&#39;</span>)<span class="op">;</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a><span class="co">// GET /api/auth/me  ข้อมูลของคนที่ login อยู่</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>router<span class="op">.</span><span class="fu">get</span>(<span class="st">&#39;/me&#39;</span><span class="op">,</span> login<span class="op">,</span> <span class="kw">async</span> (req<span class="op">,</span> res) <span class="kw">=&gt;</span> {</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> rows <span class="op">=</span> <span class="cf">await</span> <span class="fu">query</span>(</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;SELECT id, username, full_name, email, department, role, must_change_password FROM users WHERE id = ?&#39;</span><span class="op">,</span></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>    [req<span class="op">.</span><span class="at">user</span><span class="op">.</span><span class="at">id</span>]<span class="op">,</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>  )<span class="op">;</span></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (rows<span class="op">.</span><span class="at">length</span> <span class="op">===</span> <span class="dv">0</span>) <span class="cf">return</span> <span class="fu">error</span>(res<span class="op">,</span> <span class="dv">404</span><span class="op">,</span> <span class="st">&#39;ไม่พบผู้ใช้&#39;</span>)<span class="op">;</span></span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ok</span>(res<span class="op">,</span> rows[<span class="dv">0</span>])<span class="op">;</span></span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a><span class="co">// PUT /api/auth/me  แก้ข้อมูลส่วนตัว  body: full_name, email, department</span></span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>router<span class="op">.</span><span class="fu">put</span>(<span class="st">&#39;/me&#39;</span><span class="op">,</span> login<span class="op">,</span> <span class="kw">async</span> (req<span class="op">,</span> res) <span class="kw">=&gt;</span> {</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> { full_name<span class="op">,</span> email<span class="op">,</span> department } <span class="op">=</span> req<span class="op">.</span><span class="at">body</span><span class="op">;</span></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>full_name) <span class="cf">return</span> <span class="fu">error</span>(res<span class="op">,</span> <span class="dv">400</span><span class="op">,</span> <span class="st">&#39;กรอกชื่อ-นามสกุล&#39;</span>)<span class="op">;</span></span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (email <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="ss">/</span><span class="sc">^\S+</span><span class="ss">@</span><span class="sc">\S+\.\S+$</span><span class="ss">/</span><span class="op">.</span><span class="fu">test</span>(email)) <span class="cf">return</span> <span class="fu">error</span>(res<span class="op">,</span> <span class="dv">400</span><span class="op">,</span> <span class="st">&#39;รูปแบบอีเมลไม่ถูกต้อง&#39;</span>)<span class="op">;</span></span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>  <span class="cf">await</span> <span class="fu">query</span>(<span class="st">&#39;UPDATE users SET full_name = ?, email = ?, department = ? WHERE id = ?&#39;</span><span class="op">,</span> [</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>    full_name<span class="op">,</span> email <span class="op">||</span> <span class="st">&#39;&#39;</span><span class="op">,</span> department <span class="op">||</span> <span class="st">&#39;&#39;</span><span class="op">,</span> req<span class="op">.</span><span class="at">user</span><span class="op">.</span><span class="at">id</span><span class="op">,</span></span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>  ])<span class="op">;</span></span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ok</span>(res<span class="op">,</span> <span class="kw">null</span><span class="op">,</span> <span class="st">&#39;บันทึกข้อมูลส่วนตัวแล้ว&#39;</span>)<span class="op">;</span></span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a><span class="co">// PUT /api/auth/password  เปลี่ยนรหัสผ่าน  body: old_password, new_password</span></span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>router<span class="op">.</span><span class="fu">put</span>(<span class="st">&#39;/password&#39;</span><span class="op">,</span> login<span class="op">,</span> <span class="kw">async</span> (req<span class="op">,</span> res) <span class="kw">=&gt;</span> {</span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> { old_password<span class="op">,</span> new_password } <span class="op">=</span> req<span class="op">.</span><span class="at">body</span><span class="op">;</span></span>
+<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>new_password <span class="op">||</span> new_password<span class="op">.</span><span class="at">length</span> <span class="op">&lt;</span> <span class="dv">8</span>) {</span>
+<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">error</span>(res<span class="op">,</span> <span class="dv">400</span><span class="op">,</span> <span class="st">&#39;รหัสผ่านใหม่ต้องยาวอย่างน้อย 8 ตัวอักษร&#39;</span>)<span class="op">;</span></span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> rows <span class="op">=</span> <span class="cf">await</span> <span class="fu">query</span>(<span class="st">&#39;SELECT * FROM users WHERE id = ?&#39;</span><span class="op">,</span> [req<span class="op">.</span><span class="at">user</span><span class="op">.</span><span class="at">id</span>])<span class="op">;</span></span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> user <span class="op">=</span> rows[<span class="dv">0</span>]<span class="op">;</span></span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>(<span class="cf">await</span> bcrypt<span class="op">.</span><span class="fu">compare</span>(old_password <span class="op">||</span> <span class="st">&#39;&#39;</span><span class="op">,</span> user<span class="op">.</span><span class="at">password</span>))) {</span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="fu">error</span>(res<span class="op">,</span> <span class="dv">400</span><span class="op">,</span> <span class="st">&#39;รหัสผ่านเดิมไม่ถูกต้อง&#39;</span>)<span class="op">;</span></span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> hash <span class="op">=</span> <span class="cf">await</span> bcrypt<span class="op">.</span><span class="fu">hash</span>(new_password<span class="op">,</span> <span class="dv">10</span>)<span class="op">;</span></span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a>  <span class="cf">await</span> <span class="fu">query</span>(<span class="st">&#39;UPDATE users SET password = ?, must_change_password = 0 WHERE id = ?&#39;</span><span class="op">,</span> [hash<span class="op">,</span> user<span class="op">.</span><span class="at">id</span>])<span class="op">;</span></span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>  user<span class="op">.</span><span class="at">must_change_password</span> <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ok</span>(res<span class="op">,</span> { <span class="dt">token</span><span class="op">:</span> <span class="fu">createToken</span>(user) }<span class="op">,</span> <span class="st">&#39;เปลี่ยนรหัสผ่านแล้ว&#39;</span>)<span class="op">;</span></span>
+<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a>module<span class="op">.</span><span class="at">exports</span> <span class="op">=</span> router<span class="op">;</span></span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>ทำอะไร</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST /api/auth/login</code></td>
+<td>ตรวจรหัสด้วย <code>bcrypt.compare</code> ถูกตอบ <code>token</code> +
+<code>user</code> (ลบ <code>password</code> ออกก่อนส่ง) ผิดตอบ 401</td>
+</tr>
+<tr>
+<td><code>GET /api/auth/me</code></td>
+<td>ข้อมูลของคนที่ login อยู่ (ต้องมี token)</td>
+</tr>
+<tr>
+<td><code>PUT /api/auth/me</code></td>
+<td>แก้ชื่อ อีเมล แผนก (ตรวจรูปแบบอีเมล)</td>
+</tr>
+<tr>
+<td><code>PUT /api/auth/password</code></td>
+<td>เปลี่ยนรหัส (ใหม่ ≥ 8 ตัว รหัสเดิมต้องถูก) ตอบ token ใหม่ที่
+<code>must_change_password</code> เป็น false</td>
+</tr>
+</tbody>
+</table>
+<h3 id="-ตรวจ-b5">✔ ตรวจ B5</h3>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose up <span class="at">-d</span> db phpmyadmin backend</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose logs <span class="at">-f</span> backend</span></code></pre></div>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>log ขึ้น <code>seed เสร็จแล้ว</code> และ
+<code>API พร้อมที่ http://localhost:3000</code> ไม่มีตัวแดง แล้วกด
+<code>Ctrl + C</code> ออกจาก log (backend ยังทำงานต่อ)</label></li>
+<li><label><input type="checkbox"></input>เปิด
+http://localhost:3000/api/auth/me ในเบราว์เซอร์ →
+<code>{&quot;status&quot;:&quot;error&quot;,&quot;message&quot;:&quot;กรุณาเข้าสู่ระบบ&quot;,&quot;data&quot;:null}</code></label></li>
+<li><label><input type="checkbox"></input>เปิด http://localhost:3000/api/users
+→ <code>{&quot;status&quot;:&quot;error&quot;,&quot;message&quot;:&quot;ไม่พบ API นี้&quot;,&quot;data&quot;:null}</code>
+(ถูกต้อง เล่มนี้ยังไม่มี API users)</label></li>
+</ul>
+<p>แก้ไฟล์ใน <code>backend</code> แล้ว nodemon จะรีสตาร์ตเอง ดู log ได้ด้วย
+<code>docker compose logs -f backend</code></p>
+<h2 id="b6-ทดสอบ-api-ครบชุด">B6 ทดสอบ API ครบชุด</h2>
+<p>ใช้ Thunder Client / Postman หรือไฟล์ <code>.http</code> (Extension REST
+Client) ก็ได้ URL ขึ้นต้น <code>http://localhost:3000</code> และ login ต้องเป็น
+<strong>POST</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Method + URL</th>
+<th>Token</th>
+<th>Body (JSON)</th>
+<th>ผลที่ต้องได้</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>POST /api/auth/login</td>
+<td>-</td>
+<td><code>{&quot;username&quot;:&quot;admin&quot;,&quot;password&quot;:&quot;x&quot;}</code></td>
+<td>401 ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</td>
+</tr>
+<tr>
+<td>2</td>
+<td>POST /api/auth/login</td>
+<td>-</td>
+<td><code>{&quot;username&quot;:&quot;admin&quot;}</code></td>
+<td>400 กรอกชื่อผู้ใช้และรหัสผ่าน</td>
+</tr>
+<tr>
+<td>3</td>
+<td>POST /api/auth/login</td>
+<td>-</td>
+<td><code>{&quot;username&quot;:&quot;admin&quot;,&quot;password&quot;:&quot;admin1234&quot;}</code></td>
+<td>200 ได้ <code>data.token</code> และ <code>data.user</code> (ไม่มี
+<code>password</code>)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>GET /api/auth/me</td>
+<td>ไม่ใส่</td>
+<td>-</td>
+<td>401 กรุณาเข้าสู่ระบบ</td>
+</tr>
+<tr>
+<td>5</td>
+<td>GET /api/auth/me</td>
+<td>admin</td>
+<td>-</td>
+<td>200 <code>data.role</code> = <code>admin</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td>PUT /api/auth/me</td>
+<td>admin</td>
+<td><code>{&quot;full_name&quot;:&quot;ฝ่ายบุคลากร&quot;,&quot;email&quot;:&quot;abc&quot;}</code></td>
+<td>400 รูปแบบอีเมลไม่ถูกต้อง</td>
+</tr>
+<tr>
+<td>7</td>
+<td>PUT /api/auth/me</td>
+<td>admin</td>
+<td><code>{&quot;full_name&quot;:&quot;ฝ่ายบุคลากร&quot;,&quot;email&quot;:&quot;hr@school.ac.th&quot;,&quot;department&quot;:&quot;บุคลากร&quot;}</code></td>
+<td>200 บันทึกข้อมูลส่วนตัวแล้ว</td>
+</tr>
+<tr>
+<td>8</td>
+<td>POST /api/auth/login</td>
+<td>-</td>
+<td><code>{&quot;username&quot;:&quot;emp1&quot;,&quot;password&quot;:&quot;emp12345&quot;}</code></td>
+<td>200 <code>user.must_change_password</code> = 1</td>
+</tr>
+<tr>
+<td>9</td>
+<td>GET /api/auth/me</td>
+<td>emp1 (จากข้อ 8)</td>
+<td>-</td>
+<td>200 <code>data.must_change_password</code> = 1 (ยังเรียก /me ได้)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>PUT /api/auth/password</td>
+<td>emp1 (จากข้อ 8)</td>
+<td><code>{&quot;old_password&quot;:&quot;emp12345&quot;,&quot;new_password&quot;:&quot;123&quot;}</code></td>
+<td>400 รหัสผ่านใหม่ต้องยาวอย่างน้อย 8 ตัวอักษร</td>
+</tr>
+<tr>
+<td>11</td>
+<td>PUT /api/auth/password</td>
+<td>emp1 (จากข้อ 8)</td>
+<td><code>{&quot;old_password&quot;:&quot;xxxx&quot;,&quot;new_password&quot;:&quot;newpass123&quot;}</code></td>
+<td>400 รหัสผ่านเดิมไม่ถูกต้อง</td>
+</tr>
+<tr>
+<td>12</td>
+<td>PUT /api/auth/password</td>
+<td>emp1 (จากข้อ 8)</td>
+<td><code>{&quot;old_password&quot;:&quot;emp12345&quot;,&quot;new_password&quot;:&quot;newpass123&quot;}</code></td>
+<td>200 เปลี่ยนรหัสผ่านแล้ว ได้ token ใหม่</td>
+</tr>
+<tr>
+<td>13</td>
+<td>PUT /api/auth/me</td>
+<td>emp1 (token ใหม่จากข้อ 12)</td>
+<td><code>{&quot;full_name&quot;:&quot;สมชาย ใจดี&quot;,&quot;email&quot;:&quot;emp1@school.ac.th&quot;}</code></td>
+<td>200 บันทึกข้อมูลส่วนตัวแล้ว</td>
+</tr>
+<tr>
+<td>14</td>
+<td>POST /api/auth/login</td>
+<td>-</td>
+<td><code>{&quot;username&quot;:&quot;emp1&quot;,&quot;password&quot;:&quot;newpass123&quot;}</code></td>
+<td>200 <code>user.must_change_password</code> = 0</td>
+</tr>
+<tr>
+<td>15</td>
+<td>GET /api/nothing</td>
+<td>-</td>
+<td>-</td>
+<td>404 ไม่พบ API นี้</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>ใส่ token: แท็บ Auth / Authorization → Bearer → วาง token (หรือ Header
+<code>Authorization</code> = <code>Bearer &lt;token&gt;</code> มีเว้นวรรค)
+&quot;บังคับเปลี่ยนรหัสครั้งแรก&quot;: token ของ emp1 ก่อนเปลี่ยนรหัสใช้ได้แค่
+<code>/api/auth/me</code> และ <code>/api/auth/password</code> API
+อื่นทั้งหมดจะตอบ <strong>403 กรุณาเปลี่ยนรหัสผ่านก่อนใช้งาน</strong> (เล่มนี้ยังไม่มี API
+อื่น จะได้ทดสอบจริงในคู่มือหลักขั้น 3–4) ส่วนหน้าบ้านจะพาไปหน้าเปลี่ยนรหัสเอง</p>
+</blockquote>
+<p>ตรวจฐานข้อมูลอีกรอบ: phpMyAdmin → <code>users</code> แถว emp1 ช่อง
+<code>must_change_password</code> เป็น 0 และ <code>password</code>
+เปลี่ยนเป็น hash ใหม่ แถว admin มีอีเมลและแผนกตามที่แก้</p>
+<p>ซ้อมรอบใหม่ (ให้รหัสทุกคนกลับเป็นค่าเริ่มต้น)</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose down <span class="at">-v</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose up <span class="at">-d</span> db phpmyadmin backend</span></code></pre></div>
+<h3 id="-ตรวจ-b6-ก่อนส่ง">✔ ตรวจ B6 (ก่อนส่ง)</h3>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>ผ่านครบ 15 ข้อในตาราง</label></li>
+<li><label><input type="checkbox"></input>ปิด Docker Desktop แล้วเปิดใหม่ →
+<code>docker compose up -d db phpmyadmin backend</code> → login admin
+ได้อีก (ข้อมูลอยู่ใน volume ไม่หาย)</label></li>
+<li><label><input type="checkbox"></input>ถ้าคนที่ 2 ทำเล่มหน้าบ้านถึงขั้น L3 แล้ว:
+เปิดหน้าเว็บ http://localhost:5173 login <code>admin</code> /
+<code>admin1234</code> ผ่านหลังบ้านของเราได้</label></li>
+</ul>
+<h2 id="เทียบกับเฉลย">เทียบกับเฉลย</h2>
+<table>
+<thead>
+<tr>
+<th>ไฟล์</th>
+<th>เทียบกับ <code>project/backend</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>package.json</code> <code>schema.sql</code> <code>db.js</code>
+<code>seed.js</code> <code>helpers.js</code> <code>auth.js</code>
+<code>routes/auth.js</code> และ <code>docker-compose.yml</code>
+<code>.gitignore</code></td>
+<td>เหมือนทุกบรรทัด</td>
+</tr>
+<tr>
+<td><code>server.js</code></td>
+<td>ส่วนตั้งค่าและจัดการ error เหมือน ต่างแค่ผูก API ชุดเดียว</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ไปต่อคู่มือหลัก-ขั้น-34">ไปต่อคู่มือหลัก (ขั้น 3–4)</h2>
+<ol type="1">
+<li>เขียน <code>backend/upload.js</code> ตามคู่มือหลักข้อ 2.3</li>
+<li>สร้างไฟล์ routes เปล่า 10 ไฟล์ตามกล่องหมายเหตุในคู่มือหลักขั้น 2 (users periods
+topics indicators assignments self evaluate reports files backup)</li>
+<li>เขียนทับ <code>server.js</code> ด้วยตัวเต็มจากคู่มือหลักข้อ 2.4</li>
+<li>ทำ ✔ ตรวจ B5 ซ้ำ ต้องขึ้น <code>API พร้อมที่ ...</code> แล้วค่อยทำคู่มือหลักขั้น 3
+ต่อ</li>
+</ol>
+<h2 id="ปัญหาที่เจอบ่อยในเล่มนี้">ปัญหาที่เจอบ่อยในเล่มนี้</h2>
+<table>
+<thead>
+<tr>
+<th>อาการ</th>
+<th>สาเหตุ</th>
+<th>วิธีแก้</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>error during connect</code> /
+<code>Cannot connect to the Docker daemon</code></td>
+<td>Docker Desktop ยังไม่เปิด</td>
+<td>เปิด Docker Desktop รอไอคอนเขียว</td>
+</tr>
+<tr>
+<td><code>port is already allocated</code></td>
+<td>เฉลยหรือโปรเจกต์อื่นเปิดค้าง</td>
+<td>ไปโฟลเดอร์นั้น <code>docker compose down</code></td>
+</tr>
+<tr>
+<td>log ขึ้น <code>Cannot find module &#39;./routes/xxx&#39;</code></td>
+<td><code>server.js</code> ใช้ตัวเต็มของคู่มือหลัก</td>
+<td>ใช้ <code>server.js</code> รุ่นซ้อม Login ใน B5.1</td>
+</tr>
+<tr>
+<td><code>seed ไม่สำเร็จ: ... You have an error in your SQL syntax</code></td>
+<td>พิมพ์ <code>schema.sql</code> ผิด</td>
+<td>เทียบกับ B3.1 ทีละตาราง แล้ว <code>docker compose down -v</code>
+และรันใหม่</td>
+</tr>
+<tr>
+<td>login รหัสถูกแต่ได้ 401</td>
+<td>ฐานข้อมูลเก่าค้าง หรือเคยเปลี่ยนรหัสแล้ว</td>
+<td>ใช้ <code>newpass123</code> หรือ <code>docker compose down -v</code>
+แล้วเปิดใหม่</td>
+</tr>
+<tr>
+<td>ได้ 404 &quot;ไม่พบ API นี้&quot; ตอน login</td>
+<td>ใช้ GET แทน POST หรือ URL ผิด (<code>/api/login</code>)</td>
+<td>ต้องเป็น POST <code>/api/auth/login</code></td>
+</tr>
+<tr>
+<td>ได้ 403 &quot;กรุณาเปลี่ยนรหัสผ่านก่อนใช้งาน&quot;</td>
+<td>ยังไม่เปลี่ยนรหัสครั้งแรก หรือยังใช้ token เก่า</td>
+<td>ทำข้อ 12 ใน B6 แล้วใช้ token ใหม่ที่ได้</td>
+</tr>
+<tr>
+<td>ภาษาไทยในฐานข้อมูลเป็น <code>???</code></td>
+<td>ไฟล์ .sql ไม่ได้บันทึกเป็น UTF-8</td>
+<td>มุมขวาล่าง VS Code ต้องเป็น <code>UTF-8</code> แล้ว
+<code>docker compose down -v</code></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
