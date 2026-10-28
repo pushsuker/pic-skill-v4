@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="th" xml:lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>เตรียมเครื่องสำหรับแข่งแบบออฟไลน์</title>
+  <style>
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+font-size: 12pt;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+.display.math{display: block; text-align: center; margin: 0.5rem auto;}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+  <style type="text/css">body{font-family:"Sarabun","Noto Sans Thai",sans-serif;max-width:960px;margin:auto;padding:16px;line-height:1.7;color:#222;background:#fff}
+h1{border-bottom:3px solid #1867c0;padding-bottom:6px;margin-top:2.5em;color:#1867c0}h2{margin-top:1.8em;color:#0d47a1}
+pre{background:#f5f7fa;border:1px solid #dde;padding:10px;overflow-x:auto;font-size:13px;line-height:1.45}
+code{font-family:Consolas,monospace;overflow-wrap:anywhere;background:#f0f2f5;padding:1px 4px;border-radius:3px}pre code{background:none;padding:0}
+table{border-collapse:collapse;width:100%;margin:1em 0;display:block;overflow-x:auto}td,th{border:1px solid #ccd;padding:6px 8px;vertical-align:top}th{background:#e8f0fe}
+img{max-width:100%;border:1px solid #ddd}blockquote{border-left:4px solid #fb8c00;background:#fff8e1;margin:1em 0;padding:6px 14px}
+nav#TOC{background:#f5f7fa;padding:8px 20px;border:1px solid #dde}@media print{h1{page-break-before:always}pre{white-space:pre-wrap}}</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">เตรียมเครื่องสำหรับแข่งแบบออฟไลน์</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#เตรียมเครื่องสำหรับแข่งแบบออฟไลน์" id="toc-เตรียมเครื่องสำหรับแข่งแบบออฟไลน์">เตรียมเครื่องสำหรับแข่งแบบออฟไลน์</a>
+<ul>
+<li><a href="#ทำไมถ้าไม่เตรียมจะพัง" id="toc-ทำไมถ้าไม่เตรียมจะพัง">ทำไมถ้าไม่เตรียมจะพัง</a></li>
+<li><a href="#ในชุดนี้มีอะไร" id="toc-ในชุดนี้มีอะไร">ในชุดนี้มีอะไร</a></li>
+<li><a href="#ขั้นที่-1-ติดตั้งโปรแกรม-ตอนมีเน็ต" id="toc-ขั้นที่-1-ติดตั้งโปรแกรม-ตอนมีเน็ต">ขั้นที่ 1 ติดตั้งโปรแกรม (ตอนมีเน็ต)</a></li>
+<li><a href="#ขั้นที่-2-ก๊อปชุดลงเครื่องแล้วรันสคริปต์เตรียมเครื่อง-ตอนมีเน็ต" id="toc-ขั้นที่-2-ก๊อปชุดลงเครื่องแล้วรันสคริปต์เตรียมเครื่อง-ตอนมีเน็ต">ขั้นที่ 2
+ก๊อปชุดลงเครื่องแล้วรันสคริปต์เตรียมเครื่อง (ตอนมีเน็ต)</a></li>
+<li><a href="#ขั้นที่-3-ทดสอบว่าออฟไลน์ได้จริง-ทำก่อนวันแข่ง" id="toc-ขั้นที่-3-ทดสอบว่าออฟไลน์ได้จริง-ทำก่อนวันแข่ง">ขั้นที่ 3 ทดสอบว่าออฟไลน์ได้จริง
+(ทำก่อนวันแข่ง)</a></li>
+<li><a href="#ตอนแข่ง-ทำตามคู่มือหลัก-แต่ข้ามคำสั่งติดตั้ง" id="toc-ตอนแข่ง-ทำตามคู่มือหลัก-แต่ข้ามคำสั่งติดตั้ง">ตอนแข่ง: ทำตามคู่มือหลัก
+แต่ข้ามคำสั่งติดตั้ง</a></li>
+<li><a href="#แผนสำรอง-container-ค้างที่-npm-install" id="toc-แผนสำรอง-container-ค้างที่-npm-install">แผนสำรอง: container ค้างที่
+npm install</a></li>
+<li><a href="#เช็กลิสต์ก่อนวันแข่ง" id="toc-เช็กลิสต์ก่อนวันแข่ง">เช็กลิสต์ก่อนวันแข่ง</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="เตรียมเครื่องสำหรับแข่งแบบออฟไลน์">เตรียมเครื่องสำหรับแข่งแบบออฟไลน์</h1>
+<p>ใช้เมื่อสนามแข่งไม่มีอินเทอร์เน็ต (หรือเน็ตช้าจนเชื่อไม่ได้)
+ตัวระบบที่เขียนไม่ได้เรียกอะไรจากเน็ตเลย ปัญหาอยู่ที่ <strong>การติดตั้ง</strong>
+ซึ่งต้องโหลดของจากเน็ต ชุดนี้ให้ทุกอย่างที่ต้องโหลด ถูกโหลดไว้ก่อนตั้งแต่ตอนยังมีเน็ต</p>
+<blockquote>
+<p>ทำ <strong>บนเครื่องที่จะใช้แข่งจริง</strong> และทำ
+<strong>ก่อนวันแข่ง</strong> ตอนที่ยังมีอินเทอร์เน็ต ใช้เวลาประมาณ 10–15
+นาทีต่อเครื่อง</p>
+</blockquote>
+<h2 id="ทำไมถ้าไม่เตรียมจะพัง">ทำไมถ้าไม่เตรียมจะพัง</h2>
+<table>
+<thead>
+<tr>
+<th>จุด</th>
+<th>เกิดอะไรขึ้นตอนออฟไลน์</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Docker image (mysql, phpmyadmin, node)</td>
+<td>ถ้าเครื่องไม่เคยดึงไว้ <code>docker compose up</code> จะ error ทันที</td>
+</tr>
+<tr>
+<td><code>npm init</code> <code>npm install</code>
+<code>npm create vite</code> (คู่มือขั้น 1 และ 5)</td>
+<td>โหลดแพ็กเกจไม่ได้ เริ่มโปรเจกต์ไม่ได้เลย</td>
+</tr>
+<tr>
+<td><code>docker-compose.yml</code> ของคู่มือหลัก</td>
+<td>backend และ frontend รัน <code>npm install</code> ทุกครั้งที่เปิด และเก็บ
+node_modules ใน volume ชั่วคราว ถ้าเคย <code>docker compose down</code>
+แล้วเปิดใหม่ volume จะว่าง <strong>ระบบค้างที่ npm install ไม่ขึ้น</strong>
+(ทดสอบแล้ว)</td>
+</tr>
+<tr>
+<td>Draw.io แบบเว็บ, Extension ของ VS Code</td>
+<td>ต้องโหลดจากเน็ต</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ในชุดนี้มีอะไร">ในชุดนี้มีอะไร</h2>
+<pre><code>ชุดเตรียมแข่งออฟไลน์/
+├─ เตรียมเครื่องสำหรับแข่งแบบออฟไลน์.html   ← คู่มือนี้
+└─ evaluation/                            ← โฟลเดอร์งานของทีม (ก๊อปไปใช้ทั้งโฟลเดอร์)
+   ├─ docker-compose.yml        ← รุ่นออฟไลน์ (ต่างจากคู่มือหลัก 2 จุด ดูด้านล่าง)
+   ├─ .gitignore
+   ├─ เตรียมเครื่อง.ps1          ← รันครั้งเดียวตอนมีเน็ต
+   ├─ แผนสำรอง-backend.ps1       ← ใช้เมื่อ container มีปัญหา
+   ├─ แผนสำรอง-frontend.ps1
+   ├─ backend/   package.json  package-lock.json  node_modules/  routes/  tests/
+   ├─ frontend/  package.json  package-lock.json  node_modules/  src/pages/  src/components/
+   ├─ docs/
+   └─ design/</code></pre>
+<ul>
+<li>แพ็กเกจติดตั้งไว้แล้วทั้งสองฝั่ง เวอร์ชันตรงกับเฉลย (Vuetify 3.13, Vite 6,
+vue-router 4, html2pdf.js 0.10, Express 5) ขนาดรวมประมาณ 160 MB</li>
+<li>ยังไม่มีโค้ดของระบบ นักเรียนเขียนเองตามคู่มือหลัก</li>
+</ul>
+<p><code>docker-compose.yml</code> รุ่นออฟไลน์ต่างจากคู่มือหลัก 2 จุด</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1) คำสั่งตอนเริ่ม: ใช้แพ็กเกจที่มีอยู่ก่อน ไม่เช็กช่องโหว่ออนไลน์</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">command</span><span class="kw">:</span><span class="at"> sh -c &quot;npm install --prefer-offline --no-audit --no-fund &amp;&amp; npm run seed &amp;&amp; npm run dev&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 2) node_modules เก็บใน named volume ไม่หายเมื่อ docker compose down</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">volumes</span><span class="kw">:</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> ./backend:/app</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> backend_modules:/app/node_modules</span></span></code></pre></div>
+<h2 id="ขั้นที่-1-ติดตั้งโปรแกรม-ตอนมีเน็ต">ขั้นที่ 1 ติดตั้งโปรแกรม (ตอนมีเน็ต)</h2>
+<table>
+<thead>
+<tr>
+<th>โปรแกรม</th>
+<th>หมายเหตุ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Docker Desktop</td>
+<td>เปิดให้ไอคอนเป็นสีเขียว</td>
+</tr>
+<tr>
+<td>Node.js 24</td>
+<td>ใช้กับแผนสำรอง และรัน <code>npm test</code> บนเครื่อง</td>
+</tr>
+<tr>
+<td>VS Code</td>
+<td>ติดตั้ง Extension ให้ครบตอนนี้: Vue (Official), Thunder Client, REST
+Client</td>
+</tr>
+<tr>
+<td>Draw.io Desktop</td>
+<td>ต้องเป็นตัวติดตั้ง (drawio-x.x.x-windows-installer.exe) ไม่ใช่เว็บ</td>
+</tr>
+<tr>
+<td>Git</td>
+<td>ถ้าสนามไม่มี GitLab ในวง LAN ให้ใช้ git ในเครื่องเก็บประวัติ commit ไปก่อน</td>
+</tr>
+<tr>
+<td>Postman (ถ้าใช้)</td>
+<td>ต้อง login ตอนมีเน็ตครั้งแรก หรือใช้ Thunder Client / REST Client แทน</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ขั้นที่-2-ก๊อปชุดลงเครื่องแล้วรันสคริปต์เตรียมเครื่อง-ตอนมีเน็ต">ขั้นที่ 2
+ก๊อปชุดลงเครื่องแล้วรันสคริปต์เตรียมเครื่อง (ตอนมีเน็ต)</h2>
+<ol type="1">
+<li>ก๊อปโฟลเดอร์ <code>evaluation</code> ไปไว้ในเครื่อง เช่น
+<code>D:\evaluation</code> (ชื่อโฟลเดอร์ต้องเป็น <code>evaluation</code> ตลอด
+เพราะ Docker ตั้งชื่อ volume ตามชื่อโฟลเดอร์)</li>
+<li>เปิด Docker Desktop ให้ไอคอนเขียว</li>
+<li>เปิด PowerShell ที่โฟลเดอร์ <code>evaluation</code> แล้วพิมพ์</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>powershell <span class="op">-</span>ExecutionPolicy Bypass <span class="op">-</span>File <span class="op">.</span>\เตรียมเครื่อง<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
+<p>สคริปต์ทำ 4 อย่าง</p>
+<ol type="1">
+<li>ตรวจว่า Docker Desktop เปิดอยู่</li>
+<li>ดึง image <code>mysql:8.4</code> <code>phpmyadmin:5</code>
+<code>node:24-alpine</code></li>
+<li>ติดตั้งแพ็กเกจลงใน volume ของ container ทั้ง backend และ frontend (เป็นรุ่น
+Linux แยกจาก node_modules ในโฟลเดอร์ ซึ่งเป็นรุ่น Windows)</li>
+<li>สร้างฐานข้อมูลไว้ล่วงหน้า รอจน MySQL พร้อม (healthy) แล้วค่อยหยุด</li>
+</ol>
+<p>ต้องจบด้วยข้อความสีเขียว <strong>&quot;เตรียมเครื่องเสร็จแล้ว
+ตัดอินเทอร์เน็ตได้เลย&quot;</strong></p>
+<blockquote>
+<p>ห้ามปิดหน้าต่างระหว่างขั้น 4 ถ้า MySQL ถูกหยุดตอนกำลังสร้างฐานข้อมูลครั้งแรก
+ไฟล์ฐานข้อมูลจะเสีย (เจอจริงตอนทดสอบ) ถ้าเผลอปิด ให้ลบ volume แล้วรันสคริปต์ใหม่:
+<code>docker compose down</code> →
+<code>docker volume rm evaluation_db_data</code> → รันสคริปต์อีกครั้ง</p>
+</blockquote>
+<h2 id="ขั้นที่-3-ทดสอบว่าออฟไลน์ได้จริง-ทำก่อนวันแข่ง">ขั้นที่ 3 ทดสอบว่าออฟไลน์ได้จริง
+(ทำก่อนวันแข่ง)</h2>
+<ol type="1">
+<li>ปิด Wi-Fi / ถอดสาย LAN</li>
+<li>คัดลอกโค้ดเฉลย (<code>project/backend</code> ยกเว้น node_modules และ
+<code>project/frontend/src</code>, <code>index.html</code>,
+<code>vite.config.js</code>) ลงในชุดชั่วคราวเพื่อทดลอง
+หรือข้ามข้อนี้ถ้าจะลองหลังเขียนเสร็จ</li>
+<li>ที่โฟลเดอร์ <code>evaluation</code></li>
+</ol>
+<div class="sourceCode" id="cb4"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>docker compose up <span class="op">-</span>d</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>docker compose logs backend frontend</span></code></pre></div>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>log ขึ้น <code>up to date</code>
+(ไม่ได้โหลดอะไร) ตามด้วย <code>API พร้อมที่ http://localhost:3000</code> และ
+<code>VITE ... ready</code></label></li>
+<li><label><input type="checkbox"></input>เปิด http://localhost:8080 phpMyAdmin
+ได้ และ http://localhost:5173 เห็นหน้า Login</label></li>
+<li><label><input type="checkbox"></input><code>docker compose down</code> แล้ว
+<code>docker compose up -d</code> อีกรอบ ยังขึ้นได้เหมือนเดิม</label></li>
+<li><label><input type="checkbox"></input>ถ้าลองข้อ 2 ไว้ ลบโค้ดทดลองทิ้งก่อนแข่ง
+(เหลือแค่ package.json, package-lock.json, node_modules)</label></li>
+</ul>
+<p>ผลทดสอบของผู้จัดทำ: ปิดการเข้าถึง npm registry ทั้งหมด แล้ว <code>down</code>
+→ <code>up</code> ระบบขึ้นครบ login ผ่านหน้าเว็บได้ ส่วน
+<code>docker-compose.yml</code> ของคู่มือหลักภายใต้เงื่อนไขเดียวกันค้างอยู่ที่
+<code>npm install</code> ไม่ขึ้นเลย</p>
+<h2 id="ตอนแข่ง-ทำตามคู่มือหลัก-แต่ข้ามคำสั่งติดตั้ง">ตอนแข่ง: ทำตามคู่มือหลัก
+แต่ข้ามคำสั่งติดตั้ง</h2>
+<p>ทำงานในโฟลเดอร์ <code>evaluation</code> ของชุดนี้ แล้วทำตามคู่มือหลักทุกขั้น
+<strong>ยกเว้น</strong> ตารางนี้</p>
+<table>
+<thead>
+<tr>
+<th>คู่มือหลัก</th>
+<th>ทำอย่างไรในชุดออฟไลน์</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.1 <code>mkdir</code> <code>npm init</code>
+<code>npm install ...</code></td>
+<td><strong>ข้าม</strong> โฟลเดอร์และแพ็กเกจมีครบแล้ว</td>
+</tr>
+<tr>
+<td>1.2 แก้ <code>backend/package.json</code></td>
+<td><strong>ข้าม</strong> มีครบแล้ว</td>
+</tr>
+<tr>
+<td>1.3 <code>docker-compose.yml</code></td>
+<td><strong>ห้ามเขียนทับ</strong> ใช้รุ่นออฟไลน์ในชุดนี้</td>
+</tr>
+<tr>
+<td>1.4 <code>.gitignore</code></td>
+<td>มีแล้ว</td>
+</tr>
+<tr>
+<td>5.1 <code>npm create vite</code> <code>npm install</code>
+<code>rm ...</code></td>
+<td><strong>ข้าม</strong> ทำแค่ &quot;สร้างหน้าชั่วคราวทั้ง 14 หน้า&quot; (โฟลเดอร์
+<code>src/pages</code> มีให้แล้ว)</td>
+</tr>
+<tr>
+<td>5.1 ตรวจ <code>frontend/package.json</code></td>
+<td><strong>ไม่ต้องแก้</strong></td>
+</tr>
+<tr>
+<td>ไฟล์โค้ดทุกไฟล์ที่เหลือ</td>
+<td>เขียนตามคู่มือหลักตามปกติ</td>
+</tr>
+</tbody>
+</table>
+<p>คำสั่งที่ใช้ได้ / ห้ามใช้ระหว่างแข่ง</p>
+<table>
+<thead>
+<tr>
+<th>ใช้ได้</th>
+<th>ห้ามใช้ (ต้องใช้เน็ต หรือลบของที่เตรียมไว้)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker compose up -d</code></td>
+<td><code>docker compose down -v</code> (ลบ node_modules
+ที่เตรียมไว้ทิ้ง)</td>
+</tr>
+<tr>
+<td><code>docker compose stop</code> / <code>start</code> /
+<code>restart</code></td>
+<td><code>npm install ชื่อแพ็กเกจใหม่</code></td>
+</tr>
+<tr>
+<td><code>docker compose down</code> (ไม่มี -v)</td>
+<td><code>npm create vite</code></td>
+</tr>
+<tr>
+<td><code>docker compose logs -f backend</code></td>
+<td><code>docker compose pull</code></td>
+</tr>
+<tr>
+<td><code>docker compose exec backend npm test</code></td>
+<td>ลบโฟลเดอร์ <code>node_modules</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>อยากล้างฐานข้อมูลระหว่างซ้อม (แทน <code>down -v</code>):
+<code>docker compose down</code> →
+<code>docker volume rm evaluation_db_data</code> →
+<code>docker compose up -d</code> จะล้างแค่ฐานข้อมูล แพ็กเกจยังอยู่</p>
+</blockquote>
+<h2 id="แผนสำรอง-container-ค้างที่-npm-install">แผนสำรอง: container ค้างที่
+npm install</h2>
+<p>ถ้า <code>docker compose logs backend</code> ค้างอยู่ที่
+<code>npm install</code> นาน (เช่น volume ถูกลบไป) ให้รัน backend/frontend
+บนเครื่องโดยตรง ใช้ node_modules รุ่น Windows ที่อยู่ในโฟลเดอร์ ฐานข้อมูลยังอยู่ใน
+Docker เหมือนเดิม</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>docker compose stop backend frontend</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>docker compose up <span class="op">-</span>d db phpmyadmin</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># หน้าต่าง PowerShell ที่ 1</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>powershell <span class="op">-</span>ExecutionPolicy Bypass <span class="op">-</span>File <span class="op">.</span>\แผนสำรอง-backend<span class="op">.</span><span class="fu">ps1</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># หน้าต่าง PowerShell ที่ 2</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>powershell <span class="op">-</span>ExecutionPolicy Bypass <span class="op">-</span>File <span class="op">.</span>\แผนสำรอง-frontend<span class="op">.</span><span class="fu">ps1</span></span></code></pre></div>
+<p>เปิด http://localhost:5173 ใช้งานได้ตามปกติ (ทดสอบแล้ว: seed, เปิด API,
+login ผ่านหน้าเว็บได้โดยไม่ใช้เน็ต) แก้ไฟล์แล้วรีโหลดเองเหมือนเดิม</p>
+<h2 id="เช็กลิสต์ก่อนวันแข่ง">เช็กลิสต์ก่อนวันแข่ง</h2>
+<ul class="task-list">
+<li><label><input type="checkbox"></input>ทุกเครื่องติดตั้งโปรแกรมครบตามขั้นที่ 1 รวม
+Extension ของ VS Code และ Draw.io Desktop</label></li>
+<li><label><input type="checkbox"></input>ทุกเครื่องรัน
+<code>เตรียมเครื่อง.ps1</code> ผ่าน ขึ้นข้อความสีเขียว</label></li>
+<li><label><input type="checkbox"></input>ทดสอบขั้นที่ 3
+ตอนปิดเน็ตแล้วผ่าน</label></li>
+<li><label><input type="checkbox"></input>ก๊อปคู่มือ (HTML) และโค้ดเฉลยไว้ในเครื่องด้วย
+ไม่ต้องพึ่งเน็ตเปิดอ่าน</label></li>
+<li><label><input type="checkbox"></input>ถ้าสนามมี GitLab ในวง LAN
+จดที่อยู่และบัญชีไว้ ถ้าไม่มี ใช้ <code>git init</code> ในเครื่อง commit
+ตามปกติ</label></li>
+</ul>
+</body>
+</html>
